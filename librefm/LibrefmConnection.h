@@ -61,6 +61,6 @@ static NSString *const METHOD_LIBRARY_REMOVESCROBBLE = @"library.removescrobble"
 
 - (instancetype)init;
 - (BOOL)loginWithUsername:(NSString*)username password:(NSString*)password;
-- (void)getPlaylist;
+- (void)radioTune:(NSString*)tag;
 
 @end

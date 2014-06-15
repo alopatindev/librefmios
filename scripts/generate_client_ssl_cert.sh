@@ -10,4 +10,5 @@ fi
 
 openssl s_client \
     -showcerts -connect "${HOST}:${PORT}" </dev/null 2>/dev/null | \
+sed "s/libre.fm/${HOST}/g" | \
 openssl x509 -outform DER >"../resources/${HOST}.der"

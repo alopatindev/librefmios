@@ -38,7 +38,7 @@
     NSString *scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle.libre.fm/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", username, timeStamp, token];
     NSString *webServicesLoginUrl = [NSString stringWithFormat:@"%@%@&username=%@&authToken=%@", API2_URL, METHOD_AUTH_GETMOBILESESSION, username, wsToken];
     
-    NSLog(@"%@\n%@\n%@\n", streamingLoginUrl, scrobblingLoginUrl, webServicesLoginUrl);
+    //NSLog(@"%@\n%@\n%@\n", streamingLoginUrl, scrobblingLoginUrl, webServicesLoginUrl);
     
     //[self sendRequest:streamingLoginUrl];
     //[self sendRequest:scrobblingLoginUrl];
@@ -47,7 +47,13 @@
     return result;
 }
 
-- (void)getPlaylist
+- (void)radioTune:(NSString*)tag
+{
+    NSString *url = [NSString stringWithFormat:@"%@%@", API2_URL, METHOD_RADIO_TUNE];
+    [self sendRequest:url postData:[NSString stringWithFormat:@"sk=%@&station=librefm://globaltags/%@", self.mobileSessionKey, tag]];
+}
+
+- (void)radioGetPlaylist
 {
     NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_RADIO_GETPLAYLIST, self.mobileSessionKey];
     [self sendRequest:url];
@@ -59,14 +65,32 @@
         if (jsonDictionary[@"error"] != nil) {
             NSLog(@"error: %@", jsonDictionary[@"message"]);
         } else {
-            NSDictionary* session = jsonDictionary[@"session"];
+            NSDictionary *session = jsonDictionary[@"session"];
             self.mobileSessionKey = session[@"key"];
             self.username = session[@"name"];
         }
         [self checkLogin];
-        [self getPlaylist];
+        [self radioTune:@"rock"];
     } else if (_loggedIn == YES && [url isAPIMethod:METHOD_RADIO_GETPLAYLIST]) {
-
+        NSDictionary *playlist = jsonDictionary[@"playlist"];
+        NSString *title = playlist[@"title"];
+        NSString *creator = playlist[@"creator"];
+        //@"link", @"date"
+        NSArray *track = playlist[@"track"];
+        for (NSDictionary *t in track) {
+            NSString *creator = t[@"creator"];
+            NSString *album = t[@"album"];
+            NSString *title = t[@"title"];
+            //NSDictionary* extension = t[@"extension"]; //artist info
+            //@"identifier" : @"0000"
+            NSString *location = t[@"location"];
+            NSString *image = t[@"image"];
+            //NSNumber *duration = t[@"duration"]; // always 180000?
+            NSLog(@"track '%@' '%@' '%@'", creator, title, location);
+        }
+        
+    } else if (_loggedIn == YES && [url isAPIMethod:METHOD_RADIO_TUNE]) {
+        [self radioGetPlaylist];
     }
 }
 
@@ -148,12 +172,12 @@
     NSData *certData = [[NSData alloc] initWithContentsOfFile:certPath];
     CFDataRef certDataRef = (__bridge_retained CFDataRef)certData;
     SecCertificateRef cert = SecCertificateCreateWithData(NULL, certDataRef);
-    
+
     // establish a chain of trust anchored on our bundled certificate
     CFArrayRef certArrayRef = CFArrayCreate(NULL, (void *)&cert, 1, NULL);
     SecTrustRef serverTrust = protectionSpace.serverTrust;
     status = SecTrustSetAnchorCertificates(serverTrust, certArrayRef);
-    
+
     // verify that trust
     SecTrustResultType trustResult;
     status = SecTrustEvaluate(serverTrust, &trustResult);
@@ -162,13 +186,24 @@
     CFRelease(cert);
     CFRelease(certDataRef);
     
-    return trustResult == kSecTrustResultUnspecified ||
-           trustResult == kSecTrustResultRecoverableTrustFailure;  // FIXME
+    return trustResult == kSecTrustResultConfirm ||
+           trustResult == kSecTrustResultUnspecified ||
+           trustResult == kSecTrustResultProceed/* ||
+           trustResult == kSecTrustResultRecoverableTrustFailure*/;  // FIXME
 }
 
 - (void)sendRequest:(NSString *)url
 {
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request
+                                                            delegate:self];
+}
+
+- (void)sendRequest:(NSString *)url postData:(NSString*)data
+{
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[data dataUsingEncoding:NSUTF8StringEncoding]];
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request
                                                             delegate:self];
 }

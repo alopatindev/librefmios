@@ -488,6 +488,7 @@
 				BAFD9E77194CDF98009718B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BAFD9E78194CDF98009718B2 /* Build configuration list for PBXNativeTarget "librefmTests" */ = {
 			isa = XCConfigurationList;
@@ -496,6 +497,7 @@
 				BAFD9E7A194CDF98009718B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
