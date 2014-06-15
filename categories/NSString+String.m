@@ -8,16 +8,17 @@
 
 #import "NSString+String.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "../librefm/LibrefmConnection.h"
 
 @implementation NSString (String)
 
-+ (NSString *) currentTimeStamp
++ (NSString *)currentTimeStamp
 {
     long long t = (long long) time(NULL);
     return [NSString stringWithFormat:@"%lld", t];
 }
 
-- (NSString *) md5
+- (NSString *)md5
 {
     const char *cStr = [self UTF8String];
     unsigned char digest[CC_MD5_DIGEST_LENGTH];
@@ -29,6 +30,15 @@
         [output appendFormat:@"%02x", digest[i]];
 
     return output;
+}
+
+- (BOOL)isAPIMethod:(NSString *)method
+{
+    NSComparisonResult result =
+        [self compare:method
+              options:NSLiteralSearch
+                range:NSMakeRange([API2_URL length], [method length])];
+    return result == NSOrderedSame ? YES : NO;
 }
 
 @end

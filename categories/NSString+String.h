@@ -10,7 +10,8 @@
 
 @interface NSString (String)
 
-+ (NSString *) currentTimeStamp;
-- (NSString *) md5;
++ (NSString *)currentTimeStamp;
+- (NSString *)md5;
+- (BOOL)isAPIMethod:(NSString *)method;
 
 @end

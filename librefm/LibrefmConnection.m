@@ -19,41 +19,41 @@
     return self;
 }
 
-- (BOOL)loginWithUsername:(NSString*)username password:(NSString*)password
+- (BOOL)loginWithUsername:(NSString *)username password:(NSString *)password
 {
     BOOL result = NO;
     
-    NSString* passMD5 = [password md5];
-    NSString* token;
-    NSString* wsToken;
-    NSString* timeStamp = [NSString currentTimeStamp];
+    NSString *passMD5 = [password md5];
+    NSString *token;
+    NSString *wsToken;
+    NSString *timeStamp = [NSString currentTimeStamp];
     
     token = [passMD5 stringByAppendingString:timeStamp];
     token = [token md5];
     wsToken = [username stringByAppendingString:passMD5];
     wsToken = [wsToken md5];
     
-    NSString* streamingLoginUrl = [NSString stringWithFormat:@"https://libre.fm/radio/handshake.php?username=%@&passwordmd5=%@", username, passMD5];
-    NSString* scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle.libre.fm/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", username, timeStamp, token];
-    NSString* webServicesLoginUrl = [NSString stringWithFormat:@"https://libre.fm/2.0/?method=auth.getmobilesession&username=%@&authToken=%@", username, wsToken];
+    NSString *streamingLoginUrl = [NSString stringWithFormat:@"https://libre.fm/radio/handshake.php?username=%@&passwordmd5=%@", username, passMD5];
+    NSString *scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle.libre.fm/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", username, timeStamp, token];
+    NSString *webServicesLoginUrl = [NSString stringWithFormat:@"%@%@&username=%@&authToken=%@", API2_URL, METHOD_AUTH_GETMOBILESESSION, username, wsToken];
     
     NSLog(@"%@\n%@\n%@\n", streamingLoginUrl, scrobblingLoginUrl, webServicesLoginUrl);
     
-    [self sendRequest:streamingLoginUrl];
-    [self sendRequest:scrobblingLoginUrl];
+    //[self sendRequest:streamingLoginUrl];
+    //[self sendRequest:scrobblingLoginUrl];
     [self sendRequest:webServicesLoginUrl];
     
     return result;
 }
 
-- (void)sendRequest:(NSString*)url
+- (void)sendRequest:(NSString *)url
 {
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request
                                                             delegate:self];
 }
 
-- (NSString*)currentURLStringFromConnection:(NSURLConnection*)connection
+- (NSString *)currentURLStringFromConnection:(NSURLConnection *)connection
 {
     return [[[connection currentRequest] URL] absoluteString];
 }
@@ -61,14 +61,14 @@
 - (void)connection:(NSURLConnection *)connection
 didReceiveResponse:(NSURLResponse *)response
 {
-    NSString* url = [self currentURLStringFromConnection:connection];
+    NSString *url = [self currentURLStringFromConnection:connection];
     _responseDict[url] = [NSMutableData new];
 }
 
 - (void)connection:(NSURLConnection *)connection
     didReceiveData:(NSData *)data
 {
-    NSString* url = [self currentURLStringFromConnection:connection];
+    NSString *url = [self currentURLStringFromConnection:connection];
     [_responseDict[url] appendData:data];
 }
 
@@ -80,16 +80,31 @@ didReceiveResponse:(NSURLResponse *)response
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSString* url = [self currentURLStringFromConnection:connection];
+    NSString *url = [self currentURLStringFromConnection:connection];
     NSLog(@"connectionDidFinishLoading url='%@'", url);
-    NSMutableData* data = _responseDict[url];
+    NSMutableData *data = _responseDict[url];
     
     if (data != nil) {
-        NSString* out = [[NSString alloc] initWithData:data
-                                              encoding:NSUTF8StringEncoding];
-        
-        NSLog(@"\n\ndata='''%@'''\n\n", out);
-    
+        if ([url hasPrefix:API2_URL] == YES) {
+            NSError *error;
+            NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                                           options:NSJSONReadingMutableContainers
+                                                                             error:&error];
+            if ([url isAPIMethod:METHOD_AUTH_GETMOBILESESSION])
+            {
+                if (jsonDictionary[@"error"] != nil) {
+                    NSLog(@"error: %@", jsonDictionary[@"message"]);
+                } else {
+                    NSDictionary* session = jsonDictionary[@"session"];
+                    NSString *sessionKey = session[@"key"];
+                }
+            }
+        } else {
+            NSString *out = [[NSString alloc] initWithData:data
+                                                  encoding:NSUTF8StringEncoding];
+            NSLog(@"\n\ndata='''%@'''\n\n", out);
+        }
+
         data.length = 0;
         [_responseDict removeObjectForKey:url];
     }
@@ -98,7 +113,7 @@ didReceiveResponse:(NSURLResponse *)response
 - (void)connection:(NSURLConnection *)connection
   didFailWithError:(NSError *)error
 {
-    NSString* url = [self currentURLStringFromConnection:connection];
+    NSString *url = [self currentURLStringFromConnection:connection];
     NSLog(@"didFailWithError url='%@' error: %@", url, error);
     NSMutableData* data = _responseDict[url];
     if (data != nil) {
@@ -130,6 +145,7 @@ didReceiveResponse:(NSURLResponse *)response
     if (certPath == nil)
         return NO;
 
+    OSStatus status;
     NSData *certData = [[NSData alloc] initWithContentsOfFile:certPath];
     CFDataRef certDataRef = (__bridge_retained CFDataRef)certData;
     SecCertificateRef cert = SecCertificateCreateWithData(NULL, certDataRef);
@@ -137,18 +153,18 @@ didReceiveResponse:(NSURLResponse *)response
     // establish a chain of trust anchored on our bundled certificate
     CFArrayRef certArrayRef = CFArrayCreate(NULL, (void *)&cert, 1, NULL);
     SecTrustRef serverTrust = protectionSpace.serverTrust;
-    SecTrustSetAnchorCertificates(serverTrust, certArrayRef);
+    status = SecTrustSetAnchorCertificates(serverTrust, certArrayRef);
     
     // verify that trust
     SecTrustResultType trustResult;
-    SecTrustEvaluate(serverTrust, &trustResult);
+    status = SecTrustEvaluate(serverTrust, &trustResult);
 
     CFRelease(certArrayRef);
     CFRelease(cert);
     CFRelease(certDataRef);
     
     return trustResult == kSecTrustResultUnspecified ||
-           trustResult == kSecTrustResultRecoverableTrustFailure;
+           trustResult == kSecTrustResultRecoverableTrustFailure;  // FIXME
 }
 
 @end
