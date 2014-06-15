@@ -10,7 +10,7 @@
 
 @interface NSString (String)
 
-+ (NSString*) currentTimeStamp;
-- (NSString*) md5;
++ (NSString *) currentTimeStamp;
+- (NSString *) md5;
 
 @end

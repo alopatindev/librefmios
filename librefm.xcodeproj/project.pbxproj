@@ -22,6 +22,7 @@
 		BAFD9E70194CDF98009718B2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BAFD9E6E194CDF98009718B2 /* InfoPlist.strings */; };
 		BAFD9E72194CDF98009718B2 /* librefmTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E71194CDF98009718B2 /* librefmTests.m */; };
 		BAFD9E82194D2090009718B2 /* NSString+String.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E81194D2090009718B2 /* NSString+String.m */; };
+		BAFD9E85194D2541009718B2 /* LibrefmConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E84194D2541009718B2 /* LibrefmConnection.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,8 @@
 		BAFD9E71194CDF98009718B2 /* librefmTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = librefmTests.m; sourceTree = "<group>"; };
 		BAFD9E80194D2090009718B2 /* NSString+String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+String.h"; sourceTree = "<group>"; };
 		BAFD9E81194D2090009718B2 /* NSString+String.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+String.m"; sourceTree = "<group>"; };
+		BAFD9E83194D2541009718B2 /* LibrefmConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibrefmConnection.h; sourceTree = "<group>"; };
+		BAFD9E84194D2541009718B2 /* LibrefmConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibrefmConnection.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +125,8 @@
 				BAFD9E5B194CDF98009718B2 /* ViewController.h */,
 				BAFD9E5C194CDF98009718B2 /* ViewController.m */,
 				BAFD9E5E194CDF98009718B2 /* Images.xcassets */,
+				BAFD9E83194D2541009718B2 /* LibrefmConnection.h */,
+				BAFD9E84194D2541009718B2 /* LibrefmConnection.m */,
 				BAFD9E4D194CDF98009718B2 /* Supporting Files */,
 			);
 			path = librefm;
@@ -266,6 +271,7 @@
 				BAFD9E57194CDF98009718B2 /* AppDelegate.m in Sources */,
 				BAFD9E82194D2090009718B2 /* NSString+String.m in Sources */,
 				BAFD9E53194CDF98009718B2 /* main.m in Sources */,
+				BAFD9E85194D2541009718B2 /* LibrefmConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

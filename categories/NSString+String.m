@@ -11,13 +11,13 @@
 
 @implementation NSString (String)
 
-+ (NSString*) currentTimeStamp
++ (NSString *) currentTimeStamp
 {
     long long t = (long long) time(NULL);
     return [NSString stringWithFormat:@"%lld", t];
 }
 
-- (NSString*) md5
+- (NSString *) md5
 {
     const char *cStr = [self UTF8String];
     unsigned char digest[CC_MD5_DIGEST_LENGTH];

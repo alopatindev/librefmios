@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "NSString+String.h"
+#import "LibrefmConnection.h"
 
 @interface ViewController ()
 
@@ -15,33 +15,12 @@
 
 @implementation ViewController
 
-- (BOOL)loginWithUsername:(NSString*)username password:(NSString*)password
-{
-    BOOL result = NO;
-
-    NSString* passMD5 = [password md5];
-    NSString* token;
-    NSString* wsToken;
-    NSString* timeStamp = [NSString currentTimeStamp];
-
-    token = [passMD5 stringByAppendingString:timeStamp];
-    token = [token md5];
-    wsToken = [username stringByAppendingString:passMD5];
-    wsToken = [wsToken md5];
-
-    NSString* streamingLoginUrl = [NSString stringWithFormat:@"https://libre.fm/radio/handshake.php?username=%@&passwordmd5=%@", username, passMD5];
-    NSString* scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle.libre.fm/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", username, timeStamp, token];
-    NSString* webServicesLoginUrl = [NSString stringWithFormat:@"https://libre.fm/2.0/?method=auth.getmobilesession&username=%@&authToken=%@", username, wsToken];
-
-    NSLog(@"%@\n%@\n%@\n", streamingLoginUrl, scrobblingLoginUrl, webServicesLoginUrl);
-
-    return result;
-}
+LibrefmConnection *_librefmConnection;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+	_librefmConnection = [LibrefmConnection new];
 }
 
 - (void)didReceiveMemoryWarning
@@ -52,7 +31,7 @@
 
 - (IBAction)LoginButtonClicked:(id)sender
 {
-    BOOL b = [self loginWithUsername:[self.usernameTextField text]
-                            password:[self.passwordTextField text]];
+    BOOL b = [_librefmConnection loginWithUsername:[self.usernameTextField text]
+                                          password:[self.passwordTextField text]];
 }
 @end
