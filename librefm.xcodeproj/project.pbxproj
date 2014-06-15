@@ -23,6 +23,7 @@
 		BAFD9E72194CDF98009718B2 /* librefmTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E71194CDF98009718B2 /* librefmTests.m */; };
 		BAFD9E82194D2090009718B2 /* NSString+String.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E81194D2090009718B2 /* NSString+String.m */; };
 		BAFD9E85194D2541009718B2 /* LibrefmConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E84194D2541009718B2 /* LibrefmConnection.m */; };
+		BAFD9E88194DA181009718B2 /* turtle.libre.fm.der in Resources */ = {isa = PBXBuildFile; fileRef = BAFD9E87194DA181009718B2 /* turtle.libre.fm.der */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		BAFD9E81194D2090009718B2 /* NSString+String.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+String.m"; sourceTree = "<group>"; };
 		BAFD9E83194D2541009718B2 /* LibrefmConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibrefmConnection.h; sourceTree = "<group>"; };
 		BAFD9E84194D2541009718B2 /* LibrefmConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibrefmConnection.m; sourceTree = "<group>"; };
+		BAFD9E87194DA181009718B2 /* turtle.libre.fm.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = turtle.libre.fm.der; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 		BAFD9E3A194CDF98009718B2 = {
 			isa = PBXGroup;
 			children = (
+				BAFD9E86194DA181009718B2 /* resources */,
 				BAFD9E7F194D2090009718B2 /* categories */,
 				BAFD9E4C194CDF98009718B2 /* librefm */,
 				BAFD9E6B194CDF98009718B2 /* librefmTests */,
@@ -170,6 +173,14 @@
 			path = categories;
 			sourceTree = "<group>";
 		};
+		BAFD9E86194DA181009718B2 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				BAFD9E87194DA181009718B2 /* turtle.libre.fm.der */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -247,6 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAFD9E5F194CDF98009718B2 /* Images.xcassets in Resources */,
+				BAFD9E88194DA181009718B2 /* turtle.libre.fm.der in Resources */,
 				BAFD9E51194CDF98009718B2 /* InfoPlist.strings in Resources */,
 				BAFD9E5A194CDF98009718B2 /* Main.storyboard in Resources */,
 			);
