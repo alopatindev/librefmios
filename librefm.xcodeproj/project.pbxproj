@@ -21,6 +21,7 @@
 		BAFD9E68194CDF98009718B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E4A194CDF98009718B2 /* UIKit.framework */; };
 		BAFD9E70194CDF98009718B2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BAFD9E6E194CDF98009718B2 /* InfoPlist.strings */; };
 		BAFD9E72194CDF98009718B2 /* librefmTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E71194CDF98009718B2 /* librefmTests.m */; };
+		BAFD9E7E194D1201009718B2 /* NSString+String.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E7D194D1201009718B2 /* NSString+String.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		BAFD9E6D194CDF98009718B2 /* librefmTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "librefmTests-Info.plist"; sourceTree = "<group>"; };
 		BAFD9E6F194CDF98009718B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BAFD9E71194CDF98009718B2 /* librefmTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = librefmTests.m; sourceTree = "<group>"; };
+		BAFD9E7C194D1201009718B2 /* NSString+String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+String.h"; sourceTree = "<group>"; };
+		BAFD9E7D194D1201009718B2 /* NSString+String.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+String.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +85,7 @@
 		BAFD9E3A194CDF98009718B2 = {
 			isa = PBXGroup;
 			children = (
+				BAFD9E7B194D11B6009718B2 /* categories */,
 				BAFD9E4C194CDF98009718B2 /* librefm */,
 				BAFD9E6B194CDF98009718B2 /* librefmTests */,
 				BAFD9E45194CDF98009718B2 /* Frameworks */,
@@ -150,6 +154,15 @@
 				BAFD9E6E194CDF98009718B2 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BAFD9E7B194D11B6009718B2 /* categories */ = {
+			isa = PBXGroup;
+			children = (
+				BAFD9E7C194D1201009718B2 /* NSString+String.h */,
+				BAFD9E7D194D1201009718B2 /* NSString+String.m */,
+			);
+			name = categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -251,6 +264,7 @@
 			files = (
 				BAFD9E5D194CDF98009718B2 /* ViewController.m in Sources */,
 				BAFD9E57194CDF98009718B2 /* AppDelegate.m in Sources */,
+				BAFD9E7E194D1201009718B2 /* NSString+String.m in Sources */,
 				BAFD9E53194CDF98009718B2 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
