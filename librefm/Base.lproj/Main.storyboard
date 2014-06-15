@@ -35,7 +35,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="LoginButtonClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Jyq-ns-US7"/>
+                                    <action selector="loginButtonClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fcY-me-hD4"/>
                                 </connections>
                             </button>
                         </subviews>

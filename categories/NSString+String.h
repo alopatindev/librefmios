@@ -12,6 +12,7 @@
 
 + (NSString *)currentTimeStamp;
 - (NSString *)md5;
+- (BOOL)containsString:(NSString *)string;
 - (BOOL)isAPIMethod:(NSString *)method;
 
 @end

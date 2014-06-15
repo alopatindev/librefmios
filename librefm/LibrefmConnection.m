@@ -15,6 +15,7 @@
 {
     if (self = [super init]) {
         _responseDict = [NSMutableDictionary new];
+        _loggedIn = NO;
     }
     return self;
 }
@@ -46,36 +47,27 @@
     return result;
 }
 
-- (void)sendRequest:(NSString *)url
+- (void)getPlaylist
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request
-                                                            delegate:self];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_RADIO_GETPLAYLIST, self.mobileSessionKey];
+    [self sendRequest:url];
 }
 
-- (NSString *)currentURLStringFromConnection:(NSURLConnection *)connection
+- (void)processJSON:(NSDictionary *)jsonDictionary forUrl:(NSString *)url
 {
-    return [[[connection currentRequest] URL] absoluteString];
-}
+    if (_loggedIn == NO && [url isAPIMethod:METHOD_AUTH_GETMOBILESESSION]) {
+        if (jsonDictionary[@"error"] != nil) {
+            NSLog(@"error: %@", jsonDictionary[@"message"]);
+        } else {
+            NSDictionary* session = jsonDictionary[@"session"];
+            self.mobileSessionKey = session[@"key"];
+            self.username = session[@"name"];
+        }
+        [self checkLogin];
+        [self getPlaylist];
+    } else if (_loggedIn == YES && [url isAPIMethod:METHOD_RADIO_GETPLAYLIST]) {
 
-- (void)connection:(NSURLConnection *)connection
-didReceiveResponse:(NSURLResponse *)response
-{
-    NSString *url = [self currentURLStringFromConnection:connection];
-    _responseDict[url] = [NSMutableData new];
-}
-
-- (void)connection:(NSURLConnection *)connection
-    didReceiveData:(NSData *)data
-{
-    NSString *url = [self currentURLStringFromConnection:connection];
-    [_responseDict[url] appendData:data];
-}
-
-- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
-                  willCacheResponse:(NSCachedURLResponse*)cachedResponse
-{
-    return nil;
+    }
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -83,31 +75,38 @@ didReceiveResponse:(NSURLResponse *)response
     NSString *url = [self currentURLStringFromConnection:connection];
     NSLog(@"connectionDidFinishLoading url='%@'", url);
     NSMutableData *data = _responseDict[url];
-    
-    if (data != nil) {
-        if ([url hasPrefix:API2_URL] == YES) {
-            NSError *error;
-            NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data
-                                                                           options:NSJSONReadingMutableContainers
-                                                                             error:&error];
-            if ([url isAPIMethod:METHOD_AUTH_GETMOBILESESSION])
-            {
-                if (jsonDictionary[@"error"] != nil) {
-                    NSLog(@"error: %@", jsonDictionary[@"message"]);
-                } else {
-                    NSDictionary* session = jsonDictionary[@"session"];
-                    NSString *sessionKey = session[@"key"];
-                }
-            }
-        } else {
+    assert(data != nil);
+
+    if ([url hasPrefix:API2_URL] == YES) {
+        NSError *error;
+        NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                                       options:NSJSONReadingMutableContainers
+                                                                         error:&error];
+        if (jsonDictionary == nil) {
             NSString *out = [[NSString alloc] initWithData:data
                                                   encoding:NSUTF8StringEncoding];
-            NSLog(@"\n\ndata='''%@'''\n\n", out);
+            if ([out containsString:@"BADSESSION"]) {
+                NSLog(@"BADSESSION");
+                _loggedIn = NO;
+            }
+        } else {
+            assert(jsonDictionary != nil);
         }
-
-        data.length = 0;
-        [_responseDict removeObjectForKey:url];
+        [self processJSON:jsonDictionary forUrl:url];
+    } else {
+        NSString *out = [[NSString alloc] initWithData:data
+                                              encoding:NSUTF8StringEncoding];
+        NSLog(@"\n\ndata='''%@'''\n\n", out);
     }
+
+    data.length = 0;
+    [_responseDict removeObjectForKey:url];
+}
+
+- (void) checkLogin
+{
+    _loggedIn = self.mobileSessionKey != nil
+              ? YES : NO;  // TODO
 }
 
 - (void)connection:(NSURLConnection *)connection
@@ -165,6 +164,38 @@ didReceiveResponse:(NSURLResponse *)response
     
     return trustResult == kSecTrustResultUnspecified ||
            trustResult == kSecTrustResultRecoverableTrustFailure;  // FIXME
+}
+
+- (void)sendRequest:(NSString *)url
+{
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request
+                                                            delegate:self];
+}
+
+- (NSString *)currentURLStringFromConnection:(NSURLConnection *)connection
+{
+    return [[[connection currentRequest] URL] absoluteString];
+}
+
+- (void)connection:(NSURLConnection *)connection
+didReceiveResponse:(NSURLResponse *)response
+{
+    NSString *url = [self currentURLStringFromConnection:connection];
+    _responseDict[url] = [NSMutableData new];
+}
+
+- (void)connection:(NSURLConnection *)connection
+    didReceiveData:(NSData *)data
+{
+    NSString *url = [self currentURLStringFromConnection:connection];
+    [_responseDict[url] appendData:data];
+}
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
+                  willCacheResponse:(NSCachedURLResponse*)cachedResponse
+{
+    return nil;
 }
 
 @end

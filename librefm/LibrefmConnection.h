@@ -10,6 +10,7 @@
 
 static NSString *const API2_URL = @"https://libre.fm/2.0/?format=json&method=";
 
+// http://bugs.foocorp.net/projects/librefm/wiki/Librefm_API_methods
 static NSString *const METHOD_ALBUM_ADDTAGS          = @"album.addTags";
 static NSString *const METHOD_ALBUM_GETTAGS          = @"album.getTags";
 static NSString *const METHOD_ALBUM_GETTOPTAGS       = @"album.getTopTags";
@@ -52,9 +53,14 @@ static NSString *const METHOD_LIBRARY_REMOVESCROBBLE = @"library.removescrobble"
 @interface LibrefmConnection : NSObject<NSURLConnectionDelegate>
 {
     NSMutableDictionary *_responseDict;
+    BOOL _loggedIn;
 }
+
+@property NSString *mobileSessionKey;
+@property NSString *username;
 
 - (instancetype)init;
 - (BOOL)loginWithUsername:(NSString*)username password:(NSString*)password;
+- (void)getPlaylist;
 
 @end

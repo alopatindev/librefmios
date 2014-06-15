@@ -29,7 +29,7 @@ LibrefmConnection *_librefmConnection;
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)LoginButtonClicked:(id)sender
+- (IBAction)loginButtonClicked:(id)sender
 {
     BOOL b = [_librefmConnection loginWithUsername:[self.usernameTextField text]
                                           password:[self.passwordTextField text]];

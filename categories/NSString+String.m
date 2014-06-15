@@ -32,6 +32,11 @@
     return output;
 }
 
+- (BOOL)containsString:(NSString *)string
+{
+    return [self rangeOfString:string].location != NSNotFound ? YES : NO;
+}
+
 - (BOOL)isAPIMethod:(NSString *)method
 {
     NSComparisonResult result =
