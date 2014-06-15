@@ -83,12 +83,16 @@ didReceiveResponse:(NSURLResponse *)response
     NSString* url = [self currentURLStringFromConnection:connection];
     NSLog(@"connectionDidFinishLoading url='%@'", url);
     NSMutableData* data = _responseDict[url];
-    NSString* out = [[NSString alloc] initWithData:data
-                                          encoding:NSUTF8StringEncoding];
-    NSLog(@"\n\ndata='''%@'''\n\n", out);
     
-    data.length = 0;
-    //_responseDict[url] = nil;
+    if (data != nil) {
+        NSString* out = [[NSString alloc] initWithData:data
+                                              encoding:NSUTF8StringEncoding];
+        
+        NSLog(@"\n\ndata='''%@'''\n\n", out);
+    
+        data.length = 0;
+        [_responseDict removeObjectForKey:url];
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection
@@ -96,8 +100,11 @@ didReceiveResponse:(NSURLResponse *)response
 {
     NSString* url = [self currentURLStringFromConnection:connection];
     NSLog(@"didFailWithError url='%@' error: %@", url, error);
-    ((NSMutableData*)_responseDict[url]).length = 0;
-    //_responseDict[url] = nil;
+    NSMutableData* data = _responseDict[url];
+    if (data != nil) {
+        data.length = 0;
+        [_responseDict removeObjectForKey:url];
+    }
 }
 
 @end
