@@ -180,10 +180,18 @@
         
         NSData *localServerCertData = [[NSData alloc] initWithContentsOfFile:localCertPath];
         localCertDataRef = (__bridge_retained CFDataRef)localServerCertData;
+        if (localCertDataRef == nil)
+            break;
+
         localCert = SecCertificateCreateWithData(NULL, localCertDataRef);
+        if (localCert == nil)
+            break;
         
         // establish a chain of trust anchored on our bundled certificate
         localCertArrayRef = CFArrayCreate(NULL, (void *)&localCert, 1, NULL);
+        if (localCertArrayRef == nil)
+            break;
+
         SecTrustRef serverTrust = protectionSpace.serverTrust;
         status = SecTrustSetAnchorCertificates(serverTrust, localCertArrayRef);
         if (status != errSecSuccess)
@@ -198,16 +206,16 @@
         if (trustResult == kSecTrustResultRecoverableTrustFailure) {
             // TODO: check the IP address
 
-            SecCertificateRef serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
-            if (serverCertificate == nil)
+            SecCertificateRef serverCertRef = SecTrustGetCertificateAtIndex(serverTrust, 0);
+            if (serverCertRef == nil)
                 break;
             
-            CFDataRef serverCertificateData = SecCertificateCopyData(serverCertificate);
-            if (serverCertificateData == nil)
+            CFDataRef serverCertDataRef = SecCertificateCopyData(serverCertRef);
+            if (serverCertDataRef == nil)
                 break;
             
-            const UInt8* const data = CFDataGetBytePtr(serverCertificateData);
-            const CFIndex size = CFDataGetLength(serverCertificateData);
+            const UInt8* const data = CFDataGetBytePtr(serverCertDataRef);
+            const CFIndex size = CFDataGetLength(serverCertDataRef);
             NSData* serverCertData = [NSData dataWithBytes:data length:(NSUInteger)size];
             if (serverCertData == nil)
                 break;
