@@ -152,7 +152,7 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-    if ([self shouldTrustProtectionSpace:challenge.protectionSpace]) {
+    if ([self shouldTrustSelfSignedCertificateInAuthenticationChallenge:challenge]) {
         [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]
              forAuthenticationChallenge:challenge];
     } else {
@@ -160,36 +160,76 @@
     }
 }
 
-- (BOOL)shouldTrustProtectionSpace:(NSURLProtectionSpace *)protectionSpace
+- (BOOL)shouldTrustSelfSignedCertificateInAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-    // load up the bundled certificate
-    NSString *certPath = [[NSBundle mainBundle] pathForResource:protectionSpace.host ofType:@"der"];
+    BOOL success = NO;
     
-    if (certPath == nil)
-        return NO;
-
-    OSStatus status;
-    NSData *certData = [[NSData alloc] initWithContentsOfFile:certPath];
-    CFDataRef certDataRef = (__bridge_retained CFDataRef)certData;
-    SecCertificateRef cert = SecCertificateCreateWithData(NULL, certDataRef);
-
-    // establish a chain of trust anchored on our bundled certificate
-    CFArrayRef certArrayRef = CFArrayCreate(NULL, (void *)&cert, 1, NULL);
-    SecTrustRef serverTrust = protectionSpace.serverTrust;
-    status = SecTrustSetAnchorCertificates(serverTrust, certArrayRef);
-
-    // verify that trust
-    SecTrustResultType trustResult;
-    status = SecTrustEvaluate(serverTrust, &trustResult);
-
-    CFRelease(certArrayRef);
-    CFRelease(cert);
-    CFRelease(certDataRef);
+    CFArrayRef localCertArrayRef = nil;
+    SecCertificateRef localCert = nil;
+    CFDataRef localCertDataRef = nil;
     
-    return trustResult == kSecTrustResultConfirm ||
-           trustResult == kSecTrustResultUnspecified ||
-           trustResult == kSecTrustResultProceed/* ||
-           trustResult == kSecTrustResultRecoverableTrustFailure*/;  // FIXME
+    do {
+        NSURLProtectionSpace *protectionSpace = challenge.protectionSpace;
+        
+        // load up the bundled certificate
+        NSString *localCertPath = [[NSBundle mainBundle] pathForResource:protectionSpace.host ofType:@"der"];
+        if (localCertPath == nil)
+            break;
+        
+        OSStatus status;
+        
+        NSData *localServerCertData = [[NSData alloc] initWithContentsOfFile:localCertPath];
+        localCertDataRef = (__bridge_retained CFDataRef)localServerCertData;
+        localCert = SecCertificateCreateWithData(NULL, localCertDataRef);
+        
+        // establish a chain of trust anchored on our bundled certificate
+        localCertArrayRef = CFArrayCreate(NULL, (void *)&localCert, 1, NULL);
+        SecTrustRef serverTrust = protectionSpace.serverTrust;
+        status = SecTrustSetAnchorCertificates(serverTrust, localCertArrayRef);
+        if (status != errSecSuccess)
+            break;
+        
+        // verify that trust
+        SecTrustResultType trustResult;
+        status = SecTrustEvaluate(serverTrust, &trustResult);
+        if (status != errSecSuccess)
+            break;
+        
+        if (trustResult == kSecTrustResultRecoverableTrustFailure) {
+            // TODO: check the IP address
+
+            SecCertificateRef serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
+            if (serverCertificate == nil)
+                break;
+            
+            CFDataRef serverCertificateData = SecCertificateCopyData(serverCertificate);
+            if (serverCertificateData == nil)
+                break;
+            
+            const UInt8* const data = CFDataGetBytePtr(serverCertificateData);
+            const CFIndex size = CFDataGetLength(serverCertificateData);
+            NSData* serverCertData = [NSData dataWithBytes:data length:(NSUInteger)size];
+            if (serverCertData == nil)
+                break;
+            
+            BOOL equal = [serverCertData isEqualToData:localServerCertData];
+            success = equal;
+        } else {
+            success = trustResult == kSecTrustResultUnspecified ||
+                      trustResult == kSecTrustResultProceed;
+        }
+    } while (0);
+    
+    if (localCertArrayRef != nil)
+        CFRelease(localCertArrayRef);
+    
+    if (localCert != nil)
+        CFRelease(localCert);
+    
+    if (localCertDataRef != nil)
+        CFRelease(localCertDataRef);
+    
+    return success;
 }
 
 - (void)sendRequest:(NSString *)url
