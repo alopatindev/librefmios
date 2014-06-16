@@ -20,10 +20,8 @@
     return self;
 }
 
-- (BOOL)loginWithUsername:(NSString *)username password:(NSString *)password
+- (void)loginWithUsername:(NSString *)username password:(NSString *)password
 {
-    BOOL result = NO;
-    
     NSString *passMD5 = [password md5];
     NSString *token;
     NSString *wsToken;
@@ -43,14 +41,13 @@
     //[self sendRequest:streamingLoginUrl];
     //[self sendRequest:scrobblingLoginUrl];
     [self sendRequest:webServicesLoginUrl];
-    
-    return result;
 }
 
 - (void)radioTune:(NSString*)tag
 {
     NSString *url = [NSString stringWithFormat:@"%@%@", API2_URL, METHOD_RADIO_TUNE];
-    [self sendRequest:url postData:[NSString stringWithFormat:@"sk=%@&station=librefm://globaltags/%@", self.mobileSessionKey, tag]];
+    [self sendRequest:url
+             postData:[NSString stringWithFormat:@"sk=%@&station=librefm://globaltags/%@", self.mobileSessionKey, tag]];
 }
 
 - (void)radioGetPlaylist
@@ -62,33 +59,32 @@
 - (void)processJSON:(NSDictionary *)jsonDictionary forUrl:(NSString *)url
 {
     if (_loggedIn == NO && [url isAPIMethod:METHOD_AUTH_GETMOBILESESSION]) {
-        if (jsonDictionary[@"error"] != nil) {
-            NSLog(@"error: %@", jsonDictionary[@"message"]);
+        NSString *errorCode = jsonDictionary[@"error"];
+        if (errorCode != nil) {
+            NSString* errorMessage = jsonDictionary[@"message"];
+            self.mobileSessionKey = nil;
+            [self.delegate librefmDidLogin:NO
+                                     error:[NSError errorWithDomain:errorMessage
+                                                               code:[errorCode intValue]
+                                                           userInfo:nil]];
         } else {
             NSDictionary *session = jsonDictionary[@"session"];
             self.mobileSessionKey = session[@"key"];
             self.username = session[@"name"];
+            [self checkLogin];
+            [self.delegate librefmDidLogin:_loggedIn error:nil];
         }
-        [self checkLogin];
-        [self radioTune:@"rock"];
     } else if (_loggedIn == YES && [url isAPIMethod:METHOD_RADIO_GETPLAYLIST]) {
-        NSDictionary *playlist = jsonDictionary[@"playlist"];
-        NSString *title = playlist[@"title"];
-        NSString *creator = playlist[@"creator"];
-        //@"link", @"date"
-        NSArray *track = playlist[@"track"];
-        for (NSDictionary *t in track) {
-            NSString *creator = t[@"creator"];
-            NSString *album = t[@"album"];
-            NSString *title = t[@"title"];
-            //NSDictionary* extension = t[@"extension"]; //artist info
-            //@"identifier" : @"0000"
-            NSString *location = t[@"location"];
-            NSString *image = t[@"image"];
-            //NSNumber *duration = t[@"duration"]; // always 180000?
-            NSLog(@"track '%@' '%@' '%@'", creator, title, location);
+        NSDictionary* playlist = jsonDictionary[@"playlist"];
+        if (playlist != nil) {
+            [self.delegate librefmDidLoadPlaylist:playlist ok:YES error:nil];
+        } else {
+            [self.delegate librefmDidLoadPlaylist:playlist
+                                               ok:NO
+                                            error:[NSError errorWithDomain:@"Failed to load playlist"
+                                                                      code:-1
+                                                                  userInfo:nil]];
         }
-        
     } else if (_loggedIn == YES && [url isAPIMethod:METHOD_RADIO_TUNE]) {
         [self radioGetPlaylist];
     }
@@ -112,6 +108,8 @@
             if ([out containsString:@"BADSESSION"]) {
                 NSLog(@"BADSESSION");
                 _loggedIn = NO;
+            } else if ([out containsString:@"FAILED"]) {
+                // TODO
             }
         } else {
             assert(jsonDictionary != nil);
@@ -127,7 +125,7 @@
     [_responseDict removeObjectForKey:url];
 }
 
-- (void) checkLogin
+- (void)checkLogin
 {
     _loggedIn = self.mobileSessionKey != nil
               ? YES : NO;  // TODO

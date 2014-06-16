@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LibrefmDelegate.h"
 
 static NSString *const API2_URL = @"https://libre.fm/2.0/?format=json&method=";
 
@@ -58,9 +59,10 @@ static NSString *const METHOD_LIBRARY_REMOVESCROBBLE = @"library.removescrobble"
 
 @property NSString *mobileSessionKey;
 @property NSString *username;
+@property id<LibrefmDelegate> delegate;
 
 - (instancetype)init;
-- (BOOL)loginWithUsername:(NSString*)username password:(NSString*)password;
-- (void)radioTune:(NSString*)tag;
+- (void)loginWithUsername:(NSString*)username password:(NSString*)password;
+- (void)radioTune:(NSString*)tag;  // librefmDidLoadPlaylist
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BAC2379E194FAB2600A65C9B /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAC2379D194FAB2600A65C9B /* MediaPlayer.framework */; };
 		BAFD9E47194CDF98009718B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E46194CDF98009718B2 /* Foundation.framework */; };
 		BAFD9E49194CDF98009718B2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */; };
 		BAFD9E4B194CDF98009718B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E4A194CDF98009718B2 /* UIKit.framework */; };
@@ -37,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BAC2379C194FA68200A65C9B /* LibrefmDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibrefmDelegate.h; sourceTree = "<group>"; };
+		BAC2379D194FAB2600A65C9B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		BAFD9E43194CDF98009718B2 /* librefm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = librefm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAFD9E46194CDF98009718B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -68,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BAC2379E194FAB2600A65C9B /* MediaPlayer.framework in Frameworks */,
 				BAFD9E49194CDF98009718B2 /* CoreGraphics.framework in Frameworks */,
 				BAFD9E4B194CDF98009718B2 /* UIKit.framework in Frameworks */,
 				BAFD9E47194CDF98009718B2 /* Foundation.framework in Frameworks */,
@@ -111,6 +115,7 @@
 		BAFD9E45194CDF98009718B2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BAC2379D194FAB2600A65C9B /* MediaPlayer.framework */,
 				BAFD9E46194CDF98009718B2 /* Foundation.framework */,
 				BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */,
 				BAFD9E4A194CDF98009718B2 /* UIKit.framework */,
@@ -127,9 +132,10 @@
 				BAFD9E58194CDF98009718B2 /* Main.storyboard */,
 				BAFD9E5B194CDF98009718B2 /* ViewController.h */,
 				BAFD9E5C194CDF98009718B2 /* ViewController.m */,
-				BAFD9E5E194CDF98009718B2 /* Images.xcassets */,
 				BAFD9E83194D2541009718B2 /* LibrefmConnection.h */,
 				BAFD9E84194D2541009718B2 /* LibrefmConnection.m */,
+				BAC2379C194FA68200A65C9B /* LibrefmDelegate.h */,
+				BAFD9E5E194CDF98009718B2 /* Images.xcassets */,
 				BAFD9E4D194CDF98009718B2 /* Supporting Files */,
 			);
 			path = librefm;

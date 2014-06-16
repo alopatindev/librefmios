@@ -15,12 +15,15 @@
 
 @implementation ViewController
 
+//MPMusicPlayerController *_musicPlayer;
 LibrefmConnection *_librefmConnection;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //_musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
 	_librefmConnection = [LibrefmConnection new];
+    _librefmConnection.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -31,7 +34,38 @@ LibrefmConnection *_librefmConnection;
 
 - (IBAction)loginButtonClicked:(id)sender
 {
-    BOOL b = [_librefmConnection loginWithUsername:[self.usernameTextField text]
-                                          password:[self.passwordTextField text]];
+    [_librefmConnection loginWithUsername:[self.usernameTextField text]
+                                 password:[self.passwordTextField text]];
 }
+
+- (void)librefmDidLogin:(BOOL)ok error:(NSError*)error
+{
+    if (ok) {
+        [_librefmConnection radioTune:@"rock"];  // TODO DEBUG
+    } else {
+
+    }
+}
+
+- (void)librefmDidLoadPlaylist:(NSDictionary*)playlist ok:(BOOL)ok error:(NSError*)error
+{
+    if (ok) {
+         NSString *title = playlist[@"title"];
+         NSString *creator = playlist[@"creator"];
+         //@"link", @"date"
+         NSArray *track = playlist[@"track"];
+         for (NSDictionary *t in track) {
+             NSString *creator = t[@"creator"];
+             NSString *album = t[@"album"];
+             NSString *title = t[@"title"];
+             //NSDictionary* extension = t[@"extension"]; //artist info
+             //@"identifier" : @"0000"
+             NSString *location = t[@"location"];
+             NSString *image = t[@"image"];
+             //NSNumber *duration = t[@"duration"]; // always 180000?
+             NSLog(@"track '%@' '%@' '%@'", creator, title, location);
+         }
+    }
+}
+
 @end
