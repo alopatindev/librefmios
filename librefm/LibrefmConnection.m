@@ -167,6 +167,7 @@
     CFArrayRef localCertArrayRef = nil;
     SecCertificateRef localCert = nil;
     CFDataRef localCertDataRef = nil;
+    CFDataRef serverCertDataRef = nil;
     
     do {
         NSURLProtectionSpace *protectionSpace = challenge.protectionSpace;
@@ -210,7 +211,7 @@
             if (serverCertRef == nil)
                 break;
             
-            CFDataRef serverCertDataRef = SecCertificateCopyData(serverCertRef);
+            serverCertDataRef = SecCertificateCopyData(serverCertRef);
             if (serverCertDataRef == nil)
                 break;
             
@@ -236,6 +237,9 @@
     
     if (localCertDataRef != nil)
         CFRelease(localCertDataRef);
+    
+    if (serverCertDataRef != nil)
+        CFRelease(serverCertDataRef);
     
     return success;
 }
