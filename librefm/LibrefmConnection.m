@@ -160,12 +160,13 @@
 
 - (BOOL)shouldTrustSelfSignedCertificateInAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-    BOOL success = NO;
+    BOOL result = NO;
     
     CFArrayRef localCertArrayRef = nil;
     SecCertificateRef localCert = nil;
     CFDataRef localCertDataRef = nil;
     CFDataRef serverCertDataRef = nil;
+    //SecKeyRef serverPubKeyRef = nil;
     
     do {
         NSURLProtectionSpace *protectionSpace = challenge.protectionSpace;
@@ -205,6 +206,7 @@
         if (trustResult == kSecTrustResultRecoverableTrustFailure) {
             // TODO: check the IP address
 
+            // comparing server certificate with the local copy
             SecCertificateRef serverCertRef = SecTrustGetCertificateAtIndex(serverTrust, 0);
             if (serverCertRef == nil)
                 break;
@@ -220,10 +222,12 @@
                 break;
             
             BOOL equal = [serverCertData isEqualToData:localServerCertData];
-            success = equal;
+            result = equal;
+            
+            //serverPubKeyRef = SecTrustCopyPublicKey(serverTrust);
         } else {
-            success = trustResult == kSecTrustResultUnspecified ||
-                      trustResult == kSecTrustResultProceed;
+            result = trustResult == kSecTrustResultUnspecified ||
+                     trustResult == kSecTrustResultProceed;
         }
     } while (0);
     
@@ -239,7 +243,10 @@
     if (serverCertDataRef != nil)
         CFRelease(serverCertDataRef);
     
-    return success;
+    //if (serverPubKeyRef != nil)
+    //    CFRelease(serverPubKeyRef);
+    
+    return result;
 }
 
 - (void)sendRequest:(NSString *)url
