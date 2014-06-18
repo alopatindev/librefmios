@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BAC2379E194FAB2600A65C9B /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAC2379D194FAB2600A65C9B /* MediaPlayer.framework */; };
 		BAFD9E47194CDF98009718B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E46194CDF98009718B2 /* Foundation.framework */; };
 		BAFD9E49194CDF98009718B2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */; };
 		BAFD9E4B194CDF98009718B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E4A194CDF98009718B2 /* UIKit.framework */; };
@@ -71,7 +70,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BAC2379E194FAB2600A65C9B /* MediaPlayer.framework in Frameworks */,
 				BAFD9E49194CDF98009718B2 /* CoreGraphics.framework in Frameworks */,
 				BAFD9E4B194CDF98009718B2 /* UIKit.framework in Frameworks */,
 				BAFD9E47194CDF98009718B2 /* Foundation.framework in Frameworks */,

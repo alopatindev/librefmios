@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "LibrefmConnection.h"
+//#import <StreamingKit/STKAudioPlayer.h>
 
 @interface ViewController ()
 
@@ -15,14 +16,18 @@
 
 @implementation ViewController
 
-//MPMusicPlayerController *_musicPlayer;
+//STKAudioPlayer *_audioPlayer;
 LibrefmConnection *_librefmConnection;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //_musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
-	_librefmConnection = [LibrefmConnection new];
+
+    /*_audioPlayer = [[STKAudioPlayer alloc] initWithOptions:(STKAudioPlayerOptions){ .flushQueueOnSeek = YES, .enableVolumeMixer = NO, .equalizerBandFrequencies = {50, 100, 200, 400, 800, 1600, 2600, 16000} }];
+    _audioPlayer.meteringEnabled = YES;
+    _audioPlayer.volume = 1.0f;*/
+
+    _librefmConnection = [LibrefmConnection new];
     _librefmConnection.delegate = self;
 }
 
@@ -34,6 +39,8 @@ LibrefmConnection *_librefmConnection;
 
 - (IBAction)loginButtonClicked:(id)sender
 {
+    //[_audioPlayer play:@"http://www.abstractpath.com/files/audiosamples/sample.mp3"];
+    //return;
     [_librefmConnection loginWithUsername:[self.usernameTextField text]
                                  password:[self.passwordTextField text]];
 }
