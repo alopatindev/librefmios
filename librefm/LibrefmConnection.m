@@ -168,6 +168,8 @@ NSMutableSet* _requestsQueue;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    [self setEmptyCache];
+
     NSString *url = [self currentURLStringFromConnection:connection];
     NSLog(@"connectionDidFinishLoading url='%@'", url);
     NSMutableData *data = _responseDict[url];
@@ -215,6 +217,8 @@ NSMutableSet* _requestsQueue;
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
+    [self setEmptyCache];
+
     NSString *url = [self currentURLStringFromConnection:connection];
     NSLog(@"didFailWithError url='%@' error: %@", url, error);
     
@@ -245,6 +249,8 @@ NSMutableSet* _requestsQueue;
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
+    [self setEmptyCache];
+
     if ([self shouldTrustSelfSignedCertificateInAuthenticationChallenge:challenge]) {
         [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]
              forAuthenticationChallenge:challenge];
@@ -349,6 +355,7 @@ NSMutableSet* _requestsQueue;
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request
                                                             delegate:self];
+    [self setEmptyCache];
 }
 
 - (void)sendRequest:(NSString *)url postData:(NSString*)data
@@ -358,6 +365,7 @@ NSMutableSet* _requestsQueue;
     [request setHTTPBody:[data dataUsingEncoding:NSUTF8StringEncoding]];
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request
                                                             delegate:self];
+    [self setEmptyCache];
 }
 
 - (NSString *)currentURLStringFromConnection:(NSURLConnection *)connection
@@ -381,6 +389,12 @@ NSMutableSet* _requestsQueue;
                   willCacheResponse:(NSCachedURLResponse*)cachedResponse
 {
     return nil;
+}
+
+- (void)setEmptyCache
+{
+    NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
+    [NSURLCache setSharedURLCache:sharedCache];
 }
 
 @end
