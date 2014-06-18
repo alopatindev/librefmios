@@ -236,6 +236,10 @@ NSMutableSet* _requestsQueue;
         }
     }
     
+    if (self.state == LibrefmConnectionStateLoginStarted) {
+        self.state = LibrefmConnectionStateNotLoggedIn;
+    }
+    
     NSMutableData *data = _responseDict[url];
     if (data != nil) {
         data.length = 0;
