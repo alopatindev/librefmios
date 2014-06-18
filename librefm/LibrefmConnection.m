@@ -11,10 +11,14 @@
 
 @implementation LibrefmConnection
 
+NSMutableDictionary *_responseDict;
+NSMutableSet* _requestsQueue;
+
 - (instancetype)init
 {
     if (self = [super init]) {
         _responseDict = [NSMutableDictionary new];
+        _requestsQueue = [NSMutableSet new];
         self.state = LibrefmConnectionStateNotLoggedIn;
     }
     return self;
@@ -27,7 +31,8 @@
     [self tryLogin];
 }
 
-- (BOOL)isNeedInputLoginData {
+- (BOOL)isNeedInputLoginData
+{
     return (self.username == nil || self.password == nil) ? YES : NO;
 }
 
@@ -36,6 +41,8 @@
     if ([self isNeedInputLoginData] == YES) {
         return;
     }
+    
+    self.state = LibrefmConnectionStateLoginStarted;
 
     NSString *passMD5 = [self.password md5];
     NSString *token;
@@ -58,24 +65,69 @@
     [self sendRequest:webServicesLoginUrl];
 }
 
-- (void)radioTune:(NSString*)tag
+- (void)radioTune_:(NSString*)tag
 {
     NSString *url = [NSString stringWithFormat:@"%@%@", API2_URL, METHOD_RADIO_TUNE];
     [self sendRequest:url
              postData:[NSString stringWithFormat:@"sk=%@&station=librefm://globaltags/%@", self.mobileSessionKey, tag]];
 }
 
-- (void)radioGetPlaylist
+- (void)radioGetPlaylist_
 {
     NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_RADIO_GETPLAYLIST, self.mobileSessionKey];
     [self sendRequest:url];
+}
+
+- (void)radioTune:(NSString*)tag
+{
+    NSArray *req = @[NSStringFromSelector(@selector(radioTune_:)), tag];
+    [_requestsQueue addObject:req];
+    [self processRequestsQueue];
+}
+
+- (void)radioGetPlaylist
+{
+    NSArray *req = @[NSStringFromSelector(@selector(radioGetPlaylist_))];
+    [_requestsQueue addObject:req];
+    [self processRequestsQueue];
+}
+
+- (void)processRequestsQueue
+{
+    while ([_requestsQueue count] > 0) {
+        NSArray* a = [_requestsQueue anyObject];
+
+        if (self.state == LibrefmConnectionStateNotLoggedIn)
+        {
+            [self tryLogin];
+            break;
+        } else if (self.state == LibrefmConnectionStateLoggedIn) {
+            [_requestsQueue removeObject:a];
+            SEL sel = NSSelectorFromString(a[0]);
+            switch([a count]) {
+                case 1UL:
+                    [self performSelector:sel];
+                    break;
+                case 2UL:
+                    [self performSelector:sel withObject:a[1]];
+                    break;
+                case 3UL:
+                    [self performSelector:sel withObject:a[1] withObject:a[2]];
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            break;
+        }
+    }
 }
 
 - (void)processJSON:(NSDictionary *)jsonDictionary forUrl:(NSString *)url
 {
     if ([url isAPIMethod:METHOD_AUTH_GETMOBILESESSION]) {
         NSString *errorCode = jsonDictionary[@"error"];
-        if (errorCode != nil) {
+        if (errorCode != nil || jsonDictionary == nil) {
             NSString* errorMessage = jsonDictionary[@"message"];
             self.mobileSessionKey = nil;
             [self.delegate librefmDidLogin:NO
@@ -103,7 +155,13 @@
                                                                   userInfo:nil]];
         }
     } else if ([url isAPIMethod:METHOD_RADIO_TUNE]) {
-        // TODO: check for error?
+        if (jsonDictionary == nil) {
+            [self.delegate librefmDidLoadPlaylist:nil
+                                               ok:NO
+                                            error:[NSError errorWithDomain:@"Failed to tune to the radio"
+                                                                      code:-1
+                                                                  userInfo:nil]];
+        }
         [self radioGetPlaylist];
     }
 }
@@ -113,25 +171,26 @@
     NSString *url = [self currentURLStringFromConnection:connection];
     NSLog(@"connectionDidFinishLoading url='%@'", url);
     NSMutableData *data = _responseDict[url];
-    assert(data != nil);
 
     if ([url hasPrefix:API2_URL] == YES) {
-        NSError *error;
-        NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data
-                                                                       options:NSJSONReadingMutableContainers
-                                                                         error:&error];
-        if (jsonDictionary == nil) {
-            NSString *out = [[NSString alloc] initWithData:data
-                                                  encoding:NSUTF8StringEncoding];
-            if ([out containsString:@"BADSESSION"]) {
-                NSLog(@"BADSESSION");
-                self.state = LibrefmConnectionStateNotLoggedIn;
-                self.mobileSessionKey = nil;
-            } else if ([out containsString:@"FAILED"]) {
-                // TODO
+        NSDictionary *jsonDictionary = nil;
+        if (data != nil) {
+            NSError *error;
+            jsonDictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                             options:NSJSONReadingMutableContainers
+                                                               error:&error];
+            if (jsonDictionary == nil) {
+                NSString *out = [[NSString alloc] initWithData:data
+                                                      encoding:NSUTF8StringEncoding];
+                if ([out containsString:@"BADSESSION"]) {
+                    NSLog(@"BADSESSION");
+                    self.state = LibrefmConnectionStateNotLoggedIn;
+                    self.mobileSessionKey = nil;
+                    [self tryLogin];
+                } else if ([out containsString:@"FAILED"]) {
+                    // TODO
+                }
             }
-        } else {
-            assert(jsonDictionary != nil);
         }
         [self processJSON:jsonDictionary forUrl:url];
     } else {
@@ -142,12 +201,16 @@
 
     data.length = 0;
     [_responseDict removeObjectForKey:url];
+    
+    [self processRequestsQueue];
 }
 
 - (void)checkLogin
 {
-    if (self.mobileSessionKey != nil)
+    if (self.mobileSessionKey != nil) {
         self.state = LibrefmConnectionStateLoggedIn;
+        [self processRequestsQueue];
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
@@ -168,7 +231,7 @@
         }
     }
     
-    NSMutableData* data = _responseDict[url];
+    NSMutableData *data = _responseDict[url];
     if (data != nil) {
         data.length = 0;
         [_responseDict removeObjectForKey:url];
@@ -247,7 +310,7 @@
             if (serverCertDataRef == nil)
                 break;
             
-            const UInt8* const data = CFDataGetBytePtr(serverCertDataRef);
+            const UInt8 *const data = CFDataGetBytePtr(serverCertDataRef);
             const CFIndex size = CFDataGetLength(serverCertDataRef);
             NSData* serverCertData = [NSData dataWithBytes:data length:(NSUInteger)size];
             if (serverCertData == nil)

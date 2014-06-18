@@ -53,7 +53,6 @@ static NSString *const METHOD_LIBRARY_REMOVESCROBBLE = @"library.removescrobble"
 
 @interface LibrefmConnection : NSObject<NSURLConnectionDelegate>
 {
-    NSMutableDictionary *_responseDict;
 }
 
 typedef enum {
