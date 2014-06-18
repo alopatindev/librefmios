@@ -22,24 +22,39 @@
 
 - (void)loginWithUsername:(NSString *)username password:(NSString *)password
 {
-    NSString *passMD5 = [password md5];
+    self.username = username;
+    self.password = password;
+    [self tryLogin];
+}
+
+- (BOOL)isNeedInputLoginData {
+    return (self.username == nil || self.password == nil) ? YES : NO;
+}
+
+- (void)tryLogin
+{
+    if ([self isNeedInputLoginData] == YES) {
+        return;
+    }
+
+    NSString *passMD5 = [self.password md5];
     NSString *token;
     NSString *wsToken;
     NSString *timeStamp = [NSString currentTimeStamp];
     
     token = [passMD5 stringByAppendingString:timeStamp];
     token = [token md5];
-    wsToken = [username stringByAppendingString:passMD5];
+    wsToken = [self.username stringByAppendingString:passMD5];
     wsToken = [wsToken md5];
     
-    NSString *streamingLoginUrl = [NSString stringWithFormat:@"https://libre.fm/radio/handshake.php?username=%@&passwordmd5=%@", username, passMD5];
-    NSString *scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle.libre.fm/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", username, timeStamp, token];
-    NSString *webServicesLoginUrl = [NSString stringWithFormat:@"%@%@&username=%@&authToken=%@", API2_URL, METHOD_AUTH_GETMOBILESESSION, username, wsToken];
+    NSString *streamingLoginUrl = [NSString stringWithFormat:@"https://libre.fm/radio/handshake.php?username=%@&passwordmd5=%@", self.username, passMD5];
+    NSString *scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle.libre.fm/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", self.username, timeStamp, token];
+    NSString *webServicesLoginUrl = [NSString stringWithFormat:@"%@%@&username=%@&authToken=%@", API2_URL, METHOD_AUTH_GETMOBILESESSION, self.username, wsToken];
     
     //NSLog(@"%@\n%@\n%@\n", streamingLoginUrl, scrobblingLoginUrl, webServicesLoginUrl);
     
     //[self sendRequest:streamingLoginUrl];
-    //[self sendRequest:scrobblingLoginUrl];
+    //[self sendRequest:scrobblingLoginUrl]; // 213.138.110.197 or 213.138.110.193
     [self sendRequest:webServicesLoginUrl];
 }
 
@@ -58,7 +73,7 @@
 
 - (void)processJSON:(NSDictionary *)jsonDictionary forUrl:(NSString *)url
 {
-    if (_loggedIn == NO && [url isAPIMethod:METHOD_AUTH_GETMOBILESESSION]) {
+    if ([url isAPIMethod:METHOD_AUTH_GETMOBILESESSION]) {
         NSString *errorCode = jsonDictionary[@"error"];
         if (errorCode != nil) {
             NSString* errorMessage = jsonDictionary[@"message"];
@@ -70,11 +85,11 @@
         } else {
             NSDictionary *session = jsonDictionary[@"session"];
             self.mobileSessionKey = session[@"key"];
-            self.username = session[@"name"];
+            self.name = session[@"name"];
             [self checkLogin];
             [self.delegate librefmDidLogin:_loggedIn error:nil];
         }
-    } else if (_loggedIn == YES && [url isAPIMethod:METHOD_RADIO_GETPLAYLIST]) {
+    } else if ([url isAPIMethod:METHOD_RADIO_GETPLAYLIST]) {
         NSDictionary* playlist = jsonDictionary[@"playlist"];
         if (playlist != nil) {
             [self.delegate librefmDidLoadPlaylist:playlist ok:YES error:nil];
@@ -85,7 +100,8 @@
                                                                       code:-1
                                                                   userInfo:nil]];
         }
-    } else if (_loggedIn == YES && [url isAPIMethod:METHOD_RADIO_TUNE]) {
+    } else if ([url isAPIMethod:METHOD_RADIO_TUNE]) {
+        // TODO: check for error?
         [self radioGetPlaylist];
     }
 }
@@ -131,11 +147,24 @@
               ? YES : NO;  // TODO
 }
 
-- (void)connection:(NSURLConnection *)connection
-  didFailWithError:(NSError *)error
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     NSString *url = [self currentURLStringFromConnection:connection];
     NSLog(@"didFailWithError url='%@' error: %@", url, error);
+    
+    if ([url hasPrefix:API2_URL] == YES) {
+        if ([url isAPIMethod:METHOD_AUTH_GETMOBILESESSION]) {
+            self.mobileSessionKey = nil;
+            [self.delegate librefmDidLogin:NO
+                                     error:error];
+        } else if ([url isAPIMethod:METHOD_RADIO_GETPLAYLIST] ||
+                   [url isAPIMethod:METHOD_RADIO_TUNE]) {
+            [self.delegate librefmDidLoadPlaylist:nil
+                                               ok:NO
+                                            error:error];
+        }
+    }
+    
     NSMutableData* data = _responseDict[url];
     if (data != nil) {
         data.length = 0;
@@ -270,15 +299,13 @@
     return [[[connection currentRequest] URL] absoluteString];
 }
 
-- (void)connection:(NSURLConnection *)connection
-didReceiveResponse:(NSURLResponse *)response
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     NSString *url = [self currentURLStringFromConnection:connection];
     _responseDict[url] = [NSMutableData new];
 }
 
-- (void)connection:(NSURLConnection *)connection
-    didReceiveData:(NSData *)data
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     NSString *url = [self currentURLStringFromConnection:connection];
     [_responseDict[url] appendData:data];

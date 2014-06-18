@@ -57,12 +57,17 @@ static NSString *const METHOD_LIBRARY_REMOVESCROBBLE = @"library.removescrobble"
     BOOL _loggedIn;
 }
 
-@property NSString *mobileSessionKey;
-@property NSString *username;
 @property id<LibrefmDelegate> delegate;
+@property NSString *username;
+@property NSString *password;
+
+@property NSString *name;
+@property NSString *mobileSessionKey;
 
 - (instancetype)init;
-- (void)loginWithUsername:(NSString*)username password:(NSString*)password;
+- (BOOL)isNeedInputLoginData;
+
+- (void)loginWithUsername:(NSString*)username password:(NSString*)password;  // librefmDidLogin
 - (void)radioTune:(NSString*)tag;  // librefmDidLoadPlaylist
 
 @end
