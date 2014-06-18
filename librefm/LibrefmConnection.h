@@ -54,8 +54,13 @@ static NSString *const METHOD_LIBRARY_REMOVESCROBBLE = @"library.removescrobble"
 @interface LibrefmConnection : NSObject<NSURLConnectionDelegate>
 {
     NSMutableDictionary *_responseDict;
-    BOOL _loggedIn;
 }
+
+typedef enum {
+    LibrefmConnectionStateNotLoggedIn,
+    LibrefmConnectionStateLoginStarted,
+    LibrefmConnectionStateLoggedIn,
+} LibrefmConnectionState;
 
 @property id<LibrefmDelegate> delegate;
 @property NSString *username;
@@ -63,6 +68,7 @@ static NSString *const METHOD_LIBRARY_REMOVESCROBBLE = @"library.removescrobble"
 
 @property NSString *name;
 @property NSString *mobileSessionKey;
+@property LibrefmConnectionState state;
 
 - (instancetype)init;
 - (BOOL)isNeedInputLoginData;

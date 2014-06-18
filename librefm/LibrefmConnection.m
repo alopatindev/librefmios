@@ -15,7 +15,7 @@
 {
     if (self = [super init]) {
         _responseDict = [NSMutableDictionary new];
-        _loggedIn = NO;
+        self.state = LibrefmConnectionStateNotLoggedIn;
     }
     return self;
 }
@@ -87,7 +87,9 @@
             self.mobileSessionKey = session[@"key"];
             self.name = session[@"name"];
             [self checkLogin];
-            [self.delegate librefmDidLogin:_loggedIn error:nil];
+            [self.delegate librefmDidLogin:(self.state == LibrefmConnectionStateLoggedIn
+                                                       ? YES : NO)
+                                     error:nil];
         }
     } else if ([url isAPIMethod:METHOD_RADIO_GETPLAYLIST]) {
         NSDictionary* playlist = jsonDictionary[@"playlist"];
@@ -123,7 +125,8 @@
                                                   encoding:NSUTF8StringEncoding];
             if ([out containsString:@"BADSESSION"]) {
                 NSLog(@"BADSESSION");
-                _loggedIn = NO;
+                self.state = LibrefmConnectionStateNotLoggedIn;
+                self.mobileSessionKey = nil;
             } else if ([out containsString:@"FAILED"]) {
                 // TODO
             }
@@ -143,8 +146,8 @@
 
 - (void)checkLogin
 {
-    _loggedIn = self.mobileSessionKey != nil
-              ? YES : NO;  // TODO
+    if (self.mobileSessionKey != nil)
+        self.state = LibrefmConnectionStateLoggedIn;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
