@@ -105,6 +105,8 @@ NSMutableSet* _requestsQueue;
             [_requestsQueue removeObject:a];
             SEL sel = NSSelectorFromString(a[0]);
             switch([a count]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
                 case 1UL:
                     [self performSelector:sel];
                     break;
@@ -116,6 +118,7 @@ NSMutableSet* _requestsQueue;
                     break;
                 default:
                     break;
+#pragma clang diagnostic pop
             }
         } else {
             break;
