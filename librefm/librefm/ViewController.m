@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "LibrefmConnection.h"
-#import <StreamingKit/STKAudioPlayer.h>
+#import "STKAudioPlayer.h"
 
 @interface ViewController ()
 

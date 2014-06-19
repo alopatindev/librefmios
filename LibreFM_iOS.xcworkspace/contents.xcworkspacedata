@@ -4,7 +4,4 @@
    <FileRef
       location = "group:LibreFM/librefm.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:StreamingKit/StreamingKit/StreamingKit.xcodeproj">
-   </FileRef>
 </Workspace>

@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BADD27BA19526FEC0057744B /* NSMutableArray+STKAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27A819526FEC0057744B /* NSMutableArray+STKAudioPlayer.m */; };
+		BADD27BB19526FEC0057744B /* STKAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27AA19526FEC0057744B /* STKAudioPlayer.m */; };
+		BADD27BC19526FEC0057744B /* STKAutoRecoveringHTTPDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27AC19526FEC0057744B /* STKAutoRecoveringHTTPDataSource.m */; };
+		BADD27BD19526FEC0057744B /* STKCoreFoundationDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27AE19526FEC0057744B /* STKCoreFoundationDataSource.m */; };
+		BADD27BE19526FEC0057744B /* STKDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27B019526FEC0057744B /* STKDataSource.m */; };
+		BADD27BF19526FEC0057744B /* STKDataSourceWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27B219526FEC0057744B /* STKDataSourceWrapper.m */; };
+		BADD27C019526FEC0057744B /* STKHTTPDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27B419526FEC0057744B /* STKHTTPDataSource.m */; };
+		BADD27C119526FEC0057744B /* STKLocalFileDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27B619526FEC0057744B /* STKLocalFileDataSource.m */; };
+		BADD27C219526FEC0057744B /* STKQueueEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27B819526FEC0057744B /* STKQueueEntry.m */; };
 		BAFD9E47194CDF98009718B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E46194CDF98009718B2 /* Foundation.framework */; };
 		BAFD9E49194CDF98009718B2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */; };
 		BAFD9E4B194CDF98009718B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E4A194CDF98009718B2 /* UIKit.framework */; };
@@ -39,6 +48,25 @@
 /* Begin PBXFileReference section */
 		BAC2379C194FA68200A65C9B /* LibrefmDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibrefmDelegate.h; sourceTree = "<group>"; };
 		BAC2379D194FAB2600A65C9B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		BADD27A719526FEC0057744B /* NSMutableArray+STKAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+STKAudioPlayer.h"; sourceTree = "<group>"; };
+		BADD27A819526FEC0057744B /* NSMutableArray+STKAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+STKAudioPlayer.m"; sourceTree = "<group>"; };
+		BADD27A919526FEC0057744B /* STKAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKAudioPlayer.h; sourceTree = "<group>"; };
+		BADD27AA19526FEC0057744B /* STKAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKAudioPlayer.m; sourceTree = "<group>"; };
+		BADD27AB19526FEC0057744B /* STKAutoRecoveringHTTPDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKAutoRecoveringHTTPDataSource.h; sourceTree = "<group>"; };
+		BADD27AC19526FEC0057744B /* STKAutoRecoveringHTTPDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKAutoRecoveringHTTPDataSource.m; sourceTree = "<group>"; };
+		BADD27AD19526FEC0057744B /* STKCoreFoundationDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCoreFoundationDataSource.h; sourceTree = "<group>"; };
+		BADD27AE19526FEC0057744B /* STKCoreFoundationDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCoreFoundationDataSource.m; sourceTree = "<group>"; };
+		BADD27AF19526FEC0057744B /* STKDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKDataSource.h; sourceTree = "<group>"; };
+		BADD27B019526FEC0057744B /* STKDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKDataSource.m; sourceTree = "<group>"; };
+		BADD27B119526FEC0057744B /* STKDataSourceWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKDataSourceWrapper.h; sourceTree = "<group>"; };
+		BADD27B219526FEC0057744B /* STKDataSourceWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKDataSourceWrapper.m; sourceTree = "<group>"; };
+		BADD27B319526FEC0057744B /* STKHTTPDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHTTPDataSource.h; sourceTree = "<group>"; };
+		BADD27B419526FEC0057744B /* STKHTTPDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHTTPDataSource.m; sourceTree = "<group>"; };
+		BADD27B519526FEC0057744B /* STKLocalFileDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLocalFileDataSource.h; sourceTree = "<group>"; };
+		BADD27B619526FEC0057744B /* STKLocalFileDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLocalFileDataSource.m; sourceTree = "<group>"; };
+		BADD27B719526FEC0057744B /* STKQueueEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKQueueEntry.h; sourceTree = "<group>"; };
+		BADD27B819526FEC0057744B /* STKQueueEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKQueueEntry.m; sourceTree = "<group>"; };
+		BADD27B919526FEC0057744B /* StreamingKit-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StreamingKit-Prefix.pch"; sourceTree = "<group>"; };
 		BAFD9E43194CDF98009718B2 /* librefm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = librefm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAFD9E46194CDF98009718B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -89,6 +117,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BADD27A619526FEC0057744B /* StreamingKit */ = {
+			isa = PBXGroup;
+			children = (
+				BADD27A719526FEC0057744B /* NSMutableArray+STKAudioPlayer.h */,
+				BADD27A819526FEC0057744B /* NSMutableArray+STKAudioPlayer.m */,
+				BADD27A919526FEC0057744B /* STKAudioPlayer.h */,
+				BADD27AA19526FEC0057744B /* STKAudioPlayer.m */,
+				BADD27AB19526FEC0057744B /* STKAutoRecoveringHTTPDataSource.h */,
+				BADD27AC19526FEC0057744B /* STKAutoRecoveringHTTPDataSource.m */,
+				BADD27AD19526FEC0057744B /* STKCoreFoundationDataSource.h */,
+				BADD27AE19526FEC0057744B /* STKCoreFoundationDataSource.m */,
+				BADD27AF19526FEC0057744B /* STKDataSource.h */,
+				BADD27B019526FEC0057744B /* STKDataSource.m */,
+				BADD27B119526FEC0057744B /* STKDataSourceWrapper.h */,
+				BADD27B219526FEC0057744B /* STKDataSourceWrapper.m */,
+				BADD27B319526FEC0057744B /* STKHTTPDataSource.h */,
+				BADD27B419526FEC0057744B /* STKHTTPDataSource.m */,
+				BADD27B519526FEC0057744B /* STKLocalFileDataSource.h */,
+				BADD27B619526FEC0057744B /* STKLocalFileDataSource.m */,
+				BADD27B719526FEC0057744B /* STKQueueEntry.h */,
+				BADD27B819526FEC0057744B /* STKQueueEntry.m */,
+				BADD27B919526FEC0057744B /* StreamingKit-Prefix.pch */,
+			);
+			name = StreamingKit;
+			path = ../../StreamingKit/StreamingKit/StreamingKit;
+			sourceTree = "<group>";
+		};
 		BAFD9E3A194CDF98009718B2 = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +180,7 @@
 		BAFD9E4C194CDF98009718B2 /* librefm */ = {
 			isa = PBXGroup;
 			children = (
+				BADD27A619526FEC0057744B /* StreamingKit */,
 				BAFD9E55194CDF98009718B2 /* AppDelegate.h */,
 				BAFD9E56194CDF98009718B2 /* AppDelegate.m */,
 				BAFD9E58194CDF98009718B2 /* Main.storyboard */,
@@ -284,10 +340,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAFD9E5D194CDF98009718B2 /* ViewController.m in Sources */,
+				BADD27BF19526FEC0057744B /* STKDataSourceWrapper.m in Sources */,
+				BADD27BB19526FEC0057744B /* STKAudioPlayer.m in Sources */,
+				BADD27C219526FEC0057744B /* STKQueueEntry.m in Sources */,
+				BADD27C019526FEC0057744B /* STKHTTPDataSource.m in Sources */,
+				BADD27BC19526FEC0057744B /* STKAutoRecoveringHTTPDataSource.m in Sources */,
+				BADD27BE19526FEC0057744B /* STKDataSource.m in Sources */,
 				BAFD9E57194CDF98009718B2 /* AppDelegate.m in Sources */,
 				BAFD9E82194D2090009718B2 /* NSString+String.m in Sources */,
 				BAFD9E53194CDF98009718B2 /* main.m in Sources */,
+				BADD27BA19526FEC0057744B /* NSMutableArray+STKAudioPlayer.m in Sources */,
 				BAFD9E85194D2541009718B2 /* LibrefmConnection.m in Sources */,
+				BADD27BD19526FEC0057744B /* STKCoreFoundationDataSource.m in Sources */,
+				BADD27C119526FEC0057744B /* STKLocalFileDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
