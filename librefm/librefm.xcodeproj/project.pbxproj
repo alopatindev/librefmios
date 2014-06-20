@@ -16,6 +16,10 @@
 		BADD27C019526FEC0057744B /* STKHTTPDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27B419526FEC0057744B /* STKHTTPDataSource.m */; };
 		BADD27C119526FEC0057744B /* STKLocalFileDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27B619526FEC0057744B /* STKLocalFileDataSource.m */; };
 		BADD27C219526FEC0057744B /* STKQueueEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27B819526FEC0057744B /* STKQueueEntry.m */; };
+		BADD27CA19535EA90057744B /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BADD27C819535EA90057744B /* Ogg.framework */; };
+		BADD27CB19535EA90057744B /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BADD27C919535EA90057744B /* Vorbis.framework */; };
+		BADD27D9195390F20057744B /* IDZAQAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27D0195390F20057744B /* IDZAQAudioPlayer.m */; };
+		BADD27DD1953931C0057744B /* IDZOggVorbisFileDecoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = BADD27DC1953931C0057744B /* IDZOggVorbisFileDecoder.mm */; };
 		BAFD9E47194CDF98009718B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E46194CDF98009718B2 /* Foundation.framework */; };
 		BAFD9E49194CDF98009718B2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */; };
 		BAFD9E4B194CDF98009718B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E4A194CDF98009718B2 /* UIKit.framework */; };
@@ -67,6 +71,15 @@
 		BADD27B719526FEC0057744B /* STKQueueEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKQueueEntry.h; sourceTree = "<group>"; };
 		BADD27B819526FEC0057744B /* STKQueueEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKQueueEntry.m; sourceTree = "<group>"; };
 		BADD27B919526FEC0057744B /* StreamingKit-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StreamingKit-Prefix.pch"; sourceTree = "<group>"; };
+		BADD27C819535EA90057744B /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ogg.framework; path = ../IDZAQAudioPlayer/Frameworks/Ogg.framework; sourceTree = "<group>"; };
+		BADD27C919535EA90057744B /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vorbis.framework; path = ../IDZAQAudioPlayer/Frameworks/Vorbis.framework; sourceTree = "<group>"; };
+		BADD27CF195390F20057744B /* IDZAQAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDZAQAudioPlayer.h; sourceTree = "<group>"; };
+		BADD27D0195390F20057744B /* IDZAQAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDZAQAudioPlayer.m; sourceTree = "<group>"; };
+		BADD27D3195390F20057744B /* IDZAudioDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDZAudioDecoder.h; sourceTree = "<group>"; };
+		BADD27D4195390F20057744B /* IDZAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDZAudioPlayer.h; sourceTree = "<group>"; };
+		BADD27D7195390F20057744B /* IDZOggVorbisFileDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDZOggVorbisFileDecoder.h; sourceTree = "<group>"; };
+		BADD27D8195390F20057744B /* IDZTrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDZTrace.h; sourceTree = "<group>"; };
+		BADD27DC1953931C0057744B /* IDZOggVorbisFileDecoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IDZOggVorbisFileDecoder.mm; sourceTree = "<group>"; };
 		BAFD9E43194CDF98009718B2 /* librefm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = librefm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAFD9E46194CDF98009718B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -98,6 +111,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BADD27CA19535EA90057744B /* Ogg.framework in Frameworks */,
+				BADD27CB19535EA90057744B /* Vorbis.framework in Frameworks */,
 				BAFD9E49194CDF98009718B2 /* CoreGraphics.framework in Frameworks */,
 				BAFD9E4B194CDF98009718B2 /* UIKit.framework in Frameworks */,
 				BAFD9E47194CDF98009718B2 /* Foundation.framework in Frameworks */,
@@ -144,6 +159,20 @@
 			path = ../../StreamingKit/StreamingKit/StreamingKit;
 			sourceTree = "<group>";
 		};
+		BADD27CE195390F20057744B /* IDZAQAudioPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				BADD27DC1953931C0057744B /* IDZOggVorbisFileDecoder.mm */,
+				BADD27D7195390F20057744B /* IDZOggVorbisFileDecoder.h */,
+				BADD27CF195390F20057744B /* IDZAQAudioPlayer.h */,
+				BADD27D0195390F20057744B /* IDZAQAudioPlayer.m */,
+				BADD27D3195390F20057744B /* IDZAudioDecoder.h */,
+				BADD27D4195390F20057744B /* IDZAudioPlayer.h */,
+				BADD27D8195390F20057744B /* IDZTrace.h */,
+			);
+			path = IDZAQAudioPlayer;
+			sourceTree = "<group>";
+		};
 		BAFD9E3A194CDF98009718B2 = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +197,8 @@
 		BAFD9E45194CDF98009718B2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BADD27C819535EA90057744B /* Ogg.framework */,
+				BADD27C919535EA90057744B /* Vorbis.framework */,
 				BAC2379D194FAB2600A65C9B /* MediaPlayer.framework */,
 				BAFD9E46194CDF98009718B2 /* Foundation.framework */,
 				BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */,
@@ -180,6 +211,7 @@
 		BAFD9E4C194CDF98009718B2 /* librefm */ = {
 			isa = PBXGroup;
 			children = (
+				BADD27CE195390F20057744B /* IDZAQAudioPlayer */,
 				BADD27A619526FEC0057744B /* StreamingKit */,
 				BAFD9E55194CDF98009718B2 /* AppDelegate.h */,
 				BAFD9E56194CDF98009718B2 /* AppDelegate.m */,
@@ -353,6 +385,8 @@
 				BAFD9E85194D2541009718B2 /* LibrefmConnection.m in Sources */,
 				BADD27BD19526FEC0057744B /* STKCoreFoundationDataSource.m in Sources */,
 				BADD27C119526FEC0057744B /* STKLocalFileDataSource.m in Sources */,
+				BADD27D9195390F20057744B /* IDZAQAudioPlayer.m in Sources */,
+				BADD27DD1953931C0057744B /* IDZOggVorbisFileDecoder.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,6 +511,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/sbar/git/librefm/IDZAQAudioPlayer/Frameworks,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "librefm/librefm-Prefix.pch";
 				INFOPLIST_FILE = "librefm/librefm-Info.plist";
@@ -490,6 +528,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/sbar/git/librefm/IDZAQAudioPlayer/Frameworks,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "librefm/librefm-Prefix.pch";
 				INFOPLIST_FILE = "librefm/librefm-Info.plist";
