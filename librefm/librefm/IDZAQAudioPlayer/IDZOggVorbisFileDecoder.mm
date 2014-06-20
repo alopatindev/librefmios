@@ -200,8 +200,8 @@ BufferingState _bufferingState;
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:[connection currentRequest]];
-    self.bufferingState = BufferingStateLoading;
     _mpWFile = fdopen([[_pipe fileHandleForWriting] fileDescriptor], "w");
+    self.bufferingState = BufferingStateLoading;
     assert(_mpWFile);
 }
 

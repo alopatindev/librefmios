@@ -34,8 +34,8 @@ LibrefmConnection *_librefmConnection;
     
     NSError *error;
     //NSURL *oggUrl = [[NSBundle mainBundle] URLForResource:@"Rondo_Alla_Turka" withExtension:@".ogg"];
-    //NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
-    NSURL *oggUrl = [NSURL URLWithString:@"http://gfile.ru/d/tf/d8406fbdb99e4eac67c284db85e9a112/14032833/a9Iil/storage1-5-9-452095/m.ogg"];
+    NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
+    //NSURL *oggUrl = [NSURL URLWithString:@"http://gfile.ru/d/tf/d8406fbdb99e4eac67c284db85e9a112/14032833/a9Iil/storage1-5-9-452095/m.ogg"];
 
     IDZOggVorbisFileDecoder *decoder = [[IDZOggVorbisFileDecoder alloc] initWithContentsOfURL:oggUrl error:&error];
     //NSLog(@"Ogg Vorbis file duration is %g", decoder.duration);
