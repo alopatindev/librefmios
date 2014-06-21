@@ -35,6 +35,16 @@ extern "C" {
 #define IDZ_BITS_PER_BYTE 8
 #define IDZ_BYTES_TO_BITS(bytes) ((bytes) * IDZ_BITS_PER_BYTE)
 #define IDZ_OGG_VORBIS_WORDSIZE 2
+    
+static size_t network_stream_read(void* ptr, size_t size, size_t nitems, FILE* stream);
+static int network_stream_close(FILE* stream);
+
+static ov_callbacks MY_CALLBACKS_STREAMONLY = {
+    (size_t (*)(void *, size_t, size_t, void *))  network_stream_read,
+    (int (*)(void *, ogg_int64_t, int))           NULL,
+    (int (*)(void *))                             network_stream_close,
+    (long (*)(void *))                            NULL
+};
 
 /**
  * @brief IDZOggVorbisFileDecoder private internals.
@@ -46,17 +56,18 @@ extern "C" {
     OggVorbis_File mOggVorbisFile;
 }
 
-@property NSPipe* pipe;
-@property NSOperationQueue* networkQueue;
+@property NSMutableData* dataQueue;
 @property size_t downloadedBytes;
+@property NSURLConnection* connection;
 
 @end
+    
+static IDZOggVorbisFileDecoder* _self = nil;
 
 @implementation IDZOggVorbisFileDecoder
 @synthesize dataFormat = mDataFormat;
 @synthesize bufferingState = _bufferingState;
 
-FILE* _mpWFile;
 BOOL _headerIsRead;
 
 //BufferingState _bufferingState;
@@ -76,18 +87,15 @@ BOOL _headerIsRead;
 {
     if(self = [super init])
     {
+        _self = self;
         mpFile = NULL;
-        _mpWFile = NULL;
         _downloadedBytes = 0;
         _headerIsRead = NO;
         self.bufferingState = BufferingStateNothing;
 
         if ([url isFileURL] == NO)
         {
-            _pipe = [NSPipe pipe];
-            mpFile = fdopen([[_pipe fileHandleForReading] fileDescriptor], "r");
-            _mpWFile = fdopen([[_pipe fileHandleForWriting] fileDescriptor], "w");
-            _networkQueue = [[NSOperationQueue alloc] init];
+            self.dataQueue = [NSMutableData new];
             [self sendRequest:url];
         } else {
             NSString* path = [url path];
@@ -102,9 +110,9 @@ BOOL _headerIsRead;
 - (void)readHeaderInfoIfNeeded
 {
     if (_headerIsRead == NO) {
-        NSAssert(mpFile, @"fopen succeeded.");
-        int iReturn = ov_open_callbacks(mpFile, &mOggVorbisFile, NULL, 0, OV_CALLBACKS_STREAMONLY);
-        NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
+        //NSAssert(mpFile, @"fopen succeeded.");
+        int iReturn = ov_open_callbacks(mpFile ? mpFile : (FILE*)1, &mOggVorbisFile, NULL, 0, MY_CALLBACKS_STREAMONLY);
+        //NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
 
         vorbis_info* pInfo = ov_info(&mOggVorbisFile, -1);
         int bytesPerChannel = IDZ_OGG_VORBIS_WORDSIZE;
@@ -120,17 +128,22 @@ BOOL _headerIsRead;
     }
 }
 
+- (void)releaseResources
+{
+    if (_self != nil) {
+        ov_clear(&mOggVorbisFile);
+        //network_stream_close(NULL);
+        if (self.connection != nil) {
+            [self.connection cancel];
+        }
+        _self = nil;
+    }
+}
+
 - (void)dealloc
 {
-    ov_clear(&mOggVorbisFile);
-    if(mpFile)
-    {
-        fclose(mpFile);
-        mpFile = NULL;
-        if (self.pipe != nil) {
-            [[self.pipe fileHandleForReading] closeFile];
-        }
-    }
+    NSLog(@"IDZOggVorbisFileDecoder dealloc");
+    [self releaseResources];
 }
 
 - (BOOL)readBuffer:(AudioQueueBufferRef)pBuffer
@@ -203,11 +216,8 @@ BOOL _headerIsRead;
         [request setValue:requestRange forHTTPHeaderField:@"Range"];
     }
 
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
-                                                                  delegate:self
-                                                          startImmediately:NO];
-    [connection setDelegateQueue:self.networkQueue];
-    [connection start];
+    self.connection = [[NSURLConnection alloc] initWithRequest:request
+                                                      delegate:self];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -227,8 +237,6 @@ BOOL _headerIsRead;
         default:
             break;
     }
-
-    assert(_mpWFile);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -237,7 +245,7 @@ BOOL _headerIsRead;
     size_t size = (size_t) [data length];
     self.bufferingState = BufferingStateReadyToRead;
     NSLog(@"GONNA WRITE _downloadedBytes=%zu", _downloadedBytes + size);
-    fwrite([data bytes], size, 1, _mpWFile);
+    [self.dataQueue appendData:data];
     _downloadedBytes += size;
     NSLog(@"WRITTEN _downloadedBytes=%zu", _downloadedBytes);
     
@@ -255,11 +263,7 @@ BOOL _headerIsRead;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     NSLog(@"song downloading complete!");
-    if (_mpWFile != NULL) {
-        fclose(_mpWFile);
-        _mpWFile = NULL;
-        [[self.pipe fileHandleForWriting] closeFile];
-    }
+    self.connection = nil;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
@@ -267,6 +271,48 @@ BOOL _headerIsRead;
     NSLog(@"! didFailWithError: %@", error);
     NSURL *url = [[connection currentRequest] URL];
     [self sendRequest:url];
+}
+
+static size_t network_stream_read(void* ptr, size_t size, size_t nitems, FILE* stream)
+{
+    if (_self == nil) {
+        return 0U;
+    }
+    
+    size_t sizeNeedToRead = size * nitems;
+    size_t dataQueueSize = (size_t) [_self.dataQueue length];
+    size_t sizeWasRead = dataQueueSize > sizeNeedToRead ? sizeNeedToRead : dataQueueSize;
+
+    const char* bytes = (const char*) [_self.dataQueue bytes];
+    memcpy(ptr, bytes, sizeWasRead);
+    
+    NSMutableData *newData;
+    if (size == sizeWasRead) {
+        newData = [NSMutableData new];
+    } else {
+        newData = [[NSMutableData alloc] initWithBytes:&bytes[sizeWasRead]
+                                                length:(dataQueueSize - sizeWasRead)];
+    }
+    _self.dataQueue = newData;
+    
+    return sizeWasRead;
+}
+
+static int network_stream_close(FILE* stream)
+{
+    if (_self == nil) {
+        return -1;
+    }
+    
+    /*if(_self->mpFile == stream && stream != NULL)
+    {
+        fclose(stream);
+        _self->mpFile = NULL;
+    }*/
+    
+    _self.dataQueue.length = 0;
+    _self.dataQueue = nil;
+    return 0;
 }
 
 @end

@@ -58,6 +58,8 @@ typedef enum {
 
 @property BufferingState bufferingState;
 
+- (void)releaseResources;
+
 /**
  * @brief Fills an audio buffer with decoded audio data from the source.
  */

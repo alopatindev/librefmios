@@ -272,6 +272,15 @@ static void IDZPropertyListener(void* inUserData,
     }
 }
 
+- (void)dealloc
+{
+    NSLog(@"IDZAQAudioPlayer dealloc");
+    [self stop];
+    
+    [mDecoder releaseResources];
+    mDecoder = nil;
+}
+
 // MARK: - Properties
 
 - (UInt32)queryIsRunning
@@ -318,7 +327,7 @@ static void IDZPropertyListener(void* inUserData,
     switch(self.state)
     {
         case IDZAudioPlayerStatePlaying:
-            [self stop:YES];
+            [self stop];
             break;
         default:
             break;
