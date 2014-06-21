@@ -65,20 +65,24 @@ BufferingState _bufferingState;
     if(self = [super init])
     {
         mpFile = NULL;
+        _mpWFile = NULL;
         _downloadedBytes = 0;
         _bufferingState = BufferingStateNothing;
 
-        NSString* path = [url path];
         if ([url isFileURL] == NO)
         {
             _pipe = [NSPipe pipe];
             mpFile = fdopen([[_pipe fileHandleForReading] fileDescriptor], "r");
+            _mpWFile = fdopen([[_pipe fileHandleForWriting] fileDescriptor], "w");
             _networkQueue = [[NSOperationQueue alloc] init];
+
             [self sendRequest:url];
+
             NSAssert(mpFile, @"fopen succeeded.");
             int iReturn = ov_open_callbacks(mpFile, &mOggVorbisFile, NULL, 0, OV_CALLBACKS_STREAMONLY);
             NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
         } else {
+            NSString* path = [url path];
             _bufferingState = BufferingStateDone;
             mpFile = fopen([path UTF8String], "r");
             NSAssert(mpFile, @"fopen succeeded.");
@@ -203,18 +207,24 @@ BufferingState _bufferingState;
     int statusCode = (int) httpResponse.statusCode;
     NSLog(@"! didReceiveResponse statusCode=%d", statusCode);
     
-    /*switch (statusCode) {
+    switch (statusCode) {
         case 200: // OK
+        {
+            /*NSAssert(mpFile, @"fopen succeeded.");
+            int iReturn = ov_open_callbacks(mpFile, &mOggVorbisFile, NULL, 0, OV_CALLBACKS_STREAMONLY);
+            NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
+            [self loadHeaderInfo];*/
+        }
             break;
         case 206: // partial content
             break;
         default:
             break;
-    }*/
-
-    if (_mpWFile == NULL) {
-        _mpWFile = fdopen([[_pipe fileHandleForWriting] fileDescriptor], "w");
     }
+
+    /*if (_mpWFile == NULL) {
+        _mpWFile = fdopen([[_pipe fileHandleForWriting] fileDescriptor], "w");
+    }*/
 
     assert(_mpWFile);
 }
