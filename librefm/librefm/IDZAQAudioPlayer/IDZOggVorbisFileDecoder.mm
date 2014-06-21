@@ -36,16 +36,6 @@ extern "C" {
 #define IDZ_BYTES_TO_BITS(bytes) ((bytes) * IDZ_BITS_PER_BYTE)
 #define IDZ_OGG_VORBIS_WORDSIZE 2
 
-/*static size_t network_stream_read(void* ptr, size_t size, size_t nitems, void* stream);
-static int network_stream_close(void* stream);
-
-static ov_callbacks CALLBACKS_NETWORK_STREAM = {
-    (size_t (*)(void *, size_t, size_t, void *))  network_stream_read, //fread,
-    (int (*)(void *, ogg_int64_t, int))           NULL, //network_stream_seek //_ov_header_fseek_wrap,
-    (int (*)(void *))                             network_stream_close, //fclose,
-    (long (*)(void *))                            NULL //ftell
-};*/
-
 /**
  * @brief IDZOggVorbisFileDecoder private internals.
  */
@@ -85,15 +75,17 @@ BufferingState _bufferingState;
             mpFile = fdopen([[_pipe fileHandleForReading] fileDescriptor], "r");
             _networkQueue = [[NSOperationQueue alloc] init];
             [self sendRequest:url];
+            NSAssert(mpFile, @"fopen succeeded.");
+            int iReturn = ov_open_callbacks(mpFile, &mOggVorbisFile, NULL, 0, OV_CALLBACKS_STREAMONLY);
+            NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
         } else {
             _bufferingState = BufferingStateDone;
             mpFile = fopen([path UTF8String], "r");
+            NSAssert(mpFile, @"fopen succeeded.");
+            int iReturn = ov_open_callbacks(mpFile, &mOggVorbisFile, NULL, 0, OV_CALLBACKS_NOCLOSE);
+            NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
         }
-            
-        NSAssert(mpFile, @"fopen succeeded.");
-        int iReturn = ov_open_callbacks(mpFile, &mOggVorbisFile, NULL, 0, OV_CALLBACKS_NOCLOSE);
-        NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
-        
+
         [self loadHeaderInfo];
     }
     return self;
@@ -119,15 +111,17 @@ BufferingState _bufferingState;
     {
         fclose(mpFile);
         mpFile = NULL;
+        if (self.pipe != nil) {
+            [[self.pipe fileHandleForReading] closeFile];
+        }
     }
 }
 
 - (BOOL)readBuffer:(AudioQueueBufferRef)pBuffer
 {
-    //self.bufferingState = BufferingStateLoading;
     self.bufferingState = BufferingStateReadyToRead;
 
-    IDZTrace();
+    //IDZTrace();
     int bigEndian = 0;
     int wordSize = IDZ_OGG_VORBIS_WORDSIZE;
     int signedSamples = 1;
@@ -181,27 +175,47 @@ BufferingState _bufferingState;
 
 - (void)sendRequest:(NSURL *)url
 {
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
-                                                                  delegate:self
-                                                          startImmediately:NO];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
+                                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                                       timeoutInterval:40.0];
+
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
-    [connection setDelegateQueue:self.networkQueue];
     
     size_t downloadedBytes = self.downloadedBytes;
-    if (downloadedBytes > 0) {
+    if (downloadedBytes > 0U) {
         NSString *requestRange = [NSString stringWithFormat:@"bytes=%zu-", downloadedBytes];
         [request setValue:requestRange forHTTPHeaderField:@"Range"];
     }
-    
+
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
+                                                                  delegate:self
+                                                          startImmediately:NO];
+    [connection setDelegateQueue:self.networkQueue];
     [connection start];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:[connection currentRequest]];
-    _mpWFile = fdopen([[_pipe fileHandleForWriting] fileDescriptor], "w");
-    self.bufferingState = BufferingStateLoading;
+    
+    
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+    int statusCode = (int) httpResponse.statusCode;
+    NSLog(@"! didReceiveResponse statusCode=%d", statusCode);
+    
+    /*switch (statusCode) {
+        case 200: // OK
+            break;
+        case 206: // partial content
+            break;
+        default:
+            break;
+    }*/
+
+    if (_mpWFile == NULL) {
+        _mpWFile = fdopen([[_pipe fileHandleForWriting] fileDescriptor], "w");
+    }
+
     assert(_mpWFile);
 }
 
@@ -209,9 +223,11 @@ BufferingState _bufferingState;
 {
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:[connection currentRequest]];
     size_t size = (size_t) [data length];
+    self.bufferingState = BufferingStateReadyToRead;
+    NSLog(@"GONNA WRITE _downloadedBytes=%zu", _downloadedBytes + size);
     fwrite([data bytes], size, 1, _mpWFile);
     _downloadedBytes += size;
-    self.bufferingState = BufferingStateReadyToRead;
+    NSLog(@"WRITTEN _downloadedBytes=%zu", _downloadedBytes);
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection
@@ -223,18 +239,18 @@ BufferingState _bufferingState;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     NSLog(@"loaded song!");
-    if (_mpWFile != NULL)
+    if (_mpWFile != NULL) {
         fclose(_mpWFile);
+        _mpWFile = NULL;
+        [[self.pipe fileHandleForWriting] closeFile];
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog(@"! didFailWithError");
+    NSLog(@"! didFailWithError: %@", error);
     NSURL *url = [[connection currentRequest] URL];
     [self sendRequest:url];
-    /*if (_mpWFile != NULL)
-        fclose(_mpWFile);
-    assert(0);*/
 }
 
 @end

@@ -226,17 +226,15 @@ static void IDZPropertyListener(void* inUserData,
 {
     if(self.state == IDZAudioPlayerStateStopping)
         return;
-    
+
     NSAssert(self.decoder, @"self.decoder is valid.");
-    if(self.decoder.bufferingState == BufferingStateReadyToRead && [self.decoder readBuffer:buffer])
+    if(/*self.decoder.bufferingState == BufferingStateReadyToRead &&*/ [self.decoder readBuffer:buffer] == YES)
     {
         OSStatus status = AudioQueueEnqueueBuffer(mQueue, buffer, 0, 0);
         if(status != noErr)
         {
             NSLog(@"Error: %s status=%d", __PRETTY_FUNCTION__, (int)status);
         }
-    } else if(self.decoder.bufferingState == BufferingStateLoading) {
-        NSLog(@"bufferingState == BufferingStateLoading !");
     } else {
         /*
          * Signal to the audio queue that we have run out of data,

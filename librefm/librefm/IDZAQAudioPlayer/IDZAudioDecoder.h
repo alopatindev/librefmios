@@ -39,7 +39,6 @@
 
 typedef enum {
     BufferingStateNothing,
-    BufferingStateLoading,
     BufferingStateReadyToRead,
     BufferingStateDone
 } BufferingState;
