@@ -54,11 +54,23 @@ extern "C" {
 
 @implementation IDZOggVorbisFileDecoder
 @synthesize dataFormat = mDataFormat;
-@synthesize bufferingState = _bufferState;
+//@synthesize bufferingState = _bufferingState;
 
 FILE* _mpWFile;
+BOOL _headerIsRead;
 
-BufferingState _bufferingState;
+//BufferingState _bufferingState;
+/*- (void)setBufferingState:(BufferingState)state
+{
+    NSLog(@"!!! setBufferingState %d", state);
+    _bufferingState = state;
+}
+
+- (BufferingState)bufferingState
+{
+    NSLog(@"!!! bufferingState %d", _bufferingState);
+    return _bufferingState;
+}*/
 
 - (id)initWithContentsOfURL:(NSURL*)url error:(NSError *__autoreleasing *)error
 {
@@ -67,7 +79,8 @@ BufferingState _bufferingState;
         mpFile = NULL;
         _mpWFile = NULL;
         _downloadedBytes = 0;
-        _bufferingState = BufferingStateNothing;
+        _headerIsRead = NO;
+        self.bufferingState = BufferingStateNothing;
 
         if ([url isFileURL] == NO)
         {
@@ -75,37 +88,36 @@ BufferingState _bufferingState;
             mpFile = fdopen([[_pipe fileHandleForReading] fileDescriptor], "r");
             _mpWFile = fdopen([[_pipe fileHandleForWriting] fileDescriptor], "w");
             _networkQueue = [[NSOperationQueue alloc] init];
-
             [self sendRequest:url];
-
-            NSAssert(mpFile, @"fopen succeeded.");
-            int iReturn = ov_open_callbacks(mpFile, &mOggVorbisFile, NULL, 0, OV_CALLBACKS_STREAMONLY);
-            NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
         } else {
             NSString* path = [url path];
-            _bufferingState = BufferingStateDone;
+            self.bufferingState = BufferingStateDone;
             mpFile = fopen([path UTF8String], "r");
-            NSAssert(mpFile, @"fopen succeeded.");
-            int iReturn = ov_open_callbacks(mpFile, &mOggVorbisFile, NULL, 0, OV_CALLBACKS_NOCLOSE);
-            NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
+            [self readHeaderInfoIfNeeded];
         }
-
-        [self loadHeaderInfo];
     }
     return self;
 }
 
-- (void)loadHeaderInfo
+- (void)readHeaderInfoIfNeeded
 {
-    vorbis_info* pInfo = ov_info(&mOggVorbisFile, -1);
-    int bytesPerChannel = IDZ_OGG_VORBIS_WORDSIZE;
-    FillOutASBDForLPCM(mDataFormat,
-                       (Float64)pInfo->rate, // sample rate (fps)
-                       (UInt32)pInfo->channels, // channels per frame
-                       (UInt32)IDZ_BYTES_TO_BITS(bytesPerChannel), // valid bits per channel
-                       (UInt32)IDZ_BYTES_TO_BITS(bytesPerChannel), // total bits per channel
-                       false, // isFloat
-                       false); // isBigEndian
+    if (_headerIsRead == NO) {
+        NSAssert(mpFile, @"fopen succeeded.");
+        int iReturn = ov_open_callbacks(mpFile, &mOggVorbisFile, NULL, 0, OV_CALLBACKS_STREAMONLY);
+        NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
+
+        vorbis_info* pInfo = ov_info(&mOggVorbisFile, -1);
+        int bytesPerChannel = IDZ_OGG_VORBIS_WORDSIZE;
+        FillOutASBDForLPCM(mDataFormat,
+                           (Float64)pInfo->rate, // sample rate (fps)
+                           (UInt32)pInfo->channels, // channels per frame
+                           (UInt32)IDZ_BYTES_TO_BITS(bytesPerChannel), // valid bits per channel
+                           (UInt32)IDZ_BYTES_TO_BITS(bytesPerChannel), // total bits per channel
+                           false, // isFloat
+                           false); // isBigEndian
+        
+        _headerIsRead = YES;
+    }
 }
 
 - (void)dealloc
@@ -123,7 +135,7 @@ BufferingState _bufferingState;
 
 - (BOOL)readBuffer:(AudioQueueBufferRef)pBuffer
 {
-    self.bufferingState = BufferingStateReadyToRead;
+    //self.bufferingState = BufferingStateReadyToRead;
 
     //IDZTrace();
     int bigEndian = 0;
@@ -209,22 +221,12 @@ BufferingState _bufferingState;
     
     switch (statusCode) {
         case 200: // OK
-        {
-            /*NSAssert(mpFile, @"fopen succeeded.");
-            int iReturn = ov_open_callbacks(mpFile, &mOggVorbisFile, NULL, 0, OV_CALLBACKS_STREAMONLY);
-            NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
-            [self loadHeaderInfo];*/
-        }
             break;
         case 206: // partial content
             break;
         default:
             break;
     }
-
-    /*if (_mpWFile == NULL) {
-        _mpWFile = fdopen([[_pipe fileHandleForWriting] fileDescriptor], "w");
-    }*/
 
     assert(_mpWFile);
 }
@@ -238,6 +240,10 @@ BufferingState _bufferingState;
     fwrite([data bytes], size, 1, _mpWFile);
     _downloadedBytes += size;
     NSLog(@"WRITTEN _downloadedBytes=%zu", _downloadedBytes);
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [self readHeaderInfoIfNeeded];
+    }];
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection
@@ -248,7 +254,7 @@ BufferingState _bufferingState;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSLog(@"loaded song!");
+    NSLog(@"song downloading complete!");
     if (_mpWFile != NULL) {
         fclose(_mpWFile);
         _mpWFile = NULL;

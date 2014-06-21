@@ -93,6 +93,9 @@ typedef enum IDZAudioPlayStateTag
 @synthesize decoder = mDecoder;
 @synthesize state = mState;
 
+BOOL _queuedPlayback;
+BOOL _initializedAudio;
+
 // MARK: - Static Callbacks
 static void IDZOutputCallback(void *                  inUserData,
                               AudioQueueRef           inAQ,
@@ -135,38 +138,46 @@ static void IDZPropertyListener(void* inUserData,
     if(self = [super init])
     {
         mDecoder = decoder;
-        AudioStreamBasicDescription dataFormat = decoder.dataFormat;
-        OSStatus status = AudioQueueNewOutput(&dataFormat, IDZOutputCallback,
-                                              (__bridge void*)self,
-                                              CFRunLoopGetCurrent(),
-                                              kCFRunLoopCommonModes,
-                                              0,
-                                              &mQueue);
-        NSAssert(status == noErr, @"Audio queue creation was successful.");
-        AudioQueueSetParameter(mQueue, kAudioQueueParam_Volume, 1.0);
-        status = AudioQueueAddPropertyListener(mQueue, kAudioQueueProperty_IsRunning,
-                                               IDZPropertyListener, (__bridge void*)self);
-        
-        for(int i = 0; i < IDZ_BUFFER_COUNT; ++i)
+        mState = IDZAudioPlayerStateStopped;
+        mQueueStartTime = 0.0;
+        _queuedPlayback = NO;
+        _initializedAudio = NO;
+    }
+    return self;
+}
+
+- (void)initializeAudio
+{
+    AudioStreamBasicDescription dataFormat = mDecoder.dataFormat;
+    OSStatus status = AudioQueueNewOutput(&dataFormat, IDZOutputCallback,
+                                          (__bridge void*)self,
+                                          CFRunLoopGetCurrent(),
+                                          kCFRunLoopCommonModes,
+                                          0,
+                                          &mQueue);
+    NSAssert(status == noErr, @"Audio queue creation was successful.");
+    AudioQueueSetParameter(mQueue, kAudioQueueParam_Volume, 1.0);
+    status = AudioQueueAddPropertyListener(mQueue, kAudioQueueProperty_IsRunning,
+                                           IDZPropertyListener, (__bridge void*)self);
+    
+    for(int i = 0; i < IDZ_BUFFER_COUNT; ++i)
+    {
+        UInt32 bufferSize = 128 * 1024;
+        status = AudioQueueAllocateBuffer(mQueue, bufferSize, &mBuffers[i]);
+        if(status != noErr)
         {
-            UInt32 bufferSize = 128 * 1024;
-            status = AudioQueueAllocateBuffer(mQueue, bufferSize, &mBuffers[i]);
-            if(status != noErr)
+            /*if(*error)
             {
-                if(*error)
-                {
-                    *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
-                }
-                AudioQueueDispose(mQueue, true);
-                mQueue = 0;
-                return nil;
-            }
-            
+                *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
+            }*/
+            AudioQueueDispose(mQueue, true);
+            mQueue = 0;
+            //return nil;
+            return;
         }
     }
-    mState = IDZAudioPlayerStateStopped;
-    mQueueStartTime = 0.0;
-    return self;
+    
+    _initializedAudio = YES;
 }
 
 - (BOOL)prepareToPlay
@@ -178,7 +189,20 @@ static void IDZPropertyListener(void* inUserData,
     self.state = IDZAudioPlayerStatePrepared;
     return YES;
 }
+
 - (BOOL)play
+{
+    _queuedPlayback = YES;
+    if (mDecoder.bufferingState == BufferingStateReadyToRead) {
+        if (_initializedAudio == NO) {
+            [self initializeAudio];
+        }
+        return [self play_];
+    }
+    return YES;
+}
+
+- (BOOL)play_
 {
     switch(self.state)
     {
