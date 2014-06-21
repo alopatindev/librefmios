@@ -54,7 +54,7 @@ extern "C" {
 
 @implementation IDZOggVorbisFileDecoder
 @synthesize dataFormat = mDataFormat;
-//@synthesize bufferingState = _bufferingState;
+@synthesize bufferingState = _bufferingState;
 
 FILE* _mpWFile;
 BOOL _headerIsRead;

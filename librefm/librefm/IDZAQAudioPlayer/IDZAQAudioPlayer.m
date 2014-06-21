@@ -228,16 +228,17 @@ static void IDZPropertyListener(void* inUserData,
     NSAssert(osStatus == noErr, @"AudioQueuePause failed");
     self.state = IDZAudioPlayerStatePaused;
     return (osStatus == noErr);
-    
-    
 }
 
 - (BOOL)stop
 {
-    return [self stop:YES];
+    if (_initializedAudio == NO) {
+        return NO;
+    }
+    return [self stop_:YES];
 }
 
-- (BOOL)stop:(BOOL)immediate
+- (BOOL)stop_:(BOOL)immediate
 {
     self.state = IDZAudioPlayerStateStopping;
     OSStatus osStatus = AudioQueueStop(mQueue, immediate);
