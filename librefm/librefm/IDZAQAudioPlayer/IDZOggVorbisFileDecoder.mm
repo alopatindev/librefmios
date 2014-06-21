@@ -46,6 +46,9 @@ static ov_callbacks MY_CALLBACKS_STREAMONLY = {
     (long (*)(void *))                            NULL
 };
 
+static const size_t MAX_QUEUE_SIZE = (size_t) (1024U * 1024U); // 1 MiB
+static const int DELAY_BETWEEN_REQUESTS = 20;
+    
 /**
  * @brief IDZOggVorbisFileDecoder private internals.
  */
@@ -69,6 +72,8 @@ static IDZOggVorbisFileDecoder* _self = nil;
 @synthesize bufferingState = _bufferingState;
 
 BOOL _headerIsRead;
+NSURL* _url;
+size_t _expectedContentLength;
 
 //BufferingState _bufferingState;
 /*- (void)setBufferingState:(BufferingState)state
@@ -89,7 +94,9 @@ BOOL _headerIsRead;
     {
         _self = self;
         mpFile = NULL;
-        _downloadedBytes = 0;
+        _url = url;
+        _expectedContentLength = 0U;
+        _downloadedBytes = 0U;
         _headerIsRead = NO;
         self.bufferingState = BufferingStateNothing;
 
@@ -204,13 +211,28 @@ BOOL _headerIsRead;
 
 - (void)sendRequest:(NSURL *)url
 {
+    self.connection = nil;
+
+    if (self.dataQueue == nil) {
+        return;
+    }
+
+    if ([self.dataQueue length] >= MAX_QUEUE_SIZE) {
+        [self sendRequest:_url afterDelay:DELAY_BETWEEN_REQUESTS];
+        return;
+    }
+    
+    size_t downloadedBytes = self.downloadedBytes;
+    if (downloadedBytes > _expectedContentLength) {
+        return;
+    }
+
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                        timeoutInterval:40.0];
 
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
-    
-    size_t downloadedBytes = self.downloadedBytes;
+
     if (downloadedBytes > 0U) {
         NSString *requestRange = [NSString stringWithFormat:@"bytes=%zu-", downloadedBytes];
         [request setValue:requestRange forHTTPHeaderField:@"Range"];
@@ -218,6 +240,16 @@ BOOL _headerIsRead;
 
     self.connection = [[NSURLConnection alloc] initWithRequest:request
                                                       delegate:self];
+}
+
+- (void)sendRequest:(NSURL*)url afterDelay:(int)delayInSeconds
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (dispatch_time_t) delayInSeconds * NSEC_PER_SEC),
+                   dispatch_get_main_queue(),
+                   ^{
+                       NSLog(@"sending request!");
+                       [self sendRequest:_url];
+                   });
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -231,6 +263,7 @@ BOOL _headerIsRead;
     
     switch (statusCode) {
         case 200: // OK
+            _expectedContentLength = (size_t) [response expectedContentLength];
             break;
         case 206: // partial content
             break;
@@ -241,6 +274,12 @@ BOOL _headerIsRead;
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
+    if (self.dataQueue == nil) {
+        [self.connection cancel];
+        self.connection = nil;
+        return;
+    }
+
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:[connection currentRequest]];
     size_t size = (size_t) [data length];
     self.bufferingState = BufferingStateReadyToRead;
@@ -248,6 +287,13 @@ BOOL _headerIsRead;
     [self.dataQueue appendData:data];
     _downloadedBytes += size;
     NSLog(@"WRITTEN _downloadedBytes=%zu", _downloadedBytes);
+    
+    if ([self.dataQueue length] >= MAX_QUEUE_SIZE) {
+        NSLog(@"cancelling connection");
+        [self.connection cancel];
+        self.connection = nil;
+        [self sendRequest:_url afterDelay:DELAY_BETWEEN_REQUESTS];
+    }
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [self readHeaderInfoIfNeeded];
@@ -269,13 +315,14 @@ BOOL _headerIsRead;
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     NSLog(@"! didFailWithError: %@", error);
-    NSURL *url = [[connection currentRequest] URL];
-    [self sendRequest:url];
+    [self sendRequest:_url];
 }
 
 static size_t network_stream_read(void* ptr, size_t size, size_t nitems, FILE* stream)
 {
-    if (_self == nil) {
+    // TODO: optimize CPU usage
+
+    if (_self == nil || _self.dataQueue == nil) {
         return 0U;
     }
     
