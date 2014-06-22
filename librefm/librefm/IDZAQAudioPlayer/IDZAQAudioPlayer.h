@@ -25,6 +25,17 @@
 #import <Foundation/Foundation.h>
 #import "IDZAudioPlayer.h"
 #import "IDZAudioDecoder.h"
+
+typedef enum IDZAudioPlayStateTag
+{
+    IDZAudioPlayerStateStopped,
+    IDZAudioPlayerStatePrepared,
+    IDZAudioPlayerStatePlaying,
+    IDZAudioPlayerStatePaused,
+    IDZAudioPlayerStateStopping
+    
+} IDZAudioPlayerState;
+
 /**
  * @brief An Audio Queue based audio player conforming to IDZAudioPlayer.
  *
@@ -50,6 +61,11 @@
  * @brief The current audio device time.
  */
 @property(readonly) NSTimeInterval deviceCurrentTime;
+
+/**
+ * @brief The current player state.
+ */
+@property (nonatomic, assign) IDZAudioPlayerState state;
 
 @end
 

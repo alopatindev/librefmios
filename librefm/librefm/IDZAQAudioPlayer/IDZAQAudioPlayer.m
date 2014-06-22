@@ -34,17 +34,6 @@
  */
 #define IDZ_BUFFER_COUNT 3
 
-
-typedef enum IDZAudioPlayStateTag
-{
-    IDZAudioPlayerStateStopped,
-    IDZAudioPlayerStatePrepared,
-    IDZAudioPlayerStatePlaying,
-    IDZAudioPlayerStatePaused,
-    IDZAudioPlayerStateStopping
-    
-} IDZAudioPlayerState;
-
 /**
  * @brief IDZAudioPlayer private internals.
  */
@@ -79,10 +68,7 @@ typedef enum IDZAudioPlayStateTag
  * @brief The decoder associated with this player.
  */
 @property (readonly, strong) id<IDZAudioDecoder> decoder;
-/**
- * @brief The current player state.
- */
-@property (nonatomic, assign) IDZAudioPlayerState state;
+
 @end
 
 
@@ -149,6 +135,11 @@ static void IDZPropertyListener(void* inUserData,
 
 - (void)initializeAudio
 {
+    if (mDecoder.headerIsRead == NO) {
+        NSLog(@"initializeAudio: headerIsRead == NO");
+        return;
+    }
+
     AudioStreamBasicDescription dataFormat = mDecoder.dataFormat;
     OSStatus status = AudioQueueNewOutput(&dataFormat, IDZOutputCallback,
                                           (__bridge void*)self,
@@ -259,6 +250,19 @@ static void IDZPropertyListener(void* inUserData,
 
     NSAssert(osStatus == noErr, @"AudioQueueStop failed");
     return (osStatus == noErr);    
+}
+
+- (BOOL)next
+{
+    if ([mDecoder isNextURLAvailable] == YES) {
+        [self stop];
+        _queuedPlayback = YES;
+        if ([mDecoder prepareToPlayNextURL] == YES) {
+            [self play];
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)releaseResources

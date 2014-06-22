@@ -59,6 +59,8 @@ typedef enum {
 
 @property BufferingState bufferingState;
 
+@property BOOL headerIsRead;
+
 @property id<IDZAudioPlayer> audioPlayerDelegate;
 
 - (void)releaseResources;
@@ -75,5 +77,8 @@ typedef enum {
  * @return YES if successful, NO if an error occurs.
  */
 - (BOOL)seekToTime:(NSTimeInterval)timeInterval error:(NSError*__autoreleasing*)error;
+
+- (BOOL)isNextURLAvailable;
+- (BOOL)prepareToPlayNextURL;
 
 @end

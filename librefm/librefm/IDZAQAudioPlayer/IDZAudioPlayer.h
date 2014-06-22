@@ -68,6 +68,8 @@
  */
 - (BOOL)stop;
 
+- (BOOL)next;
+
 - (BOOL)playIfQueuedPlayback;
 
 - (void)releaseResources;
