@@ -117,8 +117,8 @@ NSTimer* _timerSendRequest;
 {
     BOOL result = [self.urlList count] > 1 &&
                   self.headerIsRead == YES &&
-                  self.bufferingState != BufferingStateNothing &&
-                  ((IDZAQAudioPlayer*)self.audioPlayerDelegate).state != IDZAudioPlayerStateStopping;
+                  self.bufferingState != BufferingStateNothing /*&&
+                  ((IDZAQAudioPlayer*)self.audioPlayerDelegate).state != IDZAudioPlayerStateStopping*/;
     return result;
 }
 
@@ -139,9 +139,8 @@ NSTimer* _timerSendRequest;
     [self reset];
     self.url = url;
 
-    if ([url isFileURL] == NO)
-    {
-        self.dataQueueDict[url] = [NSMutableData new];
+    if ([url isFileURL] == NO) {
+        //self.dataQueueDict[url] = [NSMutableData new];
         [self sendRequest:url];
     } else {
         NSString* path = [url path];
@@ -306,13 +305,23 @@ NSTimer* _timerSendRequest;
 - (void)sendRequest:(NSURL *)url
 {
     self.connection = nil;
-
-    if (_self == nil || self.dataQueueDict[url] == nil) {
+    
+    BOOL isCurrentURL = [url isEqual:self.url];
+    BOOL isActualURL = isCurrentURL || [self.urlList containsObject:url];
+    if (isActualURL == NO) {
         return;
     }
 
+    //if (_self == nil /*|| self.dataQueueDict[url] == nil*/) {
+    //    return;
+    //}
+
     if ([self.dataQueueDict[url] length] >= MAX_QUEUE_SIZE) {
         [self sendRequest:url afterDelay:DELAY_BETWEEN_REQUESTS_SECONDS];
+        if (isCurrentURL == YES) {
+            [self readHeaderInfoIfNeeded];
+            [self.audioPlayerDelegate playIfQueuedPlayback];
+        }
         return;
     }
     
@@ -338,6 +347,7 @@ NSTimer* _timerSendRequest;
 
 - (void)sendRequest:(NSURL*)url afterDelay:(int)delayInSeconds
 {
+    NSLog(@"scheduling request after %d seconds", delayInSeconds);
     [_timerSendRequest invalidate];
     _timerSendRequest = [NSTimer scheduledTimerWithTimeInterval:delayInSeconds
                                                          target:self
@@ -374,24 +384,36 @@ NSTimer* _timerSendRequest;
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
+    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:[connection currentRequest]];
+
     NSURL* url = [[connection currentRequest] URL];
     
     BOOL isCurrentURL = [url isEqual:self.url];
+    BOOL isActualURL = isCurrentURL || [self.urlList containsObject:url];
 
-    if (isCurrentURL == NO || self.dataQueueDict[url] == nil) {
+    if (isActualURL == NO /*|| self.dataQueueDict[url] == nil*/) {
         NSLog(@"cancelling connection (case 2)");
         [self.connection cancel];
         self.connection = nil;
+        if (self.dataQueueDict[url] != nil) {
+            [self.dataQueueDict removeObjectForKey:url];
+        }
         return;
     }
+    
+    if (self.dataQueueDict[url] == nil) {
+        self.dataQueueDict[url] = [NSMutableData new];
+    }
 
-    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:[connection currentRequest]];
     size_t size = (size_t) [data length];
-    self.bufferingState = BufferingStateReadyToRead;
     NSLog(@"GONNA WRITE self.downloadedBytes=%zu", self.downloadedBytes + size);
     [self.dataQueueDict[url] appendData:data];
     self.downloadedBytes += size;
     NSLog(@"WRITTEN self.downloadedBytes=%zu", self.downloadedBytes);
+    
+    if (isCurrentURL) {
+        self.bufferingState = BufferingStateReadyToRead;
+    }
     
     size_t queueLength = (size_t) [self.dataQueueDict[url] length];
     if (queueLength >= MAX_QUEUE_SIZE) {
@@ -400,13 +422,14 @@ NSTimer* _timerSendRequest;
         self.connection = nil;
 
         [self sendRequest:url afterDelay:DELAY_BETWEEN_REQUESTS_SECONDS];
-        [self.audioPlayerDelegate playIfQueuedPlayback];
+        
+        if (isCurrentURL) {
+            [self.audioPlayerDelegate playIfQueuedPlayback];
+        }
     }
 
-    if (queueLength >= MIN_QUEUE_SIZE) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-            [self readHeaderInfoIfNeeded];
-        }];
+    if (queueLength >= MIN_QUEUE_SIZE && isCurrentURL) {
+        [self readHeaderInfoIfNeeded];
     }
 }
 
@@ -420,6 +443,22 @@ NSTimer* _timerSendRequest;
 {
     NSLog(@"song downloading complete!");
     self.connection = nil;
+    
+    // for very small songs
+    NSURL* url = [[connection currentRequest] URL];
+    BOOL isCurrentURL = [url isEqual:self.url];
+    if (isCurrentURL) {
+        [self readHeaderInfoIfNeeded];
+        [self.audioPlayerDelegate playIfQueuedPlayback];
+    }
+
+    if ([self isNextURLAvailable] == YES) {
+        NSLog(@"downloading the NEXT song");
+        //NSURL* nextURL = self.urlList[1];
+        //[self sendRequest:nextURL];
+    } else {
+        NSLog(@"all songs has been downloaded?");
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error

@@ -82,6 +82,7 @@
 
 BOOL _queuedPlayback;
 BOOL _initializedAudio;
+BOOL _continueWithNextSong;
 
 // MARK: - Static Callbacks
 static void IDZOutputCallback(void *                  inUserData,
@@ -112,8 +113,10 @@ static void IDZPropertyListener(void* inUserData,
              */
             pPlayer.currentTime = 0;
         }
-        if(!isRunning)
+        if(!isRunning) {
+            _continueWithNextSong = YES;
             pPlayer.state = IDZAudioPlayerStateStopped;
+        }
     }
     
 }
@@ -129,6 +132,7 @@ static void IDZPropertyListener(void* inUserData,
         mQueueStartTime = 0.0;
         _queuedPlayback = NO;
         _initializedAudio = NO;
+        _continueWithNextSong = NO;
     }
     return self;
 }
@@ -247,6 +251,7 @@ static void IDZPropertyListener(void* inUserData,
 {
     self.state = IDZAudioPlayerStateStopping;
     OSStatus osStatus = AudioQueueStop(mQueue, immediate);
+    _initializedAudio = NO;
 
     NSAssert(osStatus == noErr, @"AudioQueueStop failed");
     return (osStatus == noErr);    
@@ -294,6 +299,8 @@ static void IDZPropertyListener(void* inUserData,
         self.state = IDZAudioPlayerStateStopping;
         Boolean immediate = false;
         AudioQueueStop(mQueue, immediate);
+        //_continueWithNextSong = YES;
+        _initializedAudio = NO;
     }
 }
 
@@ -393,6 +400,10 @@ static void IDZPropertyListener(void* inUserData,
             break;
         case IDZAudioPlayerStateStopped:
             NSLog(@"IDZAudioPlayerStateStopped");
+            if (_continueWithNextSong == YES) {
+                _continueWithNextSong = NO;
+                [self next];
+            }
             break;
         case IDZAudioPlayerStateStopping:
             NSLog(@"IDZAudioPlayerStateStopping");
