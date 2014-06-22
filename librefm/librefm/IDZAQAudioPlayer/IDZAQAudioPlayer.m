@@ -261,6 +261,13 @@ static void IDZPropertyListener(void* inUserData,
     return (osStatus == noErr);    
 }
 
+- (void)releaseResources
+{
+    [self stop];
+    [mDecoder releaseResources];
+    mDecoder = nil;
+}
+
 - (void)readBuffer:(AudioQueueBufferRef)buffer
 {
     if(self.state == IDZAudioPlayerStateStopping)

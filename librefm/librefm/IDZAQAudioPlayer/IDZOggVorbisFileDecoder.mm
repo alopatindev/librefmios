@@ -48,7 +48,7 @@ static ov_callbacks MY_CALLBACKS_STREAMONLY = {
 
 static const size_t MAX_QUEUE_SIZE = (size_t) (1024U * 1024U); // 1 MiB
 static const size_t MIN_QUEUE_SIZE = (size_t) (MAX_QUEUE_SIZE / 3U);
-static const int DELAY_BETWEEN_REQUESTS = 20; // seconds
+static const int DELAY_BETWEEN_REQUESTS_SECONDS = 20; // seconds
     
 /**
  * @brief IDZOggVorbisFileDecoder private internals.
@@ -82,6 +82,7 @@ static IDZOggVorbisFileDecoder* _self = nil;
 @synthesize audioPlayerDelegate = _audioPlayerDelegate;
 
 BOOL _headerIsRead;
+NSTimer* _timerSendRequest;
 
 //BufferingState _bufferingState;
 /*- (void)setBufferingState:(BufferingState)state
@@ -143,11 +144,13 @@ BOOL _headerIsRead;
 - (void)releaseResources
 {
     if (_self != nil) {
+        [_timerSendRequest invalidate];
         ov_clear(&mOggVorbisFile);
         network_stream_close(NULL);
         if (self.connection != nil) {
             [self.connection cancel];
         }
+        //self.dataQueueDict = nil;
         _self = nil;
     }
 }
@@ -275,12 +278,12 @@ BOOL _headerIsRead;
 {
     self.connection = nil;
 
-    if (self.dataQueueDict[self.url] == nil) {
+    if (_self == nil || self.dataQueueDict[url] == nil) {
         return;
     }
 
-    if ([self.dataQueueDict[self.url] length] >= MAX_QUEUE_SIZE) {
-        [self sendRequest:self.url afterDelay:DELAY_BETWEEN_REQUESTS];
+    if ([self.dataQueueDict[url] length] >= MAX_QUEUE_SIZE) {
+        [self sendRequest:url afterDelay:DELAY_BETWEEN_REQUESTS_SECONDS];
         return;
     }
     
@@ -306,12 +309,18 @@ BOOL _headerIsRead;
 
 - (void)sendRequest:(NSURL*)url afterDelay:(int)delayInSeconds
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (dispatch_time_t) delayInSeconds * NSEC_PER_SEC),
-                   dispatch_get_main_queue(),
-                   ^{
-                       NSLog(@"sending request!");
-                       [self sendRequest:self.url];
-                   });
+    [_timerSendRequest invalidate];
+    _timerSendRequest = [NSTimer scheduledTimerWithTimeInterval:delayInSeconds
+                                                         target:self
+                                                       selector:@selector(onTickSendRequest:)
+                                                       userInfo:nil
+                                                        repeats:NO];
+}
+
+-(void)onTickSendRequest:(NSTimer*)timer
+{
+    NSLog(@"sending request!");
+    [self sendRequest:self.url];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -355,7 +364,7 @@ BOOL _headerIsRead;
         NSLog(@"cancelling connection");
         [self.connection cancel];
         self.connection = nil;
-        [self sendRequest:self.url afterDelay:DELAY_BETWEEN_REQUESTS];
+        [self sendRequest:self.url afterDelay:DELAY_BETWEEN_REQUESTS_SECONDS];
     }
     if (queueLength >= MIN_QUEUE_SIZE) {
         [self.audioPlayerDelegate playIfQueuedPlayback];

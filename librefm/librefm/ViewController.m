@@ -22,8 +22,6 @@
 id<IDZAudioPlayer> _audioPlayer;
 LibrefmConnection *_librefmConnection;
 
-IDZOggVorbisFileDecoder *decoder;
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -66,10 +64,8 @@ IDZOggVorbisFileDecoder *decoder;
 
 - (IBAction)pauseButtonClicked:(id)sender
 {
-    [_audioPlayer pause];
-    //decoder.audioPlayerDelegate = nil;
-    //[_audioPlayer stop];
-    //_audioPlayer = nil;
+    [_audioPlayer releaseResources];
+    _audioPlayer = nil;
 }
 
 - (void)librefmDidLogin:(BOOL)ok error:(NSError*)error

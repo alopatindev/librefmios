@@ -70,6 +70,8 @@
 
 - (BOOL)playIfQueuedPlayback;
 
+- (void)releaseResources;
+
 /* properties */
 /**
  * @brief YES when the player is playing, NO otherwise.
