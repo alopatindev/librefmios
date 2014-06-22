@@ -69,7 +69,8 @@ typedef enum IDZAudioPlayStateTag
  * @param immediate if YES playback stops immediately, otherwise playback stops after all enqueued buffers 
  * have finished playing.
  */
-- (BOOL)stop:(BOOL)immediate;
+//- (BOOL)stop:(BOOL)immediate;
+- (BOOL)stop;
 /**
  * @brief YES if the player is playing, NO otherwise.
  */

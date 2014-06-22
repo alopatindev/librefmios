@@ -35,6 +35,9 @@
  * @param error
  * @return a pointer to the receiver or nil if an error occurs
  */
-- (id)initWithContentsOfURL:(NSURL*)url error:(NSError**)error;
+//- (id)initWithContentsOfURL:(NSURL*)url error:(NSError**)error;
+
+- (void)queueURL:(NSURL*)url;
+- (void)queueURLString:(NSString*)urlString;
 
 @end

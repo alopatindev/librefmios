@@ -47,7 +47,7 @@ static ov_callbacks MY_CALLBACKS_STREAMONLY = {
 };
 
 static const size_t MAX_QUEUE_SIZE = (size_t) (1024U * 1024U); // 1 MiB
-static const int DELAY_BETWEEN_REQUESTS = 20;
+static const int DELAY_BETWEEN_REQUESTS = 20; // seconds
     
 /**
  * @brief IDZOggVorbisFileDecoder private internals.
@@ -59,21 +59,27 @@ static const int DELAY_BETWEEN_REQUESTS = 20;
     OggVorbis_File mOggVorbisFile;
 }
 
-@property NSMutableData* dataQueue;
+@property NSURL* url;
+@property NSMutableDictionary* dataQueueDict;
+@property NSMutableArray* urlList;
+
 @property size_t downloadedBytes;
+@property size_t expectedContentLength;
 @property NSURLConnection* connection;
 
 @end
     
+
 static IDZOggVorbisFileDecoder* _self = nil;
 
+    
+
 @implementation IDZOggVorbisFileDecoder
+
 @synthesize dataFormat = mDataFormat;
 @synthesize bufferingState = _bufferingState;
 
 BOOL _headerIsRead;
-NSURL* _url;
-size_t _expectedContentLength;
 
 //BufferingState _bufferingState;
 /*- (void)setBufferingState:(BufferingState)state
@@ -88,21 +94,93 @@ size_t _expectedContentLength;
     return _bufferingState;
 }*/
 
-- (id)initWithContentsOfURL:(NSURL*)url error:(NSError *__autoreleasing *)error
+- (void)queueURL:(NSURL*)url
+{
+    [self.urlList addObject:url];
+    
+    if ([self.urlList count] == 1U) {
+        [self prepareToPlayURL:url];
+    }
+}
+
+- (void)queueURLString:(NSString*)urlString
+{
+    NSURL* url = [NSURL URLWithString:urlString];
+    [self queueURL:url];
+}
+
+- (void)prepareToPlayURL:(NSURL*)url
+{
+    [self reset];
+    self.url = url;
+
+    if ([url isFileURL] == NO)
+    {
+        self.dataQueueDict[self.url] = [NSMutableData new];
+        [self sendRequest:url];
+    } else {
+        NSString* path = [url path];
+        self.bufferingState = BufferingStateDone;
+        mpFile = fopen([path UTF8String], "r");
+        [self readHeaderInfoIfNeeded];
+    }
+}
+
+- (void)reset
+{
+    [self releaseResources];
+    _self = self;
+    mpFile = NULL;
+    self.url = nil;
+    self.expectedContentLength = 0U;
+    self.downloadedBytes = 0U;
+    _headerIsRead = NO;
+    self.bufferingState = BufferingStateNothing;
+}
+
+- (void)releaseResources
+{
+    if (_self != nil) {
+        ov_clear(&mOggVorbisFile);
+        network_stream_close(NULL);
+        if (self.connection != nil) {
+            [self.connection cancel];
+        }
+        _self = nil;
+    }
+}
+
+- (void)dealloc
+{
+    NSLog(@"IDZOggVorbisFileDecoder dealloc");
+    [self releaseResources];
+}
+
+- (id)init
+{
+    if (self = [super init]) {
+        self.urlList = [NSMutableArray new];
+        self.dataQueueDict = [NSMutableDictionary new];
+        [self reset];
+    }
+    return self;
+}
+
+/*- (id)initWithContentsOfURL:(NSURL*)url error:(NSError *__autoreleasing *)error
 {
     if(self = [super init])
     {
         _self = self;
         mpFile = NULL;
-        _url = url;
-        _expectedContentLength = 0U;
-        _downloadedBytes = 0U;
+        self.url = url;
+        self.expectedContentLength = 0U;
+        self.downloadedBytes = 0U;
         _headerIsRead = NO;
         self.bufferingState = BufferingStateNothing;
 
         if ([url isFileURL] == NO)
         {
-            self.dataQueue = [NSMutableData new];
+            self.dataQueueDict[self.url] = [NSMutableData new];
             [self sendRequest:url];
         } else {
             NSString* path = [url path];
@@ -112,7 +190,7 @@ size_t _expectedContentLength;
         }
     }
     return self;
-}
+}*/
 
 - (void)readHeaderInfoIfNeeded
 {
@@ -133,24 +211,6 @@ size_t _expectedContentLength;
         
         _headerIsRead = YES;
     }
-}
-
-- (void)releaseResources
-{
-    if (_self != nil) {
-        ov_clear(&mOggVorbisFile);
-        //network_stream_close(NULL);
-        if (self.connection != nil) {
-            [self.connection cancel];
-        }
-        _self = nil;
-    }
-}
-
-- (void)dealloc
-{
-    NSLog(@"IDZOggVorbisFileDecoder dealloc");
-    [self releaseResources];
 }
 
 - (BOOL)readBuffer:(AudioQueueBufferRef)pBuffer
@@ -213,17 +273,17 @@ size_t _expectedContentLength;
 {
     self.connection = nil;
 
-    if (self.dataQueue == nil) {
+    if (self.dataQueueDict[self.url] == nil) {
         return;
     }
 
-    if ([self.dataQueue length] >= MAX_QUEUE_SIZE) {
-        [self sendRequest:_url afterDelay:DELAY_BETWEEN_REQUESTS];
+    if ([self.dataQueueDict[self.url] length] >= MAX_QUEUE_SIZE) {
+        [self sendRequest:self.url afterDelay:DELAY_BETWEEN_REQUESTS];
         return;
     }
     
     size_t downloadedBytes = self.downloadedBytes;
-    if (downloadedBytes > _expectedContentLength) {
+    if (downloadedBytes > self.expectedContentLength) {
         return;
     }
 
@@ -248,7 +308,7 @@ size_t _expectedContentLength;
                    dispatch_get_main_queue(),
                    ^{
                        NSLog(@"sending request!");
-                       [self sendRequest:_url];
+                       [self sendRequest:self.url];
                    });
 }
 
@@ -263,7 +323,7 @@ size_t _expectedContentLength;
     
     switch (statusCode) {
         case 200: // OK
-            _expectedContentLength = (size_t) [response expectedContentLength];
+            self.expectedContentLength = (size_t) [response expectedContentLength];
             break;
         case 206: // partial content
             break;
@@ -274,7 +334,7 @@ size_t _expectedContentLength;
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    if (self.dataQueue == nil) {
+    if (self.dataQueueDict[self.url] == nil) {
         [self.connection cancel];
         self.connection = nil;
         return;
@@ -283,16 +343,16 @@ size_t _expectedContentLength;
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:[connection currentRequest]];
     size_t size = (size_t) [data length];
     self.bufferingState = BufferingStateReadyToRead;
-    NSLog(@"GONNA WRITE _downloadedBytes=%zu", _downloadedBytes + size);
-    [self.dataQueue appendData:data];
-    _downloadedBytes += size;
-    NSLog(@"WRITTEN _downloadedBytes=%zu", _downloadedBytes);
+    NSLog(@"GONNA WRITE self.downloadedBytes=%zu", self.downloadedBytes + size);
+    [self.dataQueueDict[self.url] appendData:data];
+    self.downloadedBytes += size;
+    NSLog(@"WRITTEN self.downloadedBytes=%zu", self.downloadedBytes);
     
-    if ([self.dataQueue length] >= MAX_QUEUE_SIZE) {
+    if ([self.dataQueueDict[self.url] length] >= MAX_QUEUE_SIZE) {
         NSLog(@"cancelling connection");
         [self.connection cancel];
         self.connection = nil;
-        [self sendRequest:_url afterDelay:DELAY_BETWEEN_REQUESTS];
+        [self sendRequest:self.url afterDelay:DELAY_BETWEEN_REQUESTS];
     }
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
@@ -315,22 +375,22 @@ size_t _expectedContentLength;
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     NSLog(@"! didFailWithError: %@", error);
-    [self sendRequest:_url];
+    [self sendRequest:self.url];
 }
 
 static size_t network_stream_read(void* ptr, size_t size, size_t nitems, FILE* stream)
 {
     // TODO: optimize CPU usage
 
-    if (_self == nil || _self.dataQueue == nil) {
+    if (_self == nil || _self.dataQueueDict[_self.url] == nil) {
         return 0U;
     }
     
     size_t sizeNeedToRead = size * nitems;
-    size_t dataQueueSize = (size_t) [_self.dataQueue length];
+    size_t dataQueueSize = (size_t) [_self.dataQueueDict[_self.url] length];
     size_t sizeWasRead = dataQueueSize > sizeNeedToRead ? sizeNeedToRead : dataQueueSize;
 
-    const char* bytes = (const char*) [_self.dataQueue bytes];
+    const char* bytes = (const char*) [_self.dataQueueDict[_self.url] bytes];
     memcpy(ptr, bytes, sizeWasRead);
     
     NSMutableData *newData;
@@ -340,7 +400,7 @@ static size_t network_stream_read(void* ptr, size_t size, size_t nitems, FILE* s
         newData = [[NSMutableData alloc] initWithBytes:&bytes[sizeWasRead]
                                                 length:(dataQueueSize - sizeWasRead)];
     }
-    _self.dataQueue = newData;
+    _self.dataQueueDict[_self.url] = newData;
     
     return sizeWasRead;
 }
@@ -356,9 +416,12 @@ static int network_stream_close(FILE* stream)
         fclose(stream);
         _self->mpFile = NULL;
     }*/
-    
-    _self.dataQueue.length = 0;
-    _self.dataQueue = nil;
+
+    NSMutableData* data = _self.dataQueueDict[_self.url];
+    if (data != nil) {
+        data.length = 0;
+        _self.dataQueueDict[_self.url] = nil;
+    }
     return 0;
 }
 
