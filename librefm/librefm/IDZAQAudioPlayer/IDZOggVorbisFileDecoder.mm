@@ -47,8 +47,8 @@ static ov_callbacks MY_CALLBACKS_STREAMONLY = {
     (long (*)(void *))                            NULL
 };
 
-static const size_t MAX_QUEUE_SIZE = (size_t) (1024U * 1024U); // 1 MiB
-static const size_t MIN_QUEUE_SIZE = (size_t) (MAX_QUEUE_SIZE / 3U);
+static const size_t MAX_QUEUE_SIZE = (size_t) (1024U * 1024U / 3U);
+static const size_t MIN_QUEUE_SIZE = (size_t) (MAX_QUEUE_SIZE / 2U);
 static const int DELAY_BETWEEN_REQUESTS_SECONDS = 20; // seconds
     
 /**
@@ -398,19 +398,16 @@ NSTimer* _timerSendRequest;
         NSLog(@"cancelling connection");
         [self.connection cancel];
         self.connection = nil;
-        
-        if (isCurrentURL == YES) {
-            [self sendRequest:url afterDelay:DELAY_BETWEEN_REQUESTS_SECONDS];
-        }
-    }
 
-    if (queueLength >= MIN_QUEUE_SIZE) {
+        [self sendRequest:url afterDelay:DELAY_BETWEEN_REQUESTS_SECONDS];
         [self.audioPlayerDelegate playIfQueuedPlayback];
     }
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [self readHeaderInfoIfNeeded];
-    }];
+    if (queueLength >= MIN_QUEUE_SIZE) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+            [self readHeaderInfoIfNeeded];
+        }];
+    }
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection
