@@ -13,8 +13,11 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingAnimation;
 
 - (IBAction)loginButtonClicked:(id)sender;
+- (IBAction)playButtonClicked:(id)sender;
+- (IBAction)pauseButtonClicked:(id)sender;
 
 - (void)librefmDidLogin:(BOOL)ok error:(NSError*)error;
 - (void)librefmDidLoadPlaylist:(NSDictionary*)playlist

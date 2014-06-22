@@ -47,6 +47,7 @@ static ov_callbacks MY_CALLBACKS_STREAMONLY = {
 };
 
 static const size_t MAX_QUEUE_SIZE = (size_t) (1024U * 1024U); // 1 MiB
+static const size_t MIN_QUEUE_SIZE = (size_t) (MAX_QUEUE_SIZE / 3U);
 static const int DELAY_BETWEEN_REQUESTS = 20; // seconds
     
 /**
@@ -78,6 +79,7 @@ static IDZOggVorbisFileDecoder* _self = nil;
 
 @synthesize dataFormat = mDataFormat;
 @synthesize bufferingState = _bufferingState;
+@synthesize audioPlayerDelegate = _audioPlayerDelegate;
 
 BOOL _headerIsRead;
 
@@ -116,7 +118,7 @@ BOOL _headerIsRead;
 
     if ([url isFileURL] == NO)
     {
-        self.dataQueueDict[self.url] = [NSMutableData new];
+        self.dataQueueDict[url] = [NSMutableData new];
         [self sendRequest:url];
     } else {
         NSString* path = [url path];
@@ -153,6 +155,7 @@ BOOL _headerIsRead;
 - (void)dealloc
 {
     NSLog(@"IDZOggVorbisFileDecoder dealloc");
+    //self.audioPlayerDelegate = nil;
     [self releaseResources];
 }
 
@@ -246,7 +249,6 @@ BOOL _headerIsRead;
     pBuffer->mAudioDataByteSize = nTotalBytesRead;
     pBuffer->mPacketDescriptionCount = 0;
     return YES;
-    
 }
 
 - (BOOL)seekToTime:(NSTimeInterval)time error:(NSError**)error
@@ -348,13 +350,17 @@ BOOL _headerIsRead;
     self.downloadedBytes += size;
     NSLog(@"WRITTEN self.downloadedBytes=%zu", self.downloadedBytes);
     
-    if ([self.dataQueueDict[self.url] length] >= MAX_QUEUE_SIZE) {
+    size_t queueLength = (size_t) [self.dataQueueDict[self.url] length];
+    if (queueLength >= MAX_QUEUE_SIZE) {
         NSLog(@"cancelling connection");
         [self.connection cancel];
         self.connection = nil;
         [self sendRequest:self.url afterDelay:DELAY_BETWEEN_REQUESTS];
     }
-    
+    if (queueLength >= MIN_QUEUE_SIZE) {
+        [self.audioPlayerDelegate playIfQueuedPlayback];
+    }
+
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [self readHeaderInfoIfNeeded];
     }];
@@ -407,7 +413,7 @@ static size_t network_stream_read(void* ptr, size_t size, size_t nitems, FILE* s
 
 static int network_stream_close(FILE* stream)
 {
-    if (_self == nil) {
+    if (_self == nil || _self.url == nil) {
         return -1;
     }
     
@@ -420,7 +426,7 @@ static int network_stream_close(FILE* stream)
     NSMutableData* data = _self.dataQueueDict[_self.url];
     if (data != nil) {
         data.length = 0;
-        _self.dataQueueDict[_self.url] = nil;
+        [_self.dataQueueDict removeObjectForKey:_self.url];
     }
     return 0;
 }

@@ -27,6 +27,7 @@
  */
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "IDZAudioPlayer.h"
 /**
  * @brief Required audio decoder methods and properties
  *
@@ -57,6 +58,8 @@ typedef enum {
 @property(readonly) NSTimeInterval duration;
 
 @property BufferingState bufferingState;
+
+@property id<IDZAudioPlayer> audioPlayerDelegate;
 
 - (void)releaseResources;
 

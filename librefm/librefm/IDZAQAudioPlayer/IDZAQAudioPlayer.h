@@ -41,6 +41,7 @@
  * @return a pointer to the receiver or nil if an error occurs.
  */
 - (id)initWithDecoder:(id<IDZAudioDecoder>)decoder error:(NSError**)error;
+
 /**
  * @brief Delegate notified when playback ends.
  */

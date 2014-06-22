@@ -68,6 +68,8 @@
  */
 - (BOOL)stop;
 
+- (BOOL)playIfQueuedPlayback;
+
 /* properties */
 /**
  * @brief YES when the player is playing, NO otherwise.

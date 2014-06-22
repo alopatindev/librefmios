@@ -38,10 +38,35 @@
                                     <action selector="loginButtonClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fcY-me-hD4"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q0M-me-Vqd">
+                                <rect key="frame" x="59" y="374" width="43" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Pause">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="pauseButtonClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="iiu-As-y2Y"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rCl-8x-N9V">
+                                <rect key="frame" x="129" y="374" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Play">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="playButtonClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="TqZ-I3-36f"/>
+                                </connections>
+                            </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="502-VF-74G">
+                                <rect key="frame" x="162" y="444" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="loadingAnimation" destination="502-VF-74G" id="6Cm-oD-HIa"/>
                         <outlet property="passwordTextField" destination="xxO-MF-adR" id="Ddi-7L-0YJ"/>
                         <outlet property="usernameTextField" destination="BF5-Dr-cwE" id="pUL-F0-7us"/>
                     </connections>

@@ -9,7 +9,6 @@
 #import "ViewController.h"
 #import "LibrefmConnection.h"
 
-//#import "STKAudioPlayer.h"
 #import "IDZAudioPlayer.h"
 #import "IDZAQAudioPlayer.h"
 #import "IDZOggVorbisFileDecoder.h"
@@ -20,34 +19,32 @@
 
 @implementation ViewController
 
-//STKAudioPlayer *_audioPlayer;
 id<IDZAudioPlayer> _audioPlayer;
 LibrefmConnection *_librefmConnection;
+
+IDZOggVorbisFileDecoder *decoder;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    /*_audioPlayer = [[STKAudioPlayer alloc] initWithOptions:(STKAudioPlayerOptions){ .flushQueueOnSeek = YES, .enableVolumeMixer = NO, .equalizerBandFrequencies = {50, 100, 200, 400, 800, 1600, 2600, 16000} }];
-    _audioPlayer.meteringEnabled = YES;
-    _audioPlayer.volume = 1.0f;*/
     
-    NSError *error;
-    //NSURL *oggUrl = [[NSBundle mainBundle] URLForResource:@"Rondo_Alla_Turka" withExtension:@".ogg"];
-    NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
-    //NSURL *oggUrl = [NSURL URLWithString:@"http://gfile.ru/d/tf/d8406fbdb99e4eac67c284db85e9a112/14032833/a9Iil/storage1-5-9-452095/m.ogg"];
+    [[self loadingAnimation] startAnimating];
 
-    IDZOggVorbisFileDecoder *decoder = [[IDZOggVorbisFileDecoder alloc] initWithContentsOfURL:oggUrl error:&error];
+    /*_librefmConnection = [LibrefmConnection new];
+    _librefmConnection.delegate = self;
+    
+    [self loginButtonClicked:nil];*/
+
+    NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
+    IDZOggVorbisFileDecoder *decoder = [IDZOggVorbisFileDecoder new];
+    [decoder queueURL:oggUrl];
+    [decoder queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
+    [decoder queueURLString:@"http://gigue.rrbone.net/24765.ogg2"];
     //NSLog(@"Ogg Vorbis file duration is %g", decoder.duration);
     
     _audioPlayer = [[IDZAQAudioPlayer alloc] initWithDecoder:decoder error:nil];
-    [_audioPlayer prepareToPlay];
+    decoder.audioPlayerDelegate = _audioPlayer;
     [_audioPlayer play];
-
-    _librefmConnection = [LibrefmConnection new];
-    _librefmConnection.delegate = self;
-    
-    [self loginButtonClicked:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -58,13 +55,21 @@ LibrefmConnection *_librefmConnection;
 
 - (IBAction)loginButtonClicked:(id)sender
 {
-    //[_audioPlayer play:@"http://gigue.rrbone.net/112973.ogg2"];
-    //[_audioPlayer play:@"http://www.abstractpath.com/files/audiosamples/airplane.aac"];
-    //[_audioPlayer play:@"http://www.abstractpath.com/files/audiosamples/sample.mp3"];
-    //[_audioPlayer play:@"http://gigue.rrbone.net/743638.ogg2"];
-    return;
-    [_librefmConnection loginWithUsername:[self.usernameTextField text]
-                                 password:[self.passwordTextField text]];
+    //[_librefmConnection loginWithUsername:[self.usernameTextField text]
+    //                             password:[self.passwordTextField text]];
+}
+
+- (IBAction)playButtonClicked:(id)sender
+{
+    [_audioPlayer play];
+}
+
+- (IBAction)pauseButtonClicked:(id)sender
+{
+    [_audioPlayer pause];
+    //decoder.audioPlayerDelegate = nil;
+    //[_audioPlayer stop];
+    //_audioPlayer = nil;
 }
 
 - (void)librefmDidLogin:(BOOL)ok error:(NSError*)error
