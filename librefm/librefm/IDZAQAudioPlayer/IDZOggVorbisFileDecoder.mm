@@ -66,7 +66,7 @@ static const int DELAY_BETWEEN_REQUESTS_SECONDS = 20; // seconds
 @property NSMutableArray* urlList;
 
 @property size_t downloadedBytes;
-@property size_t expectedContentLength;
+//@property size_t expectedContentLength;
 @property NSURLConnection* connection;
 
 @end
@@ -122,9 +122,9 @@ NSTimer* _timerSendRequest;
 
 - (BOOL)isNextURLAvailable
 {
-    BOOL result = [self.urlList count] > 1 &&
+    BOOL result = [self.urlList count] > 1 /*&&
                   self.headerIsRead == YES &&
-                  self.bufferingState != BufferingStateNothing /*&&
+                  self.bufferingState != BufferingStateNothing*/ /*&&
                   ((IDZAQAudioPlayer*)self.audioPlayerDelegate).state != IDZAudioPlayerStateStopping*/;
     return result;
 }
@@ -163,7 +163,7 @@ NSTimer* _timerSendRequest;
     _self = self;
     mpFile = NULL;
     self.url = nil;
-    self.expectedContentLength = 0U;
+    //self.expectedContentLength = 0U;
     self.downloadedBytes = 0U;
     self.headerIsRead = NO;
     self.bufferingState = BufferingStateNothing;
@@ -333,9 +333,9 @@ NSTimer* _timerSendRequest;
     }
     
     size_t downloadedBytes = self.downloadedBytes;
-    if (downloadedBytes > self.expectedContentLength) {
+    /*if (downloadedBytes > self.expectedContentLength) {
         return;
-    }
+    }*/
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -372,20 +372,35 @@ NSTimer* _timerSendRequest;
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:[connection currentRequest]];
-    
-    
+
+    NSURL* url = [[connection currentRequest] URL];
+    BOOL isCurrentURL = [url isEqual:self.url];
+
+    static NSArray* const kValidMimeTypes = @[@"audio/ogg", @"application/octet-stream"];
+    BOOL correctMimeType = [kValidMimeTypes indexOfObject:[response MIMEType]] != NSNotFound;
+
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
     int statusCode = (int) httpResponse.statusCode;
-    NSLog(@"! didReceiveResponse statusCode=%d", statusCode);
+    NSLog(@"! didReceiveResponse statusCode=%d MIMEType='%@'", statusCode, [response MIMEType]);
     
+    BOOL wrongResponse = NO;
     switch (statusCode) {
         case 200: // OK
-            self.expectedContentLength = (size_t) [response expectedContentLength];
+            //self.expectedContentLength = (size_t) [response expectedContentLength];
             break;
         case 206: // partial content
             break;
         default:
+            // 404 and so on
+            wrongResponse = YES;
             break;
+    }
+
+    wrongResponse = wrongResponse || !correctMimeType;
+    
+    if (isCurrentURL == YES && wrongResponse == YES) {
+        [self.audioPlayerDelegate stop];
+        [self prepareToPlayNextURL];
     }
 }
 
@@ -460,7 +475,7 @@ NSTimer* _timerSendRequest;
     }
 
     if ([self isNextURLAvailable] == YES) {
-        NSLog(@"downloading the NEXT song");
+        //NSLog(@"downloading the NEXT song");
         //NSURL* nextURL = self.urlList[1];
         //[self sendRequest:nextURL];
     } else {
