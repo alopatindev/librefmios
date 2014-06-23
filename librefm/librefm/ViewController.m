@@ -11,7 +11,6 @@
 
 #import "IDZAudioPlayer.h"
 #import "IDZAQAudioPlayer.h"
-#import "IDZOggVorbisFileDecoder.h"
 
 @interface ViewController ()
 
@@ -33,19 +32,15 @@ LibrefmConnection *_librefmConnection;
     
     [self loginButtonClicked:nil];*/
 
-    NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
-    IDZOggVorbisFileDecoder *decoder = [IDZOggVorbisFileDecoder new];
-    //[decoder queueURLString:@"http://gfile.ru/d/tf/f785881deb7e223cbfcbd7eaa02a41b7/14034792/aaX3V/storage5-7-4-455147/little.ogg"];
-    [decoder queueURL:oggUrl];
-    [decoder queueURLString:@"http://gfile.ru/d/tf/acc4cac1bccd85ebd6bc38430f38485b/14034878/aaX3V/storage5-7-4-455147/little.ogg"];
-    
-    [decoder queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
-    [decoder queueURLString:@"http://gigue.rrbone.net/24765.ogg2"];
-    //NSLog(@"Ogg Vorbis file duration is %g", decoder.duration);
-    
-    _audioPlayer = [[IDZAQAudioPlayer alloc] initWithDecoder:decoder error:nil];
+    _audioPlayer = [IDZAQAudioPlayer new];
     _audioPlayer.delegate = self;
-    decoder.audioPlayerDelegate = _audioPlayer;
+    
+    NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
+    [_audioPlayer queueURL:oggUrl];
+    [_audioPlayer queueURLString:@"http://gfile.ru/d/tf/acc4cac1bccd85ebd6bc38430f38485b/14034878/aaX3V/storage5-7-4-455147/little.ogg"];
+    [_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
+    [_audioPlayer queueURLString:@"http://gigue.rrbone.net/24765.ogg2"];
+    
     [_audioPlayer play];
 }
 

@@ -37,7 +37,4 @@
  */
 //- (id)initWithContentsOfURL:(NSURL*)url error:(NSError**)error;
 
-- (void)queueURL:(NSURL*)url;
-- (void)queueURLString:(NSString*)urlString;
-
 @end

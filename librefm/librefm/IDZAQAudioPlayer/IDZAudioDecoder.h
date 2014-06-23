@@ -83,4 +83,7 @@ typedef enum {
 - (BOOL)isNextURLAvailable;
 - (BOOL)prepareToPlayNextURL;
 
+- (void)queueURL:(NSURL*)url;
+- (void)queueURLString:(NSString*)urlString;
+
 @end

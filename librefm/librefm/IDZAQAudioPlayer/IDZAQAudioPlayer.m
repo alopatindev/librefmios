@@ -27,6 +27,7 @@
 #import "IDZAQAudioPlayer.h"
 #import "IDZAudioDecoder.h"
 #import "IDZTrace.h"
+#import "IDZOggVorbisFileDecoder.h"
 
 /*
  * Apple uses 3 buffers in the AQPlayer example. We'll do the same.
@@ -121,6 +122,17 @@ static void IDZPropertyListener(void* inUserData,
     
 }
 
+- (id)init
+{
+    id<IDZAudioDecoder> decoder = [IDZOggVorbisFileDecoder new];
+
+    if (self = [self initWithDecoder:decoder
+                               error:nil])
+    {
+        decoder.audioPlayerDelegate = self;
+    }
+    return self;
+}
 
 - (id)initWithDecoder:(id<IDZAudioDecoder>)decoder error:(NSError *__autoreleasing *)error  
 {
@@ -414,5 +426,15 @@ static void IDZPropertyListener(void* inUserData,
             break;
     }
     mState = state;
+}
+
+- (void)queueURL:(NSURL*)url
+{
+    [mDecoder queueURL:url];
+}
+
+- (void)queueURLString:(NSString*)urlString
+{
+    [mDecoder queueURLString:urlString];
 }
 @end
