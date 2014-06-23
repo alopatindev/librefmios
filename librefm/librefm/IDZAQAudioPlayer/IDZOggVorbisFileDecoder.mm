@@ -28,6 +28,7 @@
 #import "IDZOggVorbisFileDecoder.h"
 #import "IDZTrace.h"
 #import "IDZAQAudioPlayer.h"
+#import "NetworkManager.h"
 
 #include <string.h>
 
@@ -85,6 +86,7 @@ static IDZOggVorbisFileDecoder* _self = nil;
 @synthesize url = _url;
 
 NSTimer* _timerSendRequest;
+BOOL _downloadComplete;
 
 //BufferingState _bufferingState;
 /*- (void)setBufferingState:(BufferingState)state
@@ -162,6 +164,7 @@ NSTimer* _timerSendRequest;
     [self releaseResources];
     _self = self;
     mpFile = NULL;
+    _downloadComplete = NO;
     self.url = nil;
     //self.expectedContentLength = 0U;
     self.downloadedBytes = 0U;
@@ -197,6 +200,7 @@ NSTimer* _timerSendRequest;
         self.urlList = [NSMutableArray new];
         self.dataQueueDict = [NSMutableDictionary new];
         [self reset];
+        [[NetworkManager instance] addObserver:self];
     }
     return self;
 }
@@ -309,9 +313,20 @@ NSTimer* _timerSendRequest;
 
 // networking
 
+- (void)networkAvailabilityChanged:(BOOL)available
+{
+    if (_downloadComplete == NO && self.url != nil) {
+        [self sendRequest:self.url];
+    }
+}
+
 - (void)sendRequest:(NSURL *)url
 {
     self.connection = nil;
+    
+    if ([[NetworkManager instance] isConnectionAvailable] == NO) {
+        return;
+    }
     
     BOOL isCurrentURL = [url isEqual:self.url];
     BOOL isActualURL = isCurrentURL || [self.urlList containsObject:url];
@@ -431,10 +446,10 @@ NSTimer* _timerSendRequest;
     }
 
     size_t size = (size_t) [data length];
-    NSLog(@"GONNA WRITE self.downloadedBytes=%zu", self.downloadedBytes + size);
+    //NSLog(@"GONNA WRITE self.downloadedBytes=%zu", self.downloadedBytes + size);
     [self.dataQueueDict[url] appendData:data];
     self.downloadedBytes += size;
-    NSLog(@"WRITTEN self.downloadedBytes=%zu", self.downloadedBytes);
+    //NSLog(@"WRITTEN self.downloadedBytes=%zu", self.downloadedBytes);
     
     if (isCurrentURL) {
         self.bufferingState = BufferingStateReadyToRead;
@@ -468,6 +483,7 @@ NSTimer* _timerSendRequest;
 {
     NSLog(@"song downloading complete!");
     self.connection = nil;
+    _downloadComplete = YES;
     
     // for very small songs
     NSURL* url = [[connection currentRequest] URL];
@@ -489,6 +505,11 @@ NSTimer* _timerSendRequest;
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     NSLog(@"! didFailWithError: %@", error);
+    if ([error code] == NSURLErrorNotConnectedToInternet) {
+        [NetworkManager instance].connectionAvailable = NO;
+        return;
+    }
+
     [self sendRequest:self.url];
 }
 

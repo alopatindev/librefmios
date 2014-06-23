@@ -27,21 +27,20 @@ LibrefmConnection *_librefmConnection;
     
     [[self loadingAnimation] startAnimating];
 
-    /*_librefmConnection = [LibrefmConnection new];
+    _librefmConnection = [LibrefmConnection new];
     _librefmConnection.delegate = self;
-    
-    [self loginButtonClicked:nil];*/
+    [self loginButtonClicked:nil];
 
     _audioPlayer = [IDZAQAudioPlayer new];
     _audioPlayer.delegate = self;
     
     NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
-    [_audioPlayer queueURL:oggUrl];
-    [_audioPlayer queueURLString:@"http://gfile.ru/d/tf/acc4cac1bccd85ebd6bc38430f38485b/14034878/aaX3V/storage5-7-4-455147/little.ogg"];
+    //[_audioPlayer queueURL:oggUrl];
+    [_audioPlayer queueURLString:@"http://zalil.ru/d/tf/00a61d009813661117c43caa5996e1eb/14035400/aceaH/storage5-7-4-455147/little.ogg"];
     [_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
-    [_audioPlayer queueURLString:@"http://gigue.rrbone.net/24765.ogg2"];
+    //[_audioPlayer queueURLString:@"http://gigue.rrbone.net/24765.ogg2"];
     
-    [_audioPlayer play];
+    //[_audioPlayer play];
 }
 
 - (void)didReceiveMemoryWarning
@@ -52,8 +51,8 @@ LibrefmConnection *_librefmConnection;
 
 - (IBAction)loginButtonClicked:(id)sender
 {
-    //[_librefmConnection loginWithUsername:[self.usernameTextField text]
-    //                             password:[self.passwordTextField text]];
+    [_librefmConnection loginWithUsername:[self.usernameTextField text]
+                                 password:[self.passwordTextField text]];
 }
 
 - (IBAction)playButtonClicked:(id)sender
@@ -66,6 +65,8 @@ LibrefmConnection *_librefmConnection;
     //[_audioPlayer releaseResources];
     //_audioPlayer = nil;
     [_audioPlayer pause];
+//    [_audioPlayer clearPlaylist];
+//    [_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
 }
 
 - (IBAction)nextButtonClicked:(id)sender

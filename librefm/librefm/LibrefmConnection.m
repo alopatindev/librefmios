@@ -8,6 +8,7 @@
 
 #import "LibrefmConnection.h"
 #import "NSString+String.h"
+#import "NetworkManager.h"
 
 @implementation LibrefmConnection
 
@@ -39,6 +40,10 @@ NSMutableSet* _requestsQueue;
 - (void)tryLogin
 {
     if ([self isNeedInputLoginData] == YES) {
+        return;
+    }
+    
+    if ([[NetworkManager instance] isConnectionAvailable] == NO) {
         return;
     }
     
@@ -209,6 +214,10 @@ NSMutableSet* _requestsQueue;
 
 - (void)processRequestsQueue
 {
+    if ([[NetworkManager instance] isConnectionAvailable] == NO) {
+        return;
+    }
+
     while ([_requestsQueue count] > 0) {
         NSArray* a = [_requestsQueue anyObject];
 

@@ -24,10 +24,13 @@
 //
 #import <Foundation/Foundation.h>
 #import "IDZAudioDecoder.h"
+#import "NetworkManager.h"
 /**
  * @brief An Ogg Vorbis file decompressor conforming to IDZAudioDecoder.
  */
-@interface IDZOggVorbisFileDecoder : NSObject<IDZAudioDecoder, NSURLConnectionDelegate>
+@interface IDZOggVorbisFileDecoder : NSObject<IDZAudioDecoder,
+                                              NSURLConnectionDelegate,
+                                              NetworkManagerObserver>
 /**
  * @brief Initializes the receiver with the contents of a file URL.
  *
