@@ -80,8 +80,8 @@
 @synthesize playing = mPlaying;
 @synthesize decoder = mDecoder;
 @synthesize state = mState;
+@synthesize queuedPlayback = _queuedPlayback;
 
-BOOL _queuedPlayback;
 BOOL _initializedAudio;
 BOOL _continueWithNextSong;
 

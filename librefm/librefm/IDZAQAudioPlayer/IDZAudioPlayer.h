@@ -117,4 +117,6 @@ typedef enum IDZAudioPlayStateTag
  */
 @property(readonly) NSTimeInterval deviceCurrentTime;
 
+@property BOOL queuedPlayback;
+
 @end

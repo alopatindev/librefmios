@@ -399,8 +399,11 @@ NSTimer* _timerSendRequest;
     wrongResponse = wrongResponse || !correctMimeType;
     
     if (isCurrentURL == YES && wrongResponse == YES) {
+        NSLog(@"! wrong response; skipping it");
+        BOOL queuedPlayback = self.audioPlayerDelegate.queuedPlayback;
         [self.audioPlayerDelegate stop];
         [self prepareToPlayNextURL];
+        self.audioPlayerDelegate.queuedPlayback = queuedPlayback;
     }
 }
 
