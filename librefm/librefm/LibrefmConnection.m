@@ -45,17 +45,17 @@ NSMutableSet* _requestsQueue;
     self.state = LibrefmConnectionStateLoginStarted;
 
     NSString *passMD5 = [self.password md5];
-    NSString *token;
+    //NSString *token;
     NSString *wsToken;
-    NSString *timeStamp = [NSString currentTimeStamp];
+    //NSString *timeStamp = [NSString currentTimeStamp];
     
-    token = [passMD5 stringByAppendingString:timeStamp];
-    token = [token md5];
+    //token = [passMD5 stringByAppendingString:timeStamp];
+    //token = [token md5];
     wsToken = [self.username stringByAppendingString:passMD5];
     wsToken = [wsToken md5];
     
-    NSString *streamingLoginUrl = [NSString stringWithFormat:@"https://libre.fm/radio/handshake.php?username=%@&passwordmd5=%@", self.username, passMD5];
-    NSString *scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle.libre.fm/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", self.username, timeStamp, token];
+    //NSString *streamingLoginUrl = [NSString stringWithFormat:@"https://libre.fm/radio/handshake.php?username=%@&passwordmd5=%@", self.username, passMD5];
+    //NSString *scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle.libre.fm/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", self.username, timeStamp, token];
     NSString *webServicesLoginUrl = [NSString stringWithFormat:@"%@%@&username=%@&authToken=%@", API2_URL, METHOD_AUTH_GETMOBILESESSION, self.username, wsToken];
     
     //NSLog(@"%@\n%@\n%@\n", streamingLoginUrl, scrobblingLoginUrl, webServicesLoginUrl);
@@ -85,9 +85,124 @@ NSMutableSet* _requestsQueue;
     [self processRequestsQueue];
 }
 
-- (void)radioGetPlaylist
+- (void)radioGetNextPlaylistPage
 {
     NSArray *req = @[NSStringFromSelector(@selector(radioGetPlaylist_))];
+    [_requestsQueue addObject:req];
+    [self processRequestsQueue];
+}
+
+- (void)updateNowPlayingArtist_:(NSArray*)args
+{
+    NSString* artist = args[0];
+    NSString* track = args[1];
+    NSString* album = args[2];
+    
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UPDATENOWPLAYING, self.mobileSessionKey];
+    
+    NSString *postData;
+    if ([album length] > 0) {
+        postData = [NSString stringWithFormat:@"artist=%@&track=%@&album=%@", artist, track, album];
+    } else {
+        postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
+    }
+    
+    [self sendRequest:url postData:postData];
+}
+
+- (void)updateNowPlayingArtist:(NSString*)artist track:(NSString*)track album:(NSString*)album
+{
+    NSArray *req = @[NSStringFromSelector(@selector(updateNowPlayingArtist_:)), @[artist, track, album]];
+    [_requestsQueue addObject:req];
+    [self processRequestsQueue];
+}
+
+- (void)scrobbleArtist_:(NSArray*)args
+{
+    NSString* artist = args[0];
+    NSString* track = args[1];
+    NSString* album = args[2];
+    NSString* timestamp = [NSString currentTimeStamp];
+    
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_SCROBBLE, self.mobileSessionKey];
+    
+    NSString *postData;
+    if ([album length] > 0) {
+        postData = [NSString stringWithFormat:@"artist=%@&track=%@&album=%@&timestamp=%@", artist, track, album, timestamp];
+    } else {
+        postData = [NSString stringWithFormat:@"artist=%@&track=%@&timestamp=%@", artist, track, timestamp];
+    }
+    
+    [self sendRequest:url postData:postData];
+}
+
+- (void)scrobbleArtist:(NSString*)artist track:(NSString*)track album:(NSString*)album
+{
+    NSArray *req = @[NSStringFromSelector(@selector(scrobbleArtist_:)), @[artist, track, album]];
+    [_requestsQueue addObject:req];
+    [self processRequestsQueue];
+}
+
+- (void)love_:(NSArray*)args
+{
+    NSString* artist = args[0];
+    NSString* track = args[1];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_LOVE, self.mobileSessionKey];
+    NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
+    [self sendRequest:url postData:postData];
+}
+
+- (void)loveArtist:(NSString*)artist track:(NSString*)track
+{
+    NSArray *req = @[NSStringFromSelector(@selector(love_:)), @[artist, track]];
+    [_requestsQueue addObject:req];
+    [self processRequestsQueue];
+}
+
+- (void)unlove_:(NSArray*)args
+{
+    NSString* artist = args[0];
+    NSString* track = args[1];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UNLOVE, self.mobileSessionKey];
+    NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
+    [self sendRequest:url postData:postData];
+}
+
+- (void)unloveArtist:(NSString*)artist track:(NSString*)track
+{
+    NSArray *req = @[NSStringFromSelector(@selector(unlove_:)), @[artist, track]];
+    [_requestsQueue addObject:req];
+    [self processRequestsQueue];
+}
+
+- (void)ban_:(NSArray*)args
+{
+    NSString* artist = args[0];
+    NSString* track = args[1];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_BAN, self.mobileSessionKey];
+    NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
+    [self sendRequest:url postData:postData];
+}
+
+- (void)banArtist:(NSString*)artist track:(NSString*)track
+{
+    NSArray *req = @[NSStringFromSelector(@selector(ban_:)), @[artist, track]];
+    [_requestsQueue addObject:req];
+    [self processRequestsQueue];
+}
+
+- (void)unban_:(NSArray*)args
+{
+    NSString* artist = args[0];
+    NSString* track = args[1];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UNBAN, self.mobileSessionKey];
+    NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
+    [self sendRequest:url postData:postData];
+}
+
+- (void)unbanArtist:(NSString*)artist track:(NSString*)track
+{
+    NSArray *req = @[NSStringFromSelector(@selector(unban_:)), @[artist, track]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
 }
@@ -126,7 +241,7 @@ NSMutableSet* _requestsQueue;
     }
 }
 
-- (void)processJSON:(NSDictionary *)jsonDictionary forUrl:(NSString *)url
+- (void)processJSONResonse:(NSDictionary *)jsonDictionary forUrl:(NSString *)url
 {
     if ([url isAPIMethod:METHOD_AUTH_GETMOBILESESSION]) {
         NSString *errorCode = jsonDictionary[@"error"];
@@ -165,7 +280,10 @@ NSMutableSet* _requestsQueue;
                                                                       code:-1
                                                                   userInfo:nil]];
         }
-        [self radioGetPlaylist];
+        [self radioGetNextPlaylistPage];
+    } else {
+        if (jsonDictionary == nil) {
+        }
     }
 }
 
@@ -196,7 +314,7 @@ NSMutableSet* _requestsQueue;
                 }
             }
         }
-        [self processJSON:jsonDictionary forUrl:url];
+        [self processJSONResonse:jsonDictionary forUrl:url];
     } else {
         NSString *out = [[NSString alloc] initWithData:data
                                               encoding:NSUTF8StringEncoding];

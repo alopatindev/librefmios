@@ -30,6 +30,8 @@ static NSString *const METHOD_TRACK_UNLOVE           = @"track.unlove";
 static NSString *const METHOD_TRACK_GETTAGS          = @"track.getTags";
 static NSString *const METHOD_TRACK_GETTOPTAGS       = @"track.getTopTags";
 static NSString *const METHOD_TRACK_GETTOPFANS       = @"track.getTopFans";
+static NSString *const METHOD_TRACK_SCROBBLE         = @"track.scrobble";
+static NSString *const METHOD_TRACK_UPDATENOWPLAYING = @"track.updateNowPlaying";
 static NSString *const METHOD_USER_GETBANNEDTRACKS   = @"user.getBannedTracks";
 static NSString *const METHOD_USER_GETINFO           = @"user.getInfo";
 static NSString *const METHOD_USER_GETLOVEDTRACKS    = @"user.getLovedTracks";
@@ -73,6 +75,22 @@ typedef enum {
 - (BOOL)isNeedInputLoginData;
 
 - (void)loginWithUsername:(NSString*)username password:(NSString*)password;  // librefmDidLogin
+
 - (void)radioTune:(NSString*)tag;  // librefmDidLoadPlaylist
+- (void)radioGetNextPlaylistPage;  // librefmDidLoadPlaylist
+
+- (void)updateNowPlayingArtist:(NSString*)artist track:(NSString*)track album:(NSString*)album;
+- (void)scrobbleArtist:(NSString*)artist track:(NSString*)track album:(NSString*)album;
+//- (void)removeScrobble:(NSString*)artist track:(NSString*)track timestamp:(NSDate*)time;
+
+- (void)loveArtist:(NSString*)artist track:(NSString*)track;
+- (void)unloveArtist:(NSString*)artist track:(NSString*)track;
+
+- (void)banArtist:(NSString*)artist track:(NSString*)track;
+- (void)unbanArtist:(NSString*)artist track:(NSString*)track;
+
+/*- (void)getInfoTag:(NSString*)tag;
+- (void)getInfoArtist:(NSString*)artist;
+- (void)getInfoAlbum:(NSString*)album;*/
 
 @end
