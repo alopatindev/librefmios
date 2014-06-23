@@ -114,6 +114,12 @@ NSTimer* _timerSendRequest;
     [self queueURL:url];
 }
 
+- (void)clearPlaylist
+{
+    [self reset];
+    [self.urlList removeAllObjects];
+}
+
 - (BOOL)isNextURLAvailable
 {
     BOOL result = [self.urlList count] > 1 &&

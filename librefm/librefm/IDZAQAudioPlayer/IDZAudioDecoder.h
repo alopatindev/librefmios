@@ -85,5 +85,6 @@ typedef enum {
 
 - (void)queueURL:(NSURL*)url;
 - (void)queueURLString:(NSString*)urlString;
+- (void)clearPlaylist;
 
 @end

@@ -437,4 +437,11 @@ static void IDZPropertyListener(void* inUserData,
 {
     [mDecoder queueURLString:urlString];
 }
+
+- (void)clearPlaylist
+{
+    [self stop];
+    [mDecoder clearPlaylist];
+    _queuedPlayback = NO;
+}
 @end

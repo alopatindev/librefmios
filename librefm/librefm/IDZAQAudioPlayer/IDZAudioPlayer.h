@@ -89,6 +89,7 @@ typedef enum IDZAudioPlayStateTag
 
 - (void)queueURL:(NSURL*)url;
 - (void)queueURLString:(NSString*)urlString;
+- (void)clearPlaylist;
 
 /* properties */
 /**
