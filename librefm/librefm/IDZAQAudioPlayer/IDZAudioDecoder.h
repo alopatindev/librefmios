@@ -63,6 +63,8 @@ typedef enum {
 
 @property id<IDZAudioPlayer> audioPlayerDelegate;
 
+@property NSURL* url;
+
 - (void)releaseResources;
 
 /**

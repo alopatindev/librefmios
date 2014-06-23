@@ -387,6 +387,10 @@ static void IDZPropertyListener(void* inUserData,
 
 - (void)setState:(IDZAudioPlayerState)state
 {
+    if (mDecoder != nil) {
+        [self.delegate audioPlayerChangedState:state url:mDecoder.url];
+    }
+
     switch(state)
     {
         case IDZAudioPlayerStatePaused:

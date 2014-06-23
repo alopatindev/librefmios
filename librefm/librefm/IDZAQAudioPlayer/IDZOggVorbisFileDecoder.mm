@@ -39,10 +39,11 @@ extern "C" {
     
 static size_t network_stream_read(void* ptr, size_t size, size_t nitems, FILE* stream);
 static int network_stream_close(FILE* stream);
+//static int network_stream_seek(FILE* stream, ogg_int64_t off, int whence);
 
 static ov_callbacks MY_CALLBACKS_STREAMONLY = {
     (size_t (*)(void *, size_t, size_t, void *))  network_stream_read,
-    (int (*)(void *, ogg_int64_t, int))           NULL,
+    (int (*)(void *, ogg_int64_t, int))           NULL /*network_stream_seek*/,
     (int (*)(void *))                             network_stream_close,
     (long (*)(void *))                            NULL
 };
@@ -61,7 +62,6 @@ static const int DELAY_BETWEEN_REQUESTS_SECONDS = 20; // seconds
     OggVorbis_File mOggVorbisFile;
 }
 
-@property NSURL* url;
 @property NSMutableDictionary* dataQueueDict;
 @property NSMutableArray* urlList;
 
@@ -82,6 +82,7 @@ static IDZOggVorbisFileDecoder* _self = nil;
 @synthesize bufferingState = _bufferingState;
 @synthesize audioPlayerDelegate = _audioPlayerDelegate;
 @synthesize headerIsRead = _headerIsRead;
+@synthesize url = _url;
 
 NSTimer* _timerSendRequest;
 
@@ -524,6 +525,11 @@ static int network_stream_close(FILE* stream)
     }
     return 0;
 }
+
+/*static int network_stream_seek(FILE* stream, ogg_int64_t off, int whence)
+{
+    return 0;
+}*/
 
 @end
 

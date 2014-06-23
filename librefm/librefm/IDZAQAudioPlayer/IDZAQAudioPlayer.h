@@ -26,16 +26,6 @@
 #import "IDZAudioPlayer.h"
 #import "IDZAudioDecoder.h"
 
-typedef enum IDZAudioPlayStateTag
-{
-    IDZAudioPlayerStateStopped,
-    IDZAudioPlayerStatePrepared,
-    IDZAudioPlayerStatePlaying,
-    IDZAudioPlayerStatePaused,
-    IDZAudioPlayerStateStopping
-    
-} IDZAudioPlayerState;
-
 /**
  * @brief An Audio Queue based audio player conforming to IDZAudioPlayer.
  *

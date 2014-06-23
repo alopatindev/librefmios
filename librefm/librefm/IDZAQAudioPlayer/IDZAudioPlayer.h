@@ -23,6 +23,15 @@
 // THE SOFTWARE.
 #import <Foundation/Foundation.h>
 
+typedef enum IDZAudioPlayStateTag
+{
+    IDZAudioPlayerStateStopped,
+    IDZAudioPlayerStatePrepared,
+    IDZAudioPlayerStatePlaying,
+    IDZAudioPlayerStatePaused,
+    IDZAudioPlayerStateStopping
+    
+} IDZAudioPlayerState;
 
 @protocol IDZAudioPlayer;
 /**
@@ -39,6 +48,10 @@
  */
 - (void)audioPlayerDecodeErrorDidOccur:(id<IDZAudioPlayer>)player
                                  error:(NSError *)error;
+
+- (void)audioPlayerChangedState:(IDZAudioPlayerState)state
+                            url:(NSURL *)url;
+
 @end
 
 /**
