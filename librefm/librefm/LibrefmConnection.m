@@ -70,9 +70,22 @@ NSMutableSet* _requestsQueue;
     [self sendRequest:webServicesLoginUrl];
 }
 
+- (void)signUpWithUsername:(NSString*)username password:(NSString*)password email:(NSString*)email
+{
+    NSString *url = REGISTER_URL;
+    
+    username = [username stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    password = [password stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    NSString *postData = [NSString stringWithFormat:@"username=%@&email=%@&password=%@&password-repeat=%@&foo-check=remember-me", username, email, password, password];
+    [self sendRequest:url postData:postData];
+}
+
 - (void)radioTune_:(NSString*)tag
 {
     NSString *url = [NSString stringWithFormat:@"%@%@", API2_URL, METHOD_RADIO_TUNE];
+    tag = [tag stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self sendRequest:url
              postData:[NSString stringWithFormat:@"sk=%@&station=librefm://globaltags/%@", self.mobileSessionKey, tag]];
 }
@@ -102,6 +115,9 @@ NSMutableSet* _requestsQueue;
     NSString* artist = args[0];
     NSString* track = args[1];
     NSString* album = args[2];
+    artist = [artist stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    album = [album stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UPDATENOWPLAYING, self.mobileSessionKey];
     
@@ -129,6 +145,10 @@ NSMutableSet* _requestsQueue;
     NSString* album = args[2];
     NSString* timestamp = [NSString currentTimeStamp];
     
+    artist = [artist stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    album = [album stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_SCROBBLE, self.mobileSessionKey];
     
     NSString *postData;
@@ -152,6 +172,10 @@ NSMutableSet* _requestsQueue;
 {
     NSString* artist = args[0];
     NSString* track = args[1];
+    
+    artist = [artist stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_LOVE, self.mobileSessionKey];
     NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
     [self sendRequest:url postData:postData];
@@ -168,6 +192,10 @@ NSMutableSet* _requestsQueue;
 {
     NSString* artist = args[0];
     NSString* track = args[1];
+    
+    artist = [artist stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UNLOVE, self.mobileSessionKey];
     NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
     [self sendRequest:url postData:postData];
@@ -184,6 +212,10 @@ NSMutableSet* _requestsQueue;
 {
     NSString* artist = args[0];
     NSString* track = args[1];
+    
+    artist = [artist stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_BAN, self.mobileSessionKey];
     NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
     [self sendRequest:url postData:postData];
@@ -200,6 +232,10 @@ NSMutableSet* _requestsQueue;
 {
     NSString* artist = args[0];
     NSString* track = args[1];
+    
+    artist = [artist stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UNBAN, self.mobileSessionKey];
     NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
     [self sendRequest:url postData:postData];
@@ -324,6 +360,10 @@ NSMutableSet* _requestsQueue;
             }
         }
         [self processJSONResonse:jsonDictionary forUrl:url];
+    } else if ([url hasPrefix:REGISTER_URL]) {
+        NSString *out = [[NSString alloc] initWithData:data
+                                              encoding:NSUTF8StringEncoding];
+        NSLog(@"%@", out);
     } else {
         NSString *out = [[NSString alloc] initWithData:data
                                               encoding:NSUTF8StringEncoding];

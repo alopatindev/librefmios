@@ -11,6 +11,15 @@
 @protocol LibrefmDelegate <NSObject>
 
 - (void)librefmDidLogin:(BOOL)ok error:(NSError*)error;
-- (void)librefmDidLoadPlaylist:(NSDictionary*)playlist ok:(BOOL)ok error:(NSError*)error;
+
+- (void)librefmDidLoadPlaylist:(NSDictionary*)playlist
+                            ok:(BOOL)ok
+                         error:(NSError*)error;
+
+- (void)librefmDidSignUp:(BOOL)ok
+                   error:(NSError*)error
+                username:(NSString*)username
+                password:(NSString*)password
+                   email:(NSString*)email;
 
 @end

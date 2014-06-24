@@ -127,6 +127,7 @@
 		BADD27E01958B9960057744B /* network */ = {
 			isa = PBXGroup;
 			children = (
+				BAC2379C194FA68200A65C9B /* LibrefmDelegate.h */,
 				BAFD9E83194D2541009718B2 /* LibrefmConnection.h */,
 				BAFD9E84194D2541009718B2 /* LibrefmConnection.m */,
 				BADD27E11958BA4D0057744B /* NetworkManager.h */,
@@ -181,7 +182,6 @@
 				BAFD9E58194CDF98009718B2 /* Main.storyboard */,
 				BAFD9E5B194CDF98009718B2 /* ViewController.h */,
 				BAFD9E5C194CDF98009718B2 /* ViewController.m */,
-				BAC2379C194FA68200A65C9B /* LibrefmDelegate.h */,
 				BAFD9E5E194CDF98009718B2 /* Images.xcassets */,
 				BAFD9E4D194CDF98009718B2 /* Supporting Files */,
 			);
