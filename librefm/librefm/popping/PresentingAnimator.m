@@ -28,10 +28,19 @@
     dimmingView.layer.opacity = 0.0;
 
     UIView *toView = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey].view;
+    
+    CGFloat transitionWidth = CGRectGetWidth(transitionContext.containerView.bounds);
+    CGFloat transitionHeight = CGRectGetHeight(transitionContext.containerView.bounds);
+    CGFloat xOffset = 104.0;
+    CGFloat yOffset = 258.0;
+    CGFloat transitionRatio = transitionHeight / transitionWidth;
+    if (transitionRatio < 1.7) {
+        yOffset *= 0.5;
+    }
     toView.frame = CGRectMake(0,
                               0,
-                              CGRectGetWidth(transitionContext.containerView.bounds) - 104.f,
-                              CGRectGetHeight(transitionContext.containerView.bounds) - 288.f);
+                              transitionWidth - xOffset,
+                              transitionHeight - yOffset);
     toView.center = CGPointMake(transitionContext.containerView.center.x, -transitionContext.containerView.center.y);
 
     [transitionContext.containerView addSubview:dimmingView];

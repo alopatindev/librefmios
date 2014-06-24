@@ -10,6 +10,7 @@
 
 @interface LoginViewController : UIViewController /*<LibrefmDelegate>*/
 
+@property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 - (IBAction)loginButtonClicked:(id)sender;
 
 @end

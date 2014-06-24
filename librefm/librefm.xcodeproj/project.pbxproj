@@ -36,6 +36,8 @@
 		BADD287A1959F12E0057744B /* POPVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = BADD28641959F12E0057744B /* POPVector.mm */; };
 		BADD287B1959F12E0057744B /* TransformationMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BADD28671959F12E0057744B /* TransformationMatrix.cpp */; };
 		BADD287E1959F24D0057744B /* UIColor+CustomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD287D1959F24D0057744B /* UIColor+CustomColors.m */; };
+		BADD2881195A16DC0057744B /* FlatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD2880195A16DC0057744B /* FlatButton.m */; };
+		BADD2883195A30CF0057744B /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BADD2882195A30CF0057744B /* logo.png */; };
 		BAFD9E47194CDF98009718B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E46194CDF98009718B2 /* Foundation.framework */; };
 		BAFD9E49194CDF98009718B2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */; };
 		BAFD9E4B194CDF98009718B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E4A194CDF98009718B2 /* UIKit.framework */; };
@@ -139,8 +141,11 @@
 		BADD28671959F12E0057744B /* TransformationMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TransformationMatrix.cpp; sourceTree = "<group>"; };
 		BADD28681959F12E0057744B /* TransformationMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformationMatrix.h; sourceTree = "<group>"; };
 		BADD28691959F12E0057744B /* UnitBezier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitBezier.h; sourceTree = "<group>"; };
-		BADD287C1959F24D0057744B /* UIColor+CustomColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CustomColors.h"; sourceTree = "<group>"; };
-		BADD287D1959F24D0057744B /* UIColor+CustomColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CustomColors.m"; sourceTree = "<group>"; };
+		BADD287C1959F24D0057744B /* UIColor+CustomColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+CustomColors.h"; path = "../librefm/popping/UIColor+CustomColors.h"; sourceTree = "<group>"; };
+		BADD287D1959F24D0057744B /* UIColor+CustomColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+CustomColors.m"; path = "../librefm/popping/UIColor+CustomColors.m"; sourceTree = "<group>"; };
+		BADD287F195A16DC0057744B /* FlatButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatButton.h; sourceTree = "<group>"; };
+		BADD2880195A16DC0057744B /* FlatButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlatButton.m; sourceTree = "<group>"; };
+		BADD2882195A30CF0057744B /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		BAFD9E43194CDF98009718B2 /* librefm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = librefm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAFD9E46194CDF98009718B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -235,8 +240,8 @@
 			isa = PBXGroup;
 			children = (
 				BADD28351959F12E0057744B /* pop */,
-				BADD287C1959F24D0057744B /* UIColor+CustomColors.h */,
-				BADD287D1959F24D0057744B /* UIColor+CustomColors.m */,
+				BADD287F195A16DC0057744B /* FlatButton.h */,
+				BADD2880195A16DC0057744B /* FlatButton.m */,
 				BADD282F1959EEF40057744B /* DismissingAnimator.h */,
 				BADD28301959EEF40057744B /* DismissingAnimator.m */,
 				BADD28311959EEF40057744B /* PresentingAnimator.h */,
@@ -397,6 +402,8 @@
 		BAFD9E7F194D2090009718B2 /* categories */ = {
 			isa = PBXGroup;
 			children = (
+				BADD287C1959F24D0057744B /* UIColor+CustomColors.h */,
+				BADD287D1959F24D0057744B /* UIColor+CustomColors.m */,
 				BAFD9E80194D2090009718B2 /* NSString+String.h */,
 				BAFD9E81194D2090009718B2 /* NSString+String.m */,
 			);
@@ -406,6 +413,7 @@
 		BAFD9E86194DA181009718B2 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				BADD2882195A30CF0057744B /* logo.png */,
 				BAFD9E87194DA181009718B2 /* turtle.libre.fm.der */,
 			);
 			path = resources;
@@ -488,6 +496,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAFD9E5F194CDF98009718B2 /* Images.xcassets in Resources */,
+				BADD2883195A30CF0057744B /* logo.png in Resources */,
 				BAFD9E88194DA181009718B2 /* turtle.libre.fm.der in Resources */,
 				BAFD9E51194CDF98009718B2 /* InfoPlist.strings in Resources */,
 				BAFD9E5A194CDF98009718B2 /* Main.storyboard in Resources */,
@@ -519,6 +528,7 @@
 				BADD287A1959F12E0057744B /* POPVector.mm in Sources */,
 				BADD286A1959F12E0057744B /* POPAnimatableProperty.mm in Sources */,
 				BADD28761959F12E0057744B /* POPLayerExtras.mm in Sources */,
+				BADD2881195A16DC0057744B /* FlatButton.m in Sources */,
 				BADD287E1959F24D0057744B /* UIColor+CustomColors.m in Sources */,
 				BADD286B1959F12E0057744B /* POPAnimation.mm in Sources */,
 				BADD286E1959F12E0057744B /* POPAnimationRuntime.mm in Sources */,
@@ -671,8 +681,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "librefm/librefm-Prefix.pch";
 				INFOPLIST_FILE = "librefm/librefm-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_CFLAGS = "-I../../librefm/LibreFM/librefm/popping";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -689,8 +701,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "librefm/librefm-Prefix.pch";
 				INFOPLIST_FILE = "librefm/librefm-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_CFLAGS = "-I../../librefm/LibreFM/librefm/popping";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
