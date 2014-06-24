@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    LibrefmSignupErrorUnknown = 1,
+    LibrefmSignupErrorAlreadyRegistered,
+} LibrefmSignupError;
+
 @protocol LibrefmDelegate <NSObject>
 
 - (void)librefmDidLogin:(BOOL)ok error:(NSError*)error;

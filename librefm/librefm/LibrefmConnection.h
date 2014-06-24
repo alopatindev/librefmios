@@ -10,7 +10,7 @@
 #import "LibrefmDelegate.h"
 
 static NSString *const API2_URL = @"https://libre.fm/2.0/?format=json&method=";
-static NSString *const REGISTER_URL = @"https://libre.fm/register.php";
+static NSString *const SIGNUP_URL = @"https://libre.fm/register.php?lang=en_US";
 
 // http://bugs.foocorp.net/projects/librefm/wiki/Librefm_API_methods
 static NSString *const METHOD_ALBUM_ADDTAGS          = @"album.addTags";
@@ -64,7 +64,7 @@ typedef enum {
     LibrefmConnectionStateLoggedIn,
 } LibrefmConnectionState;
 
-@property id<LibrefmDelegate> delegate;
+@property (weak) id<LibrefmDelegate> delegate;
 @property NSString *username;
 @property NSString *password;
 
@@ -77,6 +77,7 @@ typedef enum {
 
 - (void)loginWithUsername:(NSString*)username password:(NSString*)password;  // librefmDidLogin
 - (void)signUpWithUsername:(NSString*)username password:(NSString*)password email:(NSString*)email;  // librefmDidSignUp
+- (void)openSignupBrowser;
 
 - (void)radioTune:(NSString*)tag;  // librefmDidLoadPlaylist
 - (void)radioGetNextPlaylistPage;  // librefmDidLoadPlaylist

@@ -61,7 +61,7 @@ typedef enum {
 
 @property BOOL headerIsRead;
 
-@property id<IDZAudioPlayer> audioPlayerDelegate;
+@property (weak) id<IDZAudioPlayer> audioPlayerDelegate;
 
 @property NSURL* url;
 

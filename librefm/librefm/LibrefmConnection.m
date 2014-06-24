@@ -9,11 +9,15 @@
 #import "LibrefmConnection.h"
 #import "NSString+String.h"
 #import "NetworkManager.h"
+#import "Utils.h"
 
 @implementation LibrefmConnection
 
 NSMutableDictionary *_responseDict;
 NSMutableSet* _requestsQueue;
+NSString* _signupUsername;
+NSString* _signupPassword;
+NSString* _signupEmail;
 
 - (instancetype)init
 {
@@ -72,14 +76,23 @@ NSMutableSet* _requestsQueue;
 
 - (void)signUpWithUsername:(NSString*)username password:(NSString*)password email:(NSString*)email
 {
-    NSString *url = REGISTER_URL;
+    NSString *url = SIGNUP_URL;
     
     username = [username stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     password = [password stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *postData = [NSString stringWithFormat:@"username=%@&email=%@&password=%@&password-repeat=%@&foo-check=remember-me", username, email, password, password];
+    _signupUsername = username;
+    _signupPassword = password;
+    _signupEmail = email;
+    
+    NSString *postData = [NSString stringWithFormat:@"username=%@&email=%@&password=%@&password-repeat=%@&foo-check=remember-me&register=Sign%%20up", username, email, password, password];
     [self sendRequest:url postData:postData];
+}
+
+- (void)openSignupBrowser
+{
+    [Utils openBrowser:SIGNUP_URL];
 }
 
 - (void)radioTune_:(NSString*)tag
@@ -360,10 +373,37 @@ NSMutableSet* _requestsQueue;
             }
         }
         [self processJSONResonse:jsonDictionary forUrl:url];
-    } else if ([url hasPrefix:REGISTER_URL]) {
-        NSString *out = [[NSString alloc] initWithData:data
-                                              encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", out);
+    } else if ([url hasPrefix:SIGNUP_URL]) {
+        BOOL alreadyRegistered = _signupUsername == nil ||
+                                 _signupPassword == nil ||
+                                 _signupEmail == nil;
+        if (alreadyRegistered == NO) {
+            NSString *out = [[NSString alloc] initWithData:data
+                                                  encoding:NSUTF8StringEncoding];
+            if ([out containsString:@"Go! Go! Go! Check your email now"]) {
+                [self.delegate librefmDidSignUp:YES
+                                          error:nil
+                                       username:_signupUsername
+                                       password:_signupPassword
+                                          email:_signupEmail];
+                _signupUsername = nil;
+                _signupPassword = nil;
+                _signupEmail = nil;
+            } else if ([out containsString:@"Sorry, that username is already registered."]) {
+                [self.delegate librefmDidSignUp:NO
+                                          error:[NSError errorWithDomain:@"" code:LibrefmSignupErrorAlreadyRegistered userInfo:nil]
+                                       username:_signupUsername
+                                       password:_signupPassword
+                                          email:_signupEmail];
+            } else {
+                NSLog(@"%@", out);
+                [self.delegate librefmDidSignUp:NO
+                                          error:[NSError errorWithDomain:@"" code:LibrefmSignupErrorUnknown userInfo:nil]
+                                       username:_signupUsername
+                                       password:_signupPassword
+                                          email:_signupEmail];
+            }
+        }
     } else {
         NSString *out = [[NSString alloc] initWithData:data
                                               encoding:NSUTF8StringEncoding];
@@ -534,6 +574,7 @@ NSMutableSet* _requestsQueue;
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"POST"];
+    //[request addValue:@"Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5" forHTTPHeaderField:@"User-Agent"];
     [request setHTTPBody:[data dataUsingEncoding:NSUTF8StringEncoding]];
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request
                                                             delegate:self];

@@ -11,6 +11,7 @@
 
 #import "IDZAudioPlayer.h"
 #import "IDZAQAudioPlayer.h"
+#import "Utils.h"
 
 @interface ViewController ()
 
@@ -65,10 +66,10 @@ LibrefmConnection *_librefmConnection;
     //[_librefmConnection updateNowPlayingArtist:@"Metallica" track:@"Master of Puppets" album:@""];
     //[_audioPlayer releaseResources];
     //_audioPlayer = nil;
-    [_audioPlayer pause];
+//    [_audioPlayer pause];
 //    [_audioPlayer clearPlaylist];
 //    [_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
-    //[_librefmConnection signUpWithUsername:@"sbargeek" password:@"asdajkshdk" email:@"a@a.a"];
+    [_librefmConnection signUpWithUsername:@"1" password:@"2" email:@"a@b.c"];
 }
 
 - (IBAction)nextButtonClicked:(id)sender
@@ -103,6 +104,29 @@ LibrefmConnection *_librefmConnection;
              //NSNumber *duration = t[@"duration"]; // always 180000?
              NSLog(@"track '%@' '%@' '%@'", creator, title, location);
          }
+    }
+}
+
+- (void)librefmDidSignUp:(BOOL)ok
+                   error:(NSError*)error
+                username:(NSString*)username
+                password:(NSString*)password
+                   email:(NSString*)email
+{
+    if (ok) {
+        self.usernameTextField.text = username;
+        self.passwordTextField.text = password;
+        [self loginButtonClicked:nil];
+    } else {
+        // TODO
+        switch ([error code]) {
+            case LibrefmSignupErrorAlreadyRegistered:
+                break;
+            case LibrefmSignupErrorUnknown:
+            default:
+                [_librefmConnection openSignupBrowser];
+                break;
+        }
     }
 }
 

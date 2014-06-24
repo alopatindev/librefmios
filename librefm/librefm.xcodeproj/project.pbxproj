@@ -13,6 +13,7 @@
 		BADD27DD1953931C0057744B /* IDZOggVorbisFileDecoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = BADD27DC1953931C0057744B /* IDZOggVorbisFileDecoder.mm */; };
 		BADD27E31958BA4D0057744B /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27E21958BA4D0057744B /* NetworkManager.m */; };
 		BADD27E51958C8BE0057744B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BADD27E41958C8BE0057744B /* SystemConfiguration.framework */; };
+		BADD28291959ABF20057744B /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD28281959ABF20057744B /* Utils.m */; };
 		BAFD9E47194CDF98009718B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E46194CDF98009718B2 /* Foundation.framework */; };
 		BAFD9E49194CDF98009718B2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */; };
 		BAFD9E4B194CDF98009718B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E4A194CDF98009718B2 /* UIKit.framework */; };
@@ -57,6 +58,8 @@
 		BADD27E11958BA4D0057744B /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
 		BADD27E21958BA4D0057744B /* NetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkManager.m; sourceTree = "<group>"; };
 		BADD27E41958C8BE0057744B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		BADD28271959ABF20057744B /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		BADD28281959ABF20057744B /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		BAFD9E43194CDF98009718B2 /* librefm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = librefm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAFD9E46194CDF98009718B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -184,6 +187,8 @@
 				BAFD9E5C194CDF98009718B2 /* ViewController.m */,
 				BAFD9E5E194CDF98009718B2 /* Images.xcassets */,
 				BAFD9E4D194CDF98009718B2 /* Supporting Files */,
+				BADD28271959ABF20057744B /* Utils.h */,
+				BADD28281959ABF20057744B /* Utils.m */,
 			);
 			path = librefm;
 			sourceTree = "<group>";
@@ -332,6 +337,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BADD28291959ABF20057744B /* Utils.m in Sources */,
 				BADD27E31958BA4D0057744B /* NetworkManager.m in Sources */,
 				BAFD9E5D194CDF98009718B2 /* ViewController.m in Sources */,
 				BAFD9E57194CDF98009718B2 /* AppDelegate.m in Sources */,
