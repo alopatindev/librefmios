@@ -13,6 +13,11 @@
 #import "IDZAQAudioPlayer.h"
 #import "Utils.h"
 
+#import "LoginViewController.h"
+
+#import "DismissingAnimator.h"
+#import "PresentingAnimator.h"
+
 @interface ViewController ()
 
 @end
@@ -50,10 +55,23 @@ LibrefmConnection *_librefmConnection;
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)loginButtonClicked:(id)sender
+- (void)openLoginScreen
 {
-    [_librefmConnection loginWithUsername:[self.usernameTextField text]
-                                 password:[self.passwordTextField text]];
+    //LoginViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
+
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    
+    loginViewController.transitioningDelegate = self;
+    loginViewController.modalPresentationStyle = UIModalPresentationCustom;
+    
+    //[loginViewController setModalTransitionStyle:UIModalTransitionStylePartialCurl];
+    [self presentViewController:loginViewController animated:YES completion:nil];
+    
+    /*[[[[UIApplication sharedApplication] keyWindow] rootViewController] presentViewController:loginViewController
+                                                                                     animated:YES
+                                                                                   completion:nil];*/
 }
 
 - (IBAction)playButtonClicked:(id)sender
@@ -69,7 +87,9 @@ LibrefmConnection *_librefmConnection;
 //    [_audioPlayer pause];
 //    [_audioPlayer clearPlaylist];
 //    [_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
-    [_librefmConnection signUpWithUsername:@"1" password:@"2" email:@"a@b.c"];
+    //[_librefmConnection signUpWithUsername:@"1" password:@"2" email:@"a@b.c"];
+    
+    [self openLoginScreen];
 }
 
 - (IBAction)nextButtonClicked:(id)sender
@@ -114,9 +134,9 @@ LibrefmConnection *_librefmConnection;
                    email:(NSString*)email
 {
     if (ok) {
-        self.usernameTextField.text = username;
+        /*self.usernameTextField.text = username;
         self.passwordTextField.text = password;
-        [self loginButtonClicked:nil];
+        [self loginButtonClicked:nil];*/
     } else {
         // TODO
         switch ([error code]) {
@@ -170,6 +190,18 @@ LibrefmConnection *_librefmConnection;
     
     self.statusLabel.text = [NSString stringWithFormat:@"Status: %@", str];
     self.urlLabel.text = [url absoluteString];
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                  presentingController:(UIViewController *)presenting
+                                                                      sourceController:(UIViewController *)source
+{
+    return [PresentingAnimator new];
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    return [DismissingAnimator new];
 }
 
 @end
