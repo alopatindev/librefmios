@@ -20,13 +20,13 @@
     NSValue *maxValue = @(depth);
     
     UIInterpolatingMotionEffect *verticalMotionEffect =
-    [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y"
-                                                    type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+        [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y"
+                                                        type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
     verticalMotionEffect.minimumRelativeValue = minValue;
     verticalMotionEffect.maximumRelativeValue = maxValue;
     UIInterpolatingMotionEffect *horizontalMotionEffect =
-    [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x"
-                                                    type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+        [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x"
+                                                        type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
     horizontalMotionEffect.minimumRelativeValue = minValue;
     horizontalMotionEffect.maximumRelativeValue = maxValue;
     
