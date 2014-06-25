@@ -7,6 +7,8 @@
 //
 
 #import "ViewController.h"
+#import "UIViewController+Parallax.h"
+
 #import "LibrefmConnection.h"
 
 #import "IDZAudioPlayer.h"
@@ -47,6 +49,9 @@ LibrefmConnection *_librefmConnection;
     //[_audioPlayer queueURLString:@"http://gigue.rrbone.net/24765.ogg2"];
  */
     //[_audioPlayer play];
+    
+    
+    [self addParallaxEffectWithDepth:12 foreground:NO];
 }
 
 - (void)didReceiveMemoryWarning

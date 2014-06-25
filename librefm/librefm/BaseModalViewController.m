@@ -7,6 +7,7 @@
 //
 
 #import "BaseModalViewController.h"
+#import "UIViewController+Parallax.h"
 #import <POP/POP.h>
 
 @interface BaseModalViewController ()
@@ -31,6 +32,8 @@
 
     //self.view.backgroundColor = [UIColor yellowColor];
     self.view.layer.cornerRadius = 10.0;
+    
+    [self addParallaxEffectWithDepth:7 foreground:YES];
 }
 
 - (void)didReceiveMemoryWarning
