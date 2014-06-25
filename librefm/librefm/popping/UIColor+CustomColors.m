@@ -17,7 +17,8 @@
 
 + (UIColor *)customRedColor
 {
-    return [self colorWithRed:231 green:76 blue:60];
+    //return [self colorWithRed:231 green:76 blue:60];
+    return [self colorWithRed:0xFF green:0x6C blue:0x6C];
 }
 
 + (UIColor *)customYellowColor
