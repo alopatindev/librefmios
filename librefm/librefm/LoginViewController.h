@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseModalViewController.h"
 
-@interface LoginViewController : UIViewController /*<LibrefmDelegate>*/
+@interface LoginViewController : BaseModalViewController /*<LibrefmDelegate>*/
 
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 - (IBAction)loginButtonClicked:(id)sender;

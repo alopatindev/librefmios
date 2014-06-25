@@ -7,9 +7,7 @@
 //
 
 #import "LoginViewController.h"
-
 #import "UIColor+CustomColors.h"
-#import <POP/POP.h>
 
 @interface LoginViewController ()
 
@@ -21,8 +19,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    //self.view.backgroundColor = [UIColor yellowColor];
-    self.view.layer.cornerRadius = 10.0;
+
     self.errorLabel.textColor = [UIColor customRedColor];
 }
 
@@ -34,41 +31,13 @@
 
 - (IBAction)loginButtonClicked:(id)sender
 {
-    [self showLabel:self.errorLabel from:sender];
+    [self dismissViewControllerAnimated:YES completion:NULL];
+//    [self popupLabel:self.errorLabel from:sender];
+//    [self shakeButton:sender];
     //[self shakeButton:sender];
     //[self jumpLabel:self.errorLabel from:sender];
     //[_librefmConnection loginWithUsername:[self.usernameTextField text]
     //                             password:[self.passwordTextField text]];
-}
-
-- (void)shakeButton:(UIButton*)button
-{
-    POPSpringAnimation *positionAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionX];
-    positionAnimation.velocity = @2000;
-    positionAnimation.springBounciness = 20;
-    [positionAnimation setCompletionBlock:^(POPAnimation *animation, BOOL finished) {
-        button.userInteractionEnabled = YES;
-    }];
-    [button.layer pop_addAnimation:positionAnimation forKey:@"positionAnimation"];
-}
-
-- (void)showLabel:(UILabel*)label from:(UIView*)fromView
-{
-    CGPoint pos = label.layer.position;
-    pos.y = fromView.layer.position.y - fromView.intrinsicContentSize.height * 0.5;
-    label.layer.position = pos;
-    
-    //label.layer.opacity = 1.0;
-    label.hidden = NO;
-    POPSpringAnimation *layerScaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
-    layerScaleAnimation.springBounciness = 18;
-    layerScaleAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(1.f, 1.f)];
-    [label.layer pop_addAnimation:layerScaleAnimation forKey:@"labelScaleAnimation"];
-    
-    POPSpringAnimation *layerPositionAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
-    layerPositionAnimation.toValue = @(fromView.layer.position.y - fromView.intrinsicContentSize.height);
-    layerPositionAnimation.springBounciness = 12;
-    [label.layer pop_addAnimation:layerPositionAnimation forKey:@"layerPositionAnimation"];
 }
 
 /*

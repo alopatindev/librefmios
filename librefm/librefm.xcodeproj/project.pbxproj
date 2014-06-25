@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BAAD6B8E195A4A6E00397F4D /* BaseModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */; };
 		BADD27CA19535EA90057744B /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BADD27C819535EA90057744B /* Ogg.framework */; };
 		BADD27CB19535EA90057744B /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BADD27C919535EA90057744B /* Vorbis.framework */; };
 		BADD27D9195390F20057744B /* IDZAQAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27D0195390F20057744B /* IDZAQAudioPlayer.m */; };
@@ -68,6 +69,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BAAD6B8C195A4A6E00397F4D /* BaseModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModalViewController.h; sourceTree = "<group>"; };
+		BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseModalViewController.m; sourceTree = "<group>"; };
 		BAC2379C194FA68200A65C9B /* LibrefmDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibrefmDelegate.h; sourceTree = "<group>"; };
 		BAC2379D194FAB2600A65C9B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		BADD27C819535EA90057744B /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ogg.framework; path = ../IDZAQAudioPlayer/Frameworks/Ogg.framework; sourceTree = "<group>"; };
@@ -232,6 +235,8 @@
 				BAFD9E5C194CDF98009718B2 /* ViewController.m */,
 				BADD282B1959D72A0057744B /* LoginViewController.h */,
 				BADD282C1959D72A0057744B /* LoginViewController.m */,
+				BAAD6B8C195A4A6E00397F4D /* BaseModalViewController.h */,
+				BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -546,6 +551,7 @@
 				BADD28751959F12E0057744B /* POPGeometry.mm in Sources */,
 				BADD28701959F12E0057744B /* POPAnimator.mm in Sources */,
 				BAFD9E85194D2541009718B2 /* LibrefmConnection.m in Sources */,
+				BAAD6B8E195A4A6E00397F4D /* BaseModalViewController.m in Sources */,
 				BADD27D9195390F20057744B /* IDZAQAudioPlayer.m in Sources */,
 				BADD28731959F12E0057744B /* POPCustomAnimation.mm in Sources */,
 				BADD27DD1953931C0057744B /* IDZOggVorbisFileDecoder.mm in Sources */,
