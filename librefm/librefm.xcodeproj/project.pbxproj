@@ -10,6 +10,7 @@
 		BAAD6B8E195A4A6E00397F4D /* BaseModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */; };
 		BAAD6B91195A8B4600397F4D /* UIViewController+Parallax.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B90195A8B4600397F4D /* UIViewController+Parallax.m */; };
 		BAAD6B97195EF3E800397F4D /* DeviceHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B96195EF3E800397F4D /* DeviceHardware.m */; };
+		BAAD6B9A195EF46800397F4D /* Singleton.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B99195EF46800397F4D /* Singleton.m */; };
 		BADD27CA19535EA90057744B /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BADD27C819535EA90057744B /* Ogg.framework */; };
 		BADD27CB19535EA90057744B /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BADD27C919535EA90057744B /* Vorbis.framework */; };
 		BADD27D9195390F20057744B /* IDZAQAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD27D0195390F20057744B /* IDZAQAudioPlayer.m */; };
@@ -77,6 +78,8 @@
 		BAAD6B90195A8B4600397F4D /* UIViewController+Parallax.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Parallax.m"; sourceTree = "<group>"; };
 		BAAD6B95195EF3E800397F4D /* DeviceHardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceHardware.h; sourceTree = "<group>"; };
 		BAAD6B96195EF3E800397F4D /* DeviceHardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceHardware.m; sourceTree = "<group>"; };
+		BAAD6B98195EF46800397F4D /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
+		BAAD6B99195EF46800397F4D /* Singleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Singleton.m; sourceTree = "<group>"; };
 		BAC2379C194FA68200A65C9B /* LibrefmDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibrefmDelegate.h; sourceTree = "<group>"; };
 		BAC2379D194FAB2600A65C9B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		BADD27C819535EA90057744B /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ogg.framework; path = ../IDZAQAudioPlayer/Frameworks/Ogg.framework; sourceTree = "<group>"; };
@@ -379,6 +382,8 @@
 				BADD28281959ABF20057744B /* Utils.m */,
 				BAAD6B95195EF3E800397F4D /* DeviceHardware.h */,
 				BAAD6B96195EF3E800397F4D /* DeviceHardware.m */,
+				BAAD6B98195EF46800397F4D /* Singleton.h */,
+				BAAD6B99195EF46800397F4D /* Singleton.m */,
 			);
 			path = librefm;
 			sourceTree = "<group>";
@@ -566,6 +571,7 @@
 				BAAD6B8E195A4A6E00397F4D /* BaseModalViewController.m in Sources */,
 				BADD27D9195390F20057744B /* IDZAQAudioPlayer.m in Sources */,
 				BADD28731959F12E0057744B /* POPCustomAnimation.mm in Sources */,
+				BAAD6B9A195EF46800397F4D /* Singleton.m in Sources */,
 				BADD27DD1953931C0057744B /* IDZOggVorbisFileDecoder.mm in Sources */,
 				BADD28721959F12E0057744B /* POPCGUtils.mm in Sources */,
 			);

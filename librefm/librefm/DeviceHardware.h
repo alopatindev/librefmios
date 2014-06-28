@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Singleton.h"
 
 typedef enum {
     DeviceHardwareType_Uninitialized,
@@ -48,9 +49,8 @@ typedef enum {
     DeviceHardwareType_UnknownNew
 } DeviceHardwareType;
 
-@interface DeviceHardware : NSObject
+@interface DeviceHardware : Singleton
 
-+ (instancetype)instance;
 - (DeviceHardwareType)type;
 - (BOOL)isParallaxEffectSupported;
 

@@ -15,15 +15,6 @@
 
 DeviceHardwareType _type;
 
-+ (instancetype)instance {
-    static id object = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        object = [[self alloc] init];
-    });
-    return object;
-}
-
 - (instancetype)init
 {
     if (self = [super init]) {
