@@ -7,11 +7,16 @@
 //
 
 #import "UIViewController+Parallax.h"
+#import "../DeviceHardware.h"
 
 @implementation UIViewController (Parallax)
 
 - (void)addParallaxEffectWithDepth:(int)depth foreground:(BOOL)foreground
 {
+    if ([[DeviceHardware instance] isParallaxEffectSupported] == NO) {
+        return;
+    }
+
     if (foreground == NO) {
         depth = -depth;
     }
