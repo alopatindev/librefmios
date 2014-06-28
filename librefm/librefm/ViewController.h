@@ -12,7 +12,8 @@
 
 @interface ViewController : UIViewController <LibrefmDelegate,
                                               IDZAudioPlayerDelegate,
-                                              UIViewControllerTransitioningDelegate>
+                                              UIViewControllerTransitioningDelegate,
+                                              UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingAnimation;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;

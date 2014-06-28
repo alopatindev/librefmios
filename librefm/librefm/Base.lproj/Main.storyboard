@@ -143,6 +143,8 @@
                     </view>
                     <connections>
                         <outlet property="errorLabel" destination="p9V-Uj-AHD" id="s66-Am-dFv"/>
+                        <outlet property="passwordTextField" destination="xxO-MF-adR" id="5SU-SY-YEP"/>
+                        <outlet property="usernameTextField" destination="BF5-Dr-cwE" id="7hK-RD-cPM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U8S-QL-4Dl" userLabel="First Responder" sceneMemberID="firstResponder"/>

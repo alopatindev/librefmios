@@ -8,10 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseModalViewController.h"
+#import "LibrefmConnection.h"
 
-@interface LoginViewController : BaseModalViewController /*<LibrefmDelegate>*/
+@interface LoginViewController : BaseModalViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
+@property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+
+@property (weak, nonatomic) LibrefmConnection *librefmConnection;
+
 - (IBAction)loginButtonClicked:(id)sender;
 
 @end

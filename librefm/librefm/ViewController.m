@@ -28,6 +28,7 @@
 
 id<IDZAudioPlayer> _audioPlayer;
 LibrefmConnection *_librefmConnection;
+LoginViewController *_loginViewController;
 
 - (void)viewDidLoad
 {
@@ -60,23 +61,67 @@ LibrefmConnection *_librefmConnection;
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)maybeStartLogin
+{
+    if ([_librefmConnection isNeedInputLoginData] == YES) {
+        NSString *titleText = NSLocalizedString(@"", nil);
+        NSString *messageText = NSLocalizedString(@"To continue please login with your Libre.fm account", nil);
+        NSString *loginText = NSLocalizedString(@"Login", nil);
+        NSString *signupText = NSLocalizedString(@"Create New Account", nil);
+        NSString *notNowText = NSLocalizedString(@"Not Now", nil);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:titleText
+                                                        message:messageText
+                                                       delegate:self
+                                              cancelButtonTitle:loginText
+                                              otherButtonTitles:notNowText, signupText, nil];
+        [alert show];
+        return YES;
+    }
+    return NO;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"%d", buttonIndex);
+    switch (buttonIndex) {
+        case 0:
+            [self openLoginScreen];
+            break;
+        case 1:
+            break;
+        case 2:
+            [self openSignupScreen];
+            break;
+        default:
+            break;
+    }
+}
+
+/*- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
+{
+    return YES;
+}
+
+- (void)didPresentAlertView:(UIAlertView *)alertView
+{
+}
+
+- (void)willPresentAlertView:(UIAlertView *)alertView
+{
+}*/
+
 - (void)openLoginScreen
 {
-    //LoginViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:[NSBundle mainBundle]];
-
-    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-    
-    loginViewController.transitioningDelegate = self;
-    loginViewController.modalPresentationStyle = UIModalPresentationCustom;
-    
-    //[loginViewController setModalTransitionStyle:UIModalTransitionStylePartialCurl];
-    [self presentViewController:loginViewController animated:YES completion:nil];
-    
-    /*[[[[UIApplication sharedApplication] keyWindow] rootViewController] presentViewController:loginViewController
-                                                                                     animated:YES
-                                                                                   completion:nil];*/
+    _loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    _loginViewController.transitioningDelegate = self;
+    _loginViewController.modalPresentationStyle = UIModalPresentationCustom;
+    _loginViewController.librefmConnection = _librefmConnection;
+    [self presentViewController:_loginViewController animated:YES completion:nil];
+}
+
+- (void)openSignupScreen
+{
 }
 
 - (IBAction)playButtonClicked:(id)sender
@@ -93,8 +138,8 @@ LibrefmConnection *_librefmConnection;
 //    [_audioPlayer clearPlaylist];
 //    [_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
     //[_librefmConnection signUpWithUsername:@"1" password:@"2" email:@"a@b.c"];
-    
-    [self openLoginScreen];
+
+    [self maybeStartLogin];
 }
 
 - (IBAction)nextButtonClicked:(id)sender
@@ -105,6 +150,10 @@ LibrefmConnection *_librefmConnection;
 - (void)librefmDidLogin:(BOOL)ok error:(NSError*)error
 {
     if (ok) {
+        if (_loginViewController != nil) {
+            [_loginViewController dismissViewControllerAnimated:YES completion:nil];
+            _loginViewController = nil;
+        }
         [_librefmConnection radioTune:@"rock"];  // TODO DEBUG
     } else {
 

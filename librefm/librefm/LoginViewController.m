@@ -31,13 +31,13 @@
 
 - (IBAction)loginButtonClicked:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self dismissViewControllerAnimated:YES completion:nil];
 //    [self popupLabel:self.errorLabel from:sender];
 //    [self shakeButton:sender];
     //[self shakeButton:sender];
     //[self jumpLabel:self.errorLabel from:sender];
-    //[_librefmConnection loginWithUsername:[self.usernameTextField text]
-    //                             password:[self.passwordTextField text]];
+    [self.librefmConnection loginWithUsername:[self.usernameTextField text]
+                                     password:[self.passwordTextField text]];
 }
 
 /*
