@@ -32,7 +32,7 @@
     CGFloat transitionWidth = CGRectGetWidth(transitionContext.containerView.bounds);
     CGFloat transitionHeight = CGRectGetHeight(transitionContext.containerView.bounds);
     CGFloat xOffset = 104.0;
-    CGFloat yOffset = 258.0;
+    CGFloat yOffset = 230.0;
     CGFloat transitionRatio = transitionHeight / transitionWidth;
     if (transitionRatio < 1.7) {
         yOffset *= 0.5;

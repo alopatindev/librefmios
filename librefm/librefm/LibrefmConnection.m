@@ -304,11 +304,14 @@ NSString* _signupEmail;
     if ([url isAPIMethod:METHOD_AUTH_GETMOBILESESSION]) {
         NSString *errorCode = jsonDictionary[@"error"];
         if (errorCode != nil || jsonDictionary == nil) {
-            NSString* errorMessage = jsonDictionary[@"message"];
+            int errorCodeInt = [errorCode intValue];
+            NSString* errorMessage = errorCodeInt == 4
+                                        ? NSLocalizedString(@"Invalid username or password", nil)
+                                        : jsonDictionary[@"message"];
             self.mobileSessionKey = nil;
             [self.delegate librefmDidLogin:NO
                                      error:[NSError errorWithDomain:errorMessage
-                                                               code:[errorCode intValue]
+                                                               code:errorCodeInt
                                                            userInfo:nil]];
         } else {
             NSDictionary *session = jsonDictionary[@"session"];
@@ -567,6 +570,7 @@ NSString* _signupEmail;
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request
                                                             delegate:self];
+    (void)conn;
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
 }
 
@@ -578,6 +582,7 @@ NSString* _signupEmail;
     [request setHTTPBody:[data dataUsingEncoding:NSUTF8StringEncoding]];
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request
                                                             delegate:self];
+    (void)conn;
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
 }
 

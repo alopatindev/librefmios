@@ -156,7 +156,7 @@ LoginViewController *_loginViewController;
         }
         [_librefmConnection radioTune:@"rock"];  // TODO DEBUG
     } else {
-
+        [_loginViewController animateError:[error domain]];
     }
 }
 
