@@ -15,7 +15,6 @@
                                               UIViewControllerTransitioningDelegate,
                                               UIAlertViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingAnimation;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *urlLabel;
 

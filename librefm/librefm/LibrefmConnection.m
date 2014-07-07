@@ -263,10 +263,17 @@ NSString* _signupEmail;
     [self processRequestsQueue];
 }
 
-- (void)getTopTags
+- (void)getTopTags_
 {
     NSString *url = [NSString stringWithFormat:@"%@%@", API2_URL, METHOD_TAG_GETTOPTAGS];
     [self sendRequest:url];
+}
+
+- (void)getTopTags
+{
+    NSArray *req = @[NSStringFromSelector(@selector(getTopTags_))];
+    [_requestsQueue addObject:req];
+    [self processRequestsQueue];
 }
 
 - (void)processRequestsQueue
@@ -323,14 +330,19 @@ NSString* _signupEmail;
                                      error:[NSError errorWithDomain:errorMessage
                                                                code:errorCodeInt
                                                            userInfo:nil]];
+            self.state = LibrefmConnectionStateNotLoggedIn;
         } else {
             NSDictionary *session = jsonDictionary[@"session"];
             self.mobileSessionKey = session[@"key"];
             self.name = session[@"name"];
             [self checkLogin];
-            [self.delegate librefmDidLogin:(self.state == LibrefmConnectionStateLoggedIn
-                                                       ? YES : NO)
+            BOOL loggedIn = self.state == LibrefmConnectionStateLoggedIn
+                            ? YES : NO;
+            [self.delegate librefmDidLogin:loggedIn
                                      error:nil];
+            if (loggedIn == NO) {
+                self.state = LibrefmConnectionStateNotLoggedIn;
+            }
         }
     } else if ([url isAPIMethod:METHOD_RADIO_GETPLAYLIST]) {
         NSDictionary* playlist = jsonDictionary[@"playlist"];
@@ -385,9 +397,10 @@ NSString* _signupEmail;
                 } else if ([out containsString:@"FAILED"]) {
                     // TODO
                 }
+            } else {
+                [self processJSONResonse:jsonDictionary forUrl:url];
             }
         }
-        [self processJSONResonse:jsonDictionary forUrl:url];
     } else if ([url hasPrefix:SIGNUP_URL]) {
         BOOL alreadyRegistered = _signupUsername == nil ||
                                  _signupPassword == nil ||
@@ -460,6 +473,7 @@ NSString* _signupEmail;
             self.mobileSessionKey = nil;
             [self.delegate librefmDidLogin:NO
                                      error:error];
+            self.state = LibrefmConnectionStateNotLoggedIn;
         } else if ([url isAPIMethod:METHOD_RADIO_GETPLAYLIST] ||
                    [url isAPIMethod:METHOD_RADIO_TUNE]) {
             [self.delegate librefmDidLoadPlaylist:nil

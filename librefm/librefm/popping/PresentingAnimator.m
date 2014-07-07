@@ -35,7 +35,7 @@
     CGFloat yOffset = 230.0;
     CGFloat transitionRatio = transitionHeight / transitionWidth;
     if (transitionRatio < 1.7) {
-        yOffset *= 0.5;
+        yOffset *= 0.6;
     }
     toView.frame = CGRectMake(0,
                               0,

@@ -31,14 +31,12 @@
 
 - (IBAction)loginButtonClicked:(id)sender
 {
-    [self.loadingIndicator startAnimating];
     [self.librefmConnection loginWithUsername:[self.usernameTextField text]
                                      password:[self.passwordTextField text]];
 }
 
 - (void)animateError:(NSString*)errorText
 {
-    [self.loadingIndicator stopAnimating];
     self.errorLabel.text = errorText;
     [self popupLabel:self.errorLabel from:self.loginButton];
     [self shakeButton:self.loginButton];
