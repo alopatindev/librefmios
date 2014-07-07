@@ -15,6 +15,8 @@ typedef enum {
 
 @protocol LibrefmDelegate <NSObject>
 
+- (void)librefmDidChangeNetworkActivity:(BOOL)loading;
+
 - (void)librefmDidLogin:(BOOL)ok error:(NSError*)error;
 
 - (void)librefmDidLoadPlaylist:(NSDictionary*)playlist

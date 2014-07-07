@@ -72,6 +72,8 @@ NSString* _signupEmail;
     //[self sendRequest:streamingLoginUrl];
     //[self sendRequest:scrobblingLoginUrl]; // 213.138.110.197 or 213.138.110.193
     [self sendRequest:webServicesLoginUrl];
+    
+    [self updateNetworkActivity];
 }
 
 - (void)signUpWithUsername:(NSString*)username password:(NSString*)password email:(NSString*)email
@@ -261,11 +263,19 @@ NSString* _signupEmail;
     [self processRequestsQueue];
 }
 
+- (void)getTopTags
+{
+    NSString *url = [NSString stringWithFormat:@"%@%@", API2_URL, METHOD_TAG_GETTOPTAGS];
+    [self sendRequest:url];
+}
+
 - (void)processRequestsQueue
 {
     if ([[NetworkManager instance] isConnectionAvailable] == NO) {
         return;
     }
+    
+    [self updateNetworkActivity];
 
     while ([_requestsQueue count] > 0) {
         NSArray* a = [_requestsQueue anyObject];
@@ -342,9 +352,11 @@ NSString* _signupEmail;
                                                                   userInfo:nil]];
         }
         [self radioGetNextPlaylistPage];
+    } else if ([url isAPIMethod:METHOD_TAG_GETTOPTAGS]) {
+        
     } else {
-        if (jsonDictionary == nil) {
-        }
+        NSLog(@"unknown response; url=%@", url);
+        NSAssert(jsonDictionary != nil, @"failed to parse json");
     }
 }
 
@@ -427,6 +439,16 @@ NSString* _signupEmail;
     }
 }
 
+- (void)updateNetworkActivity
+{
+    BOOL loading =
+        [_requestsQueue count] > 0 ||
+        [_responseDict count] > 0 ||
+        self.state == LibrefmConnectionStateLoginStarted;
+
+    [self.delegate librefmDidChangeNetworkActivity:loading];
+}
+
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:[connection currentRequest]];
@@ -443,6 +465,8 @@ NSString* _signupEmail;
             [self.delegate librefmDidLoadPlaylist:nil
                                                ok:NO
                                             error:error];
+        } else if ([url isAPIMethod:METHOD_TAG_GETTOPTAGS]) {
+            // TODO
         }
     }
     
@@ -455,6 +479,8 @@ NSString* _signupEmail;
         data.length = 0;
         [_responseDict removeObjectForKey:url];
     }
+    
+    [self updateNetworkActivity];
 }
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
@@ -596,6 +622,7 @@ NSString* _signupEmail;
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:[connection currentRequest]];
     NSString *url = [self currentURLStringFromConnection:connection];
     _responseDict[url] = [NSMutableData new];
+    [self updateNetworkActivity];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data

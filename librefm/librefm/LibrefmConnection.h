@@ -96,4 +96,6 @@ typedef enum {
 - (void)getInfoArtist:(NSString*)artist;
 - (void)getInfoAlbum:(NSString*)album;*/
 
+- (void)getTopTags;
+
 @end

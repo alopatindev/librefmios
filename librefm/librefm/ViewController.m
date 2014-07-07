@@ -39,16 +39,18 @@ LoginViewController *_loginViewController;
     _librefmConnection = [LibrefmConnection new];
     _librefmConnection.delegate = self;
     //[self loginButtonClicked:nil];
+    
+    [_librefmConnection getTopTags];
 
     _audioPlayer = [IDZAQAudioPlayer new];
     _audioPlayer.delegate = self;
     
-/*    NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
+    NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
     //[_audioPlayer queueURL:oggUrl];
     [_audioPlayer queueURLString:@"http://zalil.ru/d/tf/00a61d009813661117c43caa5996e1eb/14035400/aceaH/storage5-7-4-455147/little.ogg"];
     [_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
     //[_audioPlayer queueURLString:@"http://gigue.rrbone.net/24765.ogg2"];
- */
+
     //[_audioPlayer play];
     
     
@@ -145,6 +147,11 @@ LoginViewController *_loginViewController;
 - (IBAction)nextButtonClicked:(id)sender
 {
     [_audioPlayer next];
+}
+
+- (void)librefmDidChangeNetworkActivity:(BOOL)loading
+{
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = loading;
 }
 
 - (void)librefmDidLogin:(BOOL)ok error:(NSError*)error
