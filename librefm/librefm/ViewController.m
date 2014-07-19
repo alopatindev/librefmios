@@ -208,9 +208,9 @@ CGFloat _presentationViewHeightOffset;
         self.passwordTextField.text = password;
         [self loginButtonClicked:nil];*/
     } else {
-        // TODO
         switch ([error code]) {
             case LibrefmSignupErrorAlreadyRegistered:
+                [_signupViewController animateError:NSLocalizedString(@"Username is already registered", nil)];
                 break;
             case LibrefmSignupErrorUnknown:
             default:

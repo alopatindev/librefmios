@@ -28,8 +28,23 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.errorLabel.textColor = [UIColor customRedColor];
     [self.signupButton setColorText:[UIColor blackColor]
                          background:[UIColor customYellowColor]];
+}
+
+- (IBAction)signupButtonClicked:(id)sender
+{
+    [self.librefmConnection signUpWithUsername:self.usernameTextField.text
+                                      password:self.passwordTextField.text
+                                         email:self.emailTextField.text];
+}
+
+- (void)animateError:(NSString*)errorText
+{
+    self.errorLabel.text = errorText;
+    [self popupLabel:self.errorLabel from:self.signupButton];
+    [self shakeButton:self.signupButton];
 }
 
 - (void)didReceiveMemoryWarning

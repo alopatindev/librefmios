@@ -87,7 +87,7 @@
                                 <rect key="frame" x="20" y="38" width="240" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Login" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ygD-cD-MD3">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Login" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ygD-cD-MD3">
                                 <rect key="frame" x="38" y="187" width="157" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -96,7 +96,7 @@
                                     <action selector="didShowKeyboard:" destination="AgI-th-5m4" eventType="editingDidBegin" id="22T-Rh-Rjs"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="EMail" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sro-cL-TXs">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="EMail" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sro-cL-TXs">
                                 <rect key="frame" x="38" y="238" width="157" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -105,7 +105,7 @@
                                     <action selector="didShowKeyboard:" destination="AgI-th-5m4" eventType="editingDidBegin" id="1Kj-Ul-t4U"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gh8-JO-CUL">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gh8-JO-CUL">
                                 <rect key="frame" x="38" y="289" width="157" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -114,40 +114,51 @@
                                     <action selector="didShowKeyboard:" destination="AgI-th-5m4" eventType="editingDidBegin" id="2VR-yT-LXQ"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2LT-q8-z9b" customClass="FlatButton">
-                                <rect key="frame" x="45" y="338" width="130" height="39"/>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Error text is here" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="240" translatesAutoresizingMaskIntoConstraints="NO" id="SKD-EA-JF1">
+                                <rect key="frame" x="20" y="341" width="240" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Sign up">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2LT-q8-z9b" customClass="FlatButton">
+                                <rect key="frame" x="51" y="384" width="130" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Sign Up">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="loginButtonClicked:" destination="tLY-Ok-r82" eventType="touchUpInside" id="xsD-1g-e7b"/>
+                                    <action selector="signupButtonClicked:" destination="AgI-th-5m4" eventType="touchUpInside" id="Tim-5D-dH7"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="SKD-EA-JF1" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="1" id="5jM-jD-LCZ"/>
                             <constraint firstAttribute="trailing" secondItem="gh8-JO-CUL" secondAttribute="trailing" constant="20" id="6ms-5i-NwF"/>
-                            <constraint firstItem="2LT-q8-z9b" firstAttribute="top" secondItem="gh8-JO-CUL" secondAttribute="bottom" constant="20" id="87r-h6-oBZ"/>
                             <constraint firstItem="YQG-LF-qEm" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="40" id="8az-Vo-ehx"/>
                             <constraint firstItem="gDX-Qe-vYa" firstAttribute="top" secondItem="2LT-q8-z9b" secondAttribute="bottom" constant="20" id="Css-x5-lFg"/>
                             <constraint firstAttribute="trailing" secondItem="2LT-q8-z9b" secondAttribute="trailing" constant="40" id="Eh6-e3-r1L"/>
                             <constraint firstItem="gh8-JO-CUL" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="20" id="GR4-AO-l0h"/>
+                            <constraint firstAttribute="trailing" secondItem="SKD-EA-JF1" secondAttribute="trailing" constant="1" id="Hmo-VM-eku"/>
                             <constraint firstAttribute="trailing" secondItem="ygD-cD-MD3" secondAttribute="trailing" constant="20" id="KuG-x0-B7E"/>
                             <constraint firstItem="ygD-cD-MD3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YQG-LF-qEm" secondAttribute="bottom" constant="20" id="Lhb-Ox-rx0"/>
                             <constraint firstItem="Sro-cL-TXs" firstAttribute="top" secondItem="ygD-cD-MD3" secondAttribute="bottom" constant="20" id="QYz-JK-2Wf"/>
+                            <constraint firstItem="SKD-EA-JF1" firstAttribute="top" relation="greaterThanOrEqual" secondItem="gh8-JO-CUL" secondAttribute="bottom" constant="5" id="aSf-1y-rSf"/>
                             <constraint firstItem="2LT-q8-z9b" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="40" id="aui-nh-hOQ"/>
                             <constraint firstItem="gh8-JO-CUL" firstAttribute="top" secondItem="Sro-cL-TXs" secondAttribute="bottom" constant="20" id="cyW-Ab-KK5"/>
                             <constraint firstAttribute="trailing" secondItem="YQG-LF-qEm" secondAttribute="trailing" constant="40" id="glv-gK-Jp4"/>
                             <constraint firstItem="ygD-cD-MD3" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="20" id="od5-pb-hQA"/>
                             <constraint firstItem="Sro-cL-TXs" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="20" id="q6f-0l-LFx"/>
                             <constraint firstItem="YQG-LF-qEm" firstAttribute="top" secondItem="Ser-M9-HYA" secondAttribute="bottom" constant="20" id="uFF-31-7H4"/>
+                            <constraint firstItem="2LT-q8-z9b" firstAttribute="top" relation="greaterThanOrEqual" secondItem="SKD-EA-JF1" secondAttribute="bottom" constant="10" id="ucW-6c-u0A"/>
                             <constraint firstAttribute="trailing" secondItem="Sro-cL-TXs" secondAttribute="trailing" constant="20" id="vR9-Y1-k8I"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="emailTextField" destination="Sro-cL-TXs" id="54E-ao-pCA"/>
+                        <outlet property="errorLabel" destination="SKD-EA-JF1" id="Nhy-Yp-U0g"/>
                         <outlet property="passwordTextField" destination="gh8-JO-CUL" id="QvH-Nn-YBq"/>
                         <outlet property="signupButton" destination="2LT-q8-z9b" id="yH0-Af-Alz"/>
                         <outlet property="usernameTextField" destination="ygD-cD-MD3" id="AoX-CD-nGK"/>
