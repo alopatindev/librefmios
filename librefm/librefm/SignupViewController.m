@@ -15,6 +15,8 @@
 
 @implementation SignupViewController
 
+BOOL _useWebBrowser;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -31,13 +33,18 @@
     self.errorLabel.textColor = [UIColor customRedColor];
     [self.signupButton setColorText:[UIColor blackColor]
                          background:[UIColor customYellowColor]];
+    _useWebBrowser = NO;
 }
 
 - (IBAction)signupButtonClicked:(id)sender
 {
-    [self.librefmConnection signUpWithUsername:self.usernameTextField.text
-                                      password:self.passwordTextField.text
-                                         email:self.emailTextField.text];
+    if (_useWebBrowser == YES) {
+        [self.librefmConnection openSignupBrowser];
+    } else {
+        [self.librefmConnection signUpWithUsername:self.usernameTextField.text
+                                          password:self.passwordTextField.text
+                                             email:self.emailTextField.text];
+    }
 }
 
 - (void)animateError:(NSString*)errorText
@@ -45,6 +52,14 @@
     self.errorLabel.text = errorText;
     [self popupLabel:self.errorLabel from:self.signupButton];
     [self shakeButton:self.signupButton];
+}
+
+- (void)replaceSignupButtonWithOpenBrowser
+{
+    _useWebBrowser = YES;
+    [self.signupButton setTitle:NSLocalizedString(@"Open Browser", nil)
+                       forState:UIControlStateNormal];
+    // TODO: fix button size
 }
 
 - (void)didReceiveMemoryWarning

@@ -22,5 +22,6 @@
 
 - (IBAction)signupButtonClicked:(id)sender;
 - (void)animateError:(NSString*)errorText;
+- (void)replaceSignupButtonWithOpenBrowser;
 
 @end

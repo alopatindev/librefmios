@@ -128,7 +128,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="loginButtonClicked:" destination="tLY-Ok-r82" eventType="touchUpInside" id="xsD-1g-e7b"/>
                                     <action selector="signupButtonClicked:" destination="AgI-th-5m4" eventType="touchUpInside" id="Tim-5D-dH7"/>
                                 </connections>
                             </button>

@@ -214,7 +214,8 @@ CGFloat _presentationViewHeightOffset;
                 break;
             case LibrefmSignupErrorUnknown:
             default:
-                [_librefmConnection openSignupBrowser];
+                [_signupViewController animateError:NSLocalizedString(@"Oops, something went wrong", nil)];
+                [_signupViewController replaceSignupButtonWithOpenBrowser];
                 break;
         }
     }
