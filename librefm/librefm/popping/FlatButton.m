@@ -65,10 +65,7 @@
 
 - (void)setup
 {
-    self.backgroundColor = [UIColor customGreenColor]; //self.tintColor;
     self.layer.cornerRadius = 4.f;
-    [self setTitleColor:[UIColor whiteColor]
-                 forState:UIControlStateNormal];
     self.titleLabel.font = [UIFont fontWithName:@"Avenir-Medium"
                                              size:18];
 
@@ -78,6 +75,12 @@
    forControlEvents:UIControlEventTouchUpInside];
     [self addTarget:self action:@selector(scaleToDefault)
    forControlEvents:UIControlEventTouchDragExit];
+}
+
+- (void)setColorText:(UIColor*)textColor background:(UIColor*)backgroundColor
+{
+    [self setTitleColor:textColor forState:UIControlStateNormal];
+    self.backgroundColor = backgroundColor;
 }
 
 - (void)scaleToSmall

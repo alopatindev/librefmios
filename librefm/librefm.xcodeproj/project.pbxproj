@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BA0DC6CD197AB44300AED271 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0DC6CC197AB44300AED271 /* SignupViewController.m */; };
 		BAAD6B8E195A4A6E00397F4D /* BaseModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */; };
 		BAAD6B91195A8B4600397F4D /* UIViewController+Parallax.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B90195A8B4600397F4D /* UIViewController+Parallax.m */; };
 		BAAD6B97195EF3E800397F4D /* DeviceHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B96195EF3E800397F4D /* DeviceHardware.m */; };
@@ -72,6 +73,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BA0DC6CB197AB44300AED271 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
+		BA0DC6CC197AB44300AED271 /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignupViewController.m; sourceTree = "<group>"; };
 		BAAD6B8C195A4A6E00397F4D /* BaseModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModalViewController.h; sourceTree = "<group>"; };
 		BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseModalViewController.m; sourceTree = "<group>"; };
 		BAAD6B8F195A8B4600397F4D /* UIViewController+Parallax.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Parallax.h"; sourceTree = "<group>"; };
@@ -244,6 +247,8 @@
 				BAFD9E5C194CDF98009718B2 /* ViewController.m */,
 				BADD282B1959D72A0057744B /* LoginViewController.h */,
 				BADD282C1959D72A0057744B /* LoginViewController.m */,
+				BA0DC6CB197AB44300AED271 /* SignupViewController.h */,
+				BA0DC6CC197AB44300AED271 /* SignupViewController.m */,
 				BAAD6B8C195A4A6E00397F4D /* BaseModalViewController.h */,
 				BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */,
 			);
@@ -558,6 +563,7 @@
 				BADD286C1959F12E0057744B /* POPAnimationEvent.mm in Sources */,
 				BADD28741959F12E0057744B /* POPDecayAnimation.mm in Sources */,
 				BADD28791959F12E0057744B /* POPSpringAnimation.mm in Sources */,
+				BA0DC6CD197AB44300AED271 /* SignupViewController.m in Sources */,
 				BAFD9E57194CDF98009718B2 /* AppDelegate.m in Sources */,
 				BADD282D1959D72A0057744B /* LoginViewController.m in Sources */,
 				BADD287B1959F12E0057744B /* TransformationMatrix.cpp in Sources */,

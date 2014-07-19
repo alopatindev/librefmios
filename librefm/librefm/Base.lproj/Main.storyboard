@@ -69,6 +69,93 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="186" y="-107"/>
+        </scene>
+        <!--Signup View Controller-->
+        <scene sceneID="H7F-mm-PZJ">
+            <objects>
+                <viewController storyboardIdentifier="SignupViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="AgI-th-5m4" customClass="SignupViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Ser-M9-HYA"/>
+                        <viewControllerLayoutGuide type="bottom" id="gDX-Qe-vYa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4rW-Jw-okH">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="YQG-LF-qEm">
+                                <rect key="frame" x="20" y="38" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Login" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ygD-cD-MD3">
+                                <rect key="frame" x="38" y="187" width="157" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                                <connections>
+                                    <action selector="didShowKeyboard:" destination="AgI-th-5m4" eventType="editingDidBegin" id="22T-Rh-Rjs"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="EMail" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sro-cL-TXs">
+                                <rect key="frame" x="38" y="238" width="157" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                                <connections>
+                                    <action selector="didShowKeyboard:" destination="AgI-th-5m4" eventType="editingDidBegin" id="1Kj-Ul-t4U"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gh8-JO-CUL">
+                                <rect key="frame" x="38" y="289" width="157" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES"/>
+                                <connections>
+                                    <action selector="didShowKeyboard:" destination="AgI-th-5m4" eventType="editingDidBegin" id="2VR-yT-LXQ"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2LT-q8-z9b" customClass="FlatButton">
+                                <rect key="frame" x="45" y="338" width="130" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Sign up">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginButtonClicked:" destination="tLY-Ok-r82" eventType="touchUpInside" id="xsD-1g-e7b"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="gh8-JO-CUL" secondAttribute="trailing" constant="20" id="6ms-5i-NwF"/>
+                            <constraint firstItem="2LT-q8-z9b" firstAttribute="top" secondItem="gh8-JO-CUL" secondAttribute="bottom" constant="20" id="87r-h6-oBZ"/>
+                            <constraint firstItem="YQG-LF-qEm" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="40" id="8az-Vo-ehx"/>
+                            <constraint firstItem="gDX-Qe-vYa" firstAttribute="top" secondItem="2LT-q8-z9b" secondAttribute="bottom" constant="20" id="Css-x5-lFg"/>
+                            <constraint firstAttribute="trailing" secondItem="2LT-q8-z9b" secondAttribute="trailing" constant="40" id="Eh6-e3-r1L"/>
+                            <constraint firstItem="gh8-JO-CUL" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="20" id="GR4-AO-l0h"/>
+                            <constraint firstAttribute="trailing" secondItem="ygD-cD-MD3" secondAttribute="trailing" constant="20" id="KuG-x0-B7E"/>
+                            <constraint firstItem="ygD-cD-MD3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YQG-LF-qEm" secondAttribute="bottom" constant="20" id="Lhb-Ox-rx0"/>
+                            <constraint firstItem="Sro-cL-TXs" firstAttribute="top" secondItem="ygD-cD-MD3" secondAttribute="bottom" constant="20" id="QYz-JK-2Wf"/>
+                            <constraint firstItem="2LT-q8-z9b" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="40" id="aui-nh-hOQ"/>
+                            <constraint firstItem="gh8-JO-CUL" firstAttribute="top" secondItem="Sro-cL-TXs" secondAttribute="bottom" constant="20" id="cyW-Ab-KK5"/>
+                            <constraint firstAttribute="trailing" secondItem="YQG-LF-qEm" secondAttribute="trailing" constant="40" id="glv-gK-Jp4"/>
+                            <constraint firstItem="ygD-cD-MD3" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="20" id="od5-pb-hQA"/>
+                            <constraint firstItem="Sro-cL-TXs" firstAttribute="leading" secondItem="4rW-Jw-okH" secondAttribute="leading" constant="20" id="q6f-0l-LFx"/>
+                            <constraint firstItem="YQG-LF-qEm" firstAttribute="top" secondItem="Ser-M9-HYA" secondAttribute="bottom" constant="20" id="uFF-31-7H4"/>
+                            <constraint firstAttribute="trailing" secondItem="Sro-cL-TXs" secondAttribute="trailing" constant="20" id="vR9-Y1-k8I"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="emailTextField" destination="Sro-cL-TXs" id="54E-ao-pCA"/>
+                        <outlet property="passwordTextField" destination="gh8-JO-CUL" id="QvH-Nn-YBq"/>
+                        <outlet property="signupButton" destination="2LT-q8-z9b" id="yH0-Af-Alz"/>
+                        <outlet property="usernameTextField" destination="ygD-cD-MD3" id="AoX-CD-nGK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LEb-6u-IM9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="899" y="-107"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="JWC-oO-f0E">
@@ -82,19 +169,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="a6206008" borderStyle="roundedRect" placeholder="Login" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BF5-Dr-cwE">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="a6206008" borderStyle="roundedRect" placeholder="Login" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BF5-Dr-cwE">
                                 <rect key="frame" x="82" y="187" width="157" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                                <connections>
+                                    <action selector="didShowKeyboard:" destination="tLY-Ok-r82" eventType="editingDidBegin" id="hjk-S0-rsQ"/>
+                                </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="violence" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xxO-MF-adR">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="violence" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xxO-MF-adR">
                                 <rect key="frame" x="82" y="238" width="157" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                <connections>
+                                    <action selector="didShowKeyboard:" destination="tLY-Ok-r82" eventType="editingDidBegin" id="9qA-pY-CDl"/>
+                                </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8jl-mM-njy" customClass="FlatButton">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8jl-mM-njy" customClass="FlatButton">
                                 <rect key="frame" x="95" y="353" width="130" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Login">
@@ -105,7 +198,7 @@
                                     <action selector="loginButtonClicked:" destination="tLY-Ok-r82" eventType="touchUpInside" id="9PA-0w-juJ"/>
                                 </connections>
                             </button>
-                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Error text is here" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="240" translatesAutoresizingMaskIntoConstraints="NO" id="p9V-Uj-AHD">
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Error text is here" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="240" translatesAutoresizingMaskIntoConstraints="NO" id="p9V-Uj-AHD">
                                 <rect key="frame" x="40" y="284" width="240" height="68"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -122,11 +215,11 @@
                             <constraint firstItem="BF5-Dr-cwE" firstAttribute="leading" secondItem="5Sj-cE-wgj" secondAttribute="leading" constant="20" id="9vL-Mt-aNV"/>
                             <constraint firstItem="8jl-mM-njy" firstAttribute="top" secondItem="p9V-Uj-AHD" secondAttribute="bottom" constant="20" id="BXJ-vY-wxk"/>
                             <constraint firstItem="eq5-W1-3Ex" firstAttribute="top" secondItem="5Sj-cE-wgj" secondAttribute="top" constant="20" id="Hd6-rg-Dcf"/>
-                            <constraint firstItem="Pnp-oF-HIw" firstAttribute="top" secondItem="8jl-mM-njy" secondAttribute="bottom" constant="20" id="K7T-lX-0z8"/>
-                            <constraint firstItem="p9V-Uj-AHD" firstAttribute="top" secondItem="xxO-MF-adR" secondAttribute="bottom" constant="20" id="MGc-eM-63x"/>
+                            <constraint firstItem="Pnp-oF-HIw" firstAttribute="top" relation="greaterThanOrEqual" secondItem="8jl-mM-njy" secondAttribute="bottom" constant="20" id="K7T-lX-0z8"/>
+                            <constraint firstItem="p9V-Uj-AHD" firstAttribute="top" secondItem="xxO-MF-adR" secondAttribute="bottom" constant="1" id="MGc-eM-63x"/>
                             <constraint firstItem="xxO-MF-adR" firstAttribute="leading" secondItem="5Sj-cE-wgj" secondAttribute="leading" constant="20" id="QIO-Xc-wGF"/>
                             <constraint firstAttribute="trailing" secondItem="p9V-Uj-AHD" secondAttribute="trailing" constant="5" id="S7n-Tr-nah"/>
-                            <constraint firstItem="BF5-Dr-cwE" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eq5-W1-3Ex" secondAttribute="bottom" constant="20" id="THA-Qk-QHy"/>
+                            <constraint firstItem="BF5-Dr-cwE" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eq5-W1-3Ex" secondAttribute="bottom" constant="10" id="THA-Qk-QHy"/>
                             <constraint firstItem="eq5-W1-3Ex" firstAttribute="leading" secondItem="5Sj-cE-wgj" secondAttribute="leading" constant="40" id="XUD-le-Shq"/>
                             <constraint firstAttribute="trailing" secondItem="xxO-MF-adR" secondAttribute="trailing" constant="20" id="bz8-t1-vrJ"/>
                             <constraint firstItem="xxO-MF-adR" firstAttribute="top" secondItem="BF5-Dr-cwE" secondAttribute="bottom" constant="20" id="eDi-Xq-cvU"/>
@@ -145,7 +238,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U8S-QL-4Dl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="843" y="-309"/>
+            <point key="canvasLocation" x="559" y="-107"/>
         </scene>
     </scenes>
     <resources>

@@ -16,6 +16,7 @@
 @implementation BaseModalViewController
 
 UITapGestureRecognizer *_tapOutsideRecognizer;
+BOOL _keyboardVisible;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -51,6 +52,8 @@ UITapGestureRecognizer *_tapOutsideRecognizer;
         [self.view.window removeGestureRecognizer:_tapOutsideRecognizer];
         _tapOutsideRecognizer = nil;
     }
+    
+    _keyboardVisible = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -88,6 +91,29 @@ UITapGestureRecognizer *_tapOutsideRecognizer;
     layerPositionAnimation.springBounciness = 12;
     [label.layer pop_addAnimation:layerPositionAnimation forKey:@"layerPositionAnimation"];
 }
+
+- (IBAction)didShowKeyboard:(id)sender
+{
+    if (_keyboardVisible == YES) {
+        return;
+    }
+
+    _keyboardVisible = YES;
+    POPBasicAnimation *offscreenAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionY];
+    offscreenAnimation.toValue = @(self.view.layer.position.y * 0.65);
+    [self.view.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
+}
+
+/*- (IBAction)removeKeyboard:(id)sender
+{
+    if (_keyboardVisible == NO) {
+        return;
+    }
+
+    _keyboardVisible = NO;
+    // TODO: animation
+    [self resignFirstResponder];
+}*/
 
 // http://stackoverflow.com/questions/2623417/iphone-sdk-dismissing-modal-viewcontrollers-on-ipad-by-clicking-outside-of-it
 - (void)enableDismissingPressingByOutside

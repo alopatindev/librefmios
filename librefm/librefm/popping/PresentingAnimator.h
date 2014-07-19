@@ -10,4 +10,6 @@
 
 @interface PresentingAnimator : NSObject <UIViewControllerAnimatedTransitioning>
 
+- (instancetype)initWithHeightOffset:(CGFloat)heightOffset;
+
 @end

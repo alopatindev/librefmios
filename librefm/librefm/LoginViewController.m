@@ -21,6 +21,8 @@
     // Do any additional setup after loading the view.
 
     self.errorLabel.textColor = [UIColor customRedColor];
+    [self.loginButton setColorText:[UIColor whiteColor]
+                        background:[UIColor customGreenColor]];
 }
 
 - (void)didReceiveMemoryWarning

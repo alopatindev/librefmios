@@ -12,5 +12,7 @@
 
 - (void)shakeButton:(UIButton*)button;
 - (void)popupLabel:(UILabel*)label from:(UIView*)fromView;
+- (IBAction)didShowKeyboard:(id)sender;
+//- (IBAction)removeKeyboard:(id)sender;
 
 @end

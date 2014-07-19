@@ -12,4 +12,6 @@
 
 //+ (instancetype)button;
 
+- (void)setColorText:(UIColor*)textColor background:(UIColor*)backgroundColor;
+
 @end

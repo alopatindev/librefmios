@@ -16,6 +16,7 @@
 #import "Utils.h"
 
 #import "LoginViewController.h"
+#import "SignupViewController.h"
 
 #import "DismissingAnimator.h"
 #import "PresentingAnimator.h"
@@ -29,10 +30,13 @@
 id<IDZAudioPlayer> _audioPlayer;
 LibrefmConnection *_librefmConnection;
 LoginViewController *_loginViewController;
+SignupViewController *_signupViewController;
+CGFloat _presentationViewHeightOffset;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _presentationViewHeightOffset = 0.0;
 
     _librefmConnection = [LibrefmConnection new];
     _librefmConnection.delegate = self;
@@ -67,13 +71,13 @@ LoginViewController *_loginViewController;
         NSString *titleText = NSLocalizedString(@"", nil);
         NSString *messageText = NSLocalizedString(@"To continue please login with your Libre.fm account", nil);
         NSString *loginText = NSLocalizedString(@"Login", nil);
-        NSString *signupText = NSLocalizedString(@"Create New Account", nil);
-        NSString *notNowText = NSLocalizedString(@"Not Now", nil);
+        NSString *signupText = NSLocalizedString(@"Sign Up", nil);
+        //NSString *notNowText = NSLocalizedString(@"Not Now", nil);
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:titleText
                                                         message:messageText
                                                        delegate:self
                                               cancelButtonTitle:loginText
-                                              otherButtonTitles:notNowText, signupText, nil];
+                                              otherButtonTitles:/*notNowText, */signupText, nil];
         [alert show];
         return YES;
     }
@@ -88,10 +92,9 @@ LoginViewController *_loginViewController;
             [self openLoginScreen];
             break;
         case 1:
-            break;
-        case 2:
             [self openSignupScreen];
             break;
+        //case 2:
         default:
             break;
     }
@@ -117,11 +120,19 @@ LoginViewController *_loginViewController;
     _loginViewController.transitioningDelegate = self;
     _loginViewController.modalPresentationStyle = UIModalPresentationCustom;
     _loginViewController.librefmConnection = _librefmConnection;
+    _presentationViewHeightOffset = 280.0;
     [self presentViewController:_loginViewController animated:YES completion:nil];
 }
 
 - (void)openSignupScreen
 {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    _signupViewController = [storyboard instantiateViewControllerWithIdentifier:@"SignupViewController"];
+    _signupViewController.transitioningDelegate = self;
+    _signupViewController.modalPresentationStyle = UIModalPresentationCustom;
+    _signupViewController.librefmConnection = _librefmConnection;
+    _presentationViewHeightOffset = 220.0;
+    [self presentViewController:_signupViewController animated:YES completion:nil];
 }
 
 - (IBAction)playButtonClicked:(id)sender
@@ -255,7 +266,7 @@ LoginViewController *_loginViewController;
                                                                   presentingController:(UIViewController *)presenting
                                                                       sourceController:(UIViewController *)source
 {
-    return [PresentingAnimator new];
+    return [[PresentingAnimator alloc] initWithHeightOffset:_presentationViewHeightOffset];
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed

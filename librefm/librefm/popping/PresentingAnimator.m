@@ -12,6 +12,16 @@
 
 @implementation PresentingAnimator
 
+CGFloat _heightOffset;
+
+- (instancetype)initWithHeightOffset:(CGFloat)heightOffset
+{
+    if (self = [super init]) {
+        _heightOffset = heightOffset;
+    }
+    return self;
+}
+
 - (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext
 {
     return 0.5f;
@@ -32,10 +42,10 @@
     CGFloat transitionWidth = CGRectGetWidth(transitionContext.containerView.bounds);
     CGFloat transitionHeight = CGRectGetHeight(transitionContext.containerView.bounds);
     CGFloat xOffset = 104.0;
-    CGFloat yOffset = 230.0;
+    CGFloat yOffset = _heightOffset;
     CGFloat transitionRatio = transitionHeight / transitionWidth;
     if (transitionRatio < 1.7) {
-        yOffset *= 0.6;
+        yOffset *= 0.7;
     }
     toView.frame = CGRectMake(0,
                               0,
