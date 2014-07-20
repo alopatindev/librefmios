@@ -54,6 +54,7 @@
 
 - (IBAction)loginButtonClicked:(id)sender
 {
+    self.loginButton.enabled = NO;
     [self.librefmConnection loginWithUsername:self.usernameTextField.text
                                      password:self.passwordTextField.text];
 }
@@ -70,6 +71,7 @@
     self.errorLabel.text = errorText;
     [self popupLabel:self.errorLabel from:self.loginButton];
     [self shakeButton:self.loginButton];
+    self.loginButton.enabled = YES;
 }
 
 /*

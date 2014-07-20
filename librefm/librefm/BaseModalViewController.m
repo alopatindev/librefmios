@@ -88,7 +88,7 @@ BOOL _keyboardVisible;
     [label.layer pop_addAnimation:layerScaleAnimation forKey:@"labelScaleAnimation"];
     
     POPSpringAnimation *layerPositionAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
-    layerPositionAnimation.toValue = @(fromView.layer.position.y - fromView.intrinsicContentSize.height);
+    layerPositionAnimation.toValue = @(fromView.layer.position.y - fromView.intrinsicContentSize.height * 0.8);
     layerPositionAnimation.springBounciness = 12;
     [label.layer pop_addAnimation:layerPositionAnimation forKey:@"layerPositionAnimation"];
 }

@@ -45,6 +45,8 @@ BOOL _useWebBrowser;
 
 - (IBAction)signupButtonClicked:(id)sender
 {
+    self.signupButton.enabled = NO;
+
     if (_useWebBrowser == YES) {
         [self.librefmConnection openSignupBrowser];
     } else {
@@ -87,6 +89,7 @@ BOOL _useWebBrowser;
     self.errorLabel.text = errorText;
     [self popupLabel:self.errorLabel from:self.signupButton];
     [self shakeButton:self.signupButton];
+    self.signupButton.enabled = YES;
 }
 
 - (void)replaceSignupButtonWithOpenBrowser
