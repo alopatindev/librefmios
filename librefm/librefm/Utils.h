@@ -10,6 +10,7 @@
 
 @interface Utils : NSObject
 
++ (CGFloat)aspectRatio;
 + (void)openBrowserWithURL:(NSURL*) url;
 + (void)openBrowser:(NSString*) url;
 

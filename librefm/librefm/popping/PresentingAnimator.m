@@ -8,6 +8,7 @@
 
 #import "PresentingAnimator.h"
 #import "UIColor+CustomColors.h"
+#import "Utils.h"
 #import <POP/POP.h>
 
 @implementation PresentingAnimator
@@ -43,8 +44,9 @@ CGFloat _heightOffset;
     CGFloat transitionHeight = CGRectGetHeight(transitionContext.containerView.bounds);
     CGFloat xOffset = 104.0;
     CGFloat yOffset = _heightOffset;
-    CGFloat transitionRatio = transitionHeight / transitionWidth;
-    if (transitionRatio < 1.7) {
+    //CGFloat transitionRatio = transitionHeight / transitionWidth;
+    //if (transitionRatio < 1.7) {
+    if ([Utils aspectRatio] < 1.7) {
         yOffset *= 0.7;
     }
     toView.frame = CGRectMake(0,

@@ -21,6 +21,8 @@
 @property (weak, nonatomic) LibrefmConnection *librefmConnection;
 
 - (IBAction)loginButtonClicked:(id)sender;
+- (IBAction)updateButtons;
+
 - (void)animateError:(NSString*)errorText;
 
 @end

@@ -94,6 +94,7 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <action selector="didShowKeyboard:" destination="AgI-th-5m4" eventType="editingDidBegin" id="22T-Rh-Rjs"/>
+                                    <action selector="updateButtons" destination="AgI-th-5m4" eventType="editingChanged" id="m2a-nu-d4N"/>
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="EMail" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sro-cL-TXs">
@@ -103,6 +104,7 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <action selector="didShowKeyboard:" destination="AgI-th-5m4" eventType="editingDidBegin" id="1Kj-Ul-t4U"/>
+                                    <action selector="updateButtons" destination="AgI-th-5m4" eventType="editingChanged" id="cj3-PB-VAA"/>
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gh8-JO-CUL">
@@ -112,6 +114,7 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <action selector="didShowKeyboard:" destination="AgI-th-5m4" eventType="editingDidBegin" id="2VR-yT-LXQ"/>
+                                    <action selector="updateButtons" destination="AgI-th-5m4" eventType="editingChanged" id="rPM-eL-WAb"/>
                                 </connections>
                             </textField>
                             <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Error text is here" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="240" translatesAutoresizingMaskIntoConstraints="NO" id="SKD-EA-JF1">
@@ -186,6 +189,7 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <action selector="didShowKeyboard:" destination="tLY-Ok-r82" eventType="editingDidBegin" id="hjk-S0-rsQ"/>
+                                    <action selector="updateButtons" destination="tLY-Ok-r82" eventType="editingChanged" id="Txa-Hb-h1R"/>
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="violence" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xxO-MF-adR">
@@ -195,6 +199,7 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                                 <connections>
                                     <action selector="didShowKeyboard:" destination="tLY-Ok-r82" eventType="editingDidBegin" id="9qA-pY-CDl"/>
+                                    <action selector="updateButtons" destination="tLY-Ok-r82" eventType="editingChanged" id="g8Z-hO-T6d"/>
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8jl-mM-njy" customClass="FlatButton">

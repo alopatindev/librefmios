@@ -8,6 +8,7 @@
 
 #import "BaseModalViewController.h"
 #import "UIViewController+Parallax.h"
+#import "Utils.h"
 #import <POP/POP.h>
 
 @interface BaseModalViewController ()
@@ -100,7 +101,8 @@ BOOL _keyboardVisible;
 
     _keyboardVisible = YES;
     POPBasicAnimation *offscreenAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionY];
-    offscreenAnimation.toValue = @(self.view.layer.position.y * 0.65);
+    CGFloat delta = [Utils aspectRatio] < 1.7 ? 0.55 : 0.65;
+    offscreenAnimation.toValue = @(self.view.layer.position.y * delta);
     [self.view.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
 }
 

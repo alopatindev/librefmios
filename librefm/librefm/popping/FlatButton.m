@@ -19,6 +19,8 @@
 
 @implementation FlatButton
 
+UIColor* _normalBackgroundColor;
+
 /*+ (instancetype)button
 {
     return [self buttonWithType:UIButtonTypeCustom];
@@ -81,6 +83,20 @@
 {
     [self setTitleColor:textColor forState:UIControlStateNormal];
     self.backgroundColor = backgroundColor;
+    _normalBackgroundColor = backgroundColor;
+}
+
+-(void)setEnabled:(BOOL)enabled
+{
+    [super setEnabled:enabled];
+    if (enabled)
+    {
+        self.backgroundColor = _normalBackgroundColor;
+    }
+    else
+    {
+        self.backgroundColor = [UIColor grayColor];
+    }
 }
 
 - (void)scaleToSmall

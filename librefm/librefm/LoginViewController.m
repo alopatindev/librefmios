@@ -20,6 +20,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
+    [self updateButtons];
     self.errorLabel.textColor = [UIColor customRedColor];
     [self.loginButton setColorText:[UIColor whiteColor]
                         background:[UIColor customGreenColor]];
@@ -33,8 +34,15 @@
 
 - (IBAction)loginButtonClicked:(id)sender
 {
-    [self.librefmConnection loginWithUsername:[self.usernameTextField text]
-                                     password:[self.passwordTextField text]];
+    [self.librefmConnection loginWithUsername:self.usernameTextField.text
+                                     password:self.passwordTextField.text];
+}
+
+- (IBAction)updateButtons
+{
+    BOOL needInput = [self.usernameTextField.text length] == 0 ||
+                     [self.passwordTextField.text length] == 0;
+    self.loginButton.enabled = needInput ? NO : YES;
 }
 
 - (void)animateError:(NSString*)errorText

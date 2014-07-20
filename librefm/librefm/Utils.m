@@ -10,6 +10,14 @@
 
 @implementation Utils
 
++ (CGFloat)aspectRatio
+{
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+    return screenHeight / screenWidth;
+}
+
 + (void)openBrowserWithURL:(NSURL*)url
 {
     [[UIApplication sharedApplication] openURL:url];

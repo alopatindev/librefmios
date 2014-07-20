@@ -8,6 +8,7 @@
 
 #import "SignupViewController.h"
 #import "UIColor+CustomColors.h"
+#import "NSString+String.h"
 
 @interface SignupViewController ()
 
@@ -34,6 +35,7 @@ BOOL _useWebBrowser;
     [self.signupButton setColorText:[UIColor blackColor]
                          background:[UIColor customYellowColor]];
     _useWebBrowser = NO;
+    [self updateButtons];
 }
 
 - (IBAction)signupButtonClicked:(id)sender
@@ -47,7 +49,15 @@ BOOL _useWebBrowser;
     }
 }
 
-- (void)animateError:(NSString*)errorText
+- (IBAction)updateButtons
+{
+    BOOL needInput = [self.usernameTextField.text length] == 0 ||
+                     [self.passwordTextField.text length] == 0 ||
+                     [self.emailTextField.text isValidEmail] == NO;
+    self.signupButton.enabled = needInput ? NO : YES;
+}
+
+- (void)animateError:(NSString *)errorText
 {
     self.errorLabel.text = errorText;
     [self popupLabel:self.errorLabel from:self.signupButton];

@@ -21,6 +21,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 
 - (IBAction)signupButtonClicked:(id)sender;
+- (IBAction)updateButtons;
+
 - (void)animateError:(NSString*)errorText;
 - (void)replaceSignupButtonWithOpenBrowser;
 
