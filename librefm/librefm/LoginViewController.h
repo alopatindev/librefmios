@@ -11,7 +11,7 @@
 #import "LibrefmConnection.h"
 #import "FlatButton.h"
 
-@interface LoginViewController : BaseModalViewController
+@interface LoginViewController : BaseModalViewController <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;

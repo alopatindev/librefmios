@@ -122,4 +122,11 @@ UIColor* _normalBackgroundColor;
     [self.layer pop_addAnimation:scaleAnimation forKey:@"layerScaleDefaultAnimation"];
 }
 
+- (void)click
+{
+    if (self.enabled == YES) {
+        [self sendActionsForControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
 @end

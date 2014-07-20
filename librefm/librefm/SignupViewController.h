@@ -11,7 +11,7 @@
 #import "LibrefmConnection.h"
 #import "FlatButton.h"
 
-@interface SignupViewController : BaseModalViewController
+@interface SignupViewController : BaseModalViewController <UITextFieldDelegate>
 
 @property (weak, nonatomic) LibrefmConnection *librefmConnection;
 @property (weak, nonatomic) IBOutlet FlatButton *signupButton;

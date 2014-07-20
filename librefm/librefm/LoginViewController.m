@@ -24,6 +24,26 @@
     self.errorLabel.textColor = [UIColor customRedColor];
     [self.loginButton setColorText:[UIColor whiteColor]
                         background:[UIColor customGreenColor]];
+    
+    self.usernameTextField.delegate = self;
+    self.passwordTextField.delegate = self;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    UIControl *nextControl = nil;
+    if (textField == self.usernameTextField) {
+        nextControl = self.passwordTextField;
+    } else if (textField == self.passwordTextField) {
+        [self.loginButton click];
+    }
+    
+    if (nextControl != nil) {
+        [textField resignFirstResponder];
+        [nextControl becomeFirstResponder];
+    }
+
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning

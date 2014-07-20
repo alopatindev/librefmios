@@ -35,6 +35,11 @@ BOOL _useWebBrowser;
     [self.signupButton setColorText:[UIColor blackColor]
                          background:[UIColor customYellowColor]];
     _useWebBrowser = NO;
+    
+    self.usernameTextField.delegate = self;
+    self.emailTextField.delegate = self;
+    self.passwordTextField.delegate = self;
+    
     [self updateButtons];
 }
 
@@ -55,6 +60,26 @@ BOOL _useWebBrowser;
                      [self.passwordTextField.text length] == 0 ||
                      [self.emailTextField.text isValidEmail] == NO;
     self.signupButton.enabled = needInput ? NO : YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    UIControl *nextControl = nil;
+
+    if (textField == self.usernameTextField) {
+        nextControl = self.emailTextField;
+    } else if (textField == self.emailTextField) {
+        nextControl = self.passwordTextField;
+    } else if (textField == self.passwordTextField) {
+        [self.signupButton click];
+    }
+    
+    if (nextControl != nil) {
+        [textField resignFirstResponder];
+        [nextControl becomeFirstResponder];
+    }
+    
+    return YES;
 }
 
 - (void)animateError:(NSString *)errorText
