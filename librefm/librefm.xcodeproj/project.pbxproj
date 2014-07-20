@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BA0DC6CD197AB44300AED271 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0DC6CC197AB44300AED271 /* SignupViewController.m */; };
+		BA0DC6D9197C6E4600AED271 /* TagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0DC6D8197C6E4600AED271 /* TagsViewController.m */; };
 		BAAD6B8E195A4A6E00397F4D /* BaseModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */; };
 		BAAD6B91195A8B4600397F4D /* UIViewController+Parallax.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B90195A8B4600397F4D /* UIViewController+Parallax.m */; };
 		BAAD6B97195EF3E800397F4D /* DeviceHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B96195EF3E800397F4D /* DeviceHardware.m */; };
@@ -75,6 +76,8 @@
 /* Begin PBXFileReference section */
 		BA0DC6CB197AB44300AED271 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
 		BA0DC6CC197AB44300AED271 /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignupViewController.m; sourceTree = "<group>"; };
+		BA0DC6D7197C6E4600AED271 /* TagsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagsViewController.h; sourceTree = "<group>"; };
+		BA0DC6D8197C6E4600AED271 /* TagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagsViewController.m; sourceTree = "<group>"; };
 		BAAD6B8C195A4A6E00397F4D /* BaseModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModalViewController.h; sourceTree = "<group>"; };
 		BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseModalViewController.m; sourceTree = "<group>"; };
 		BAAD6B8F195A8B4600397F4D /* UIViewController+Parallax.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Parallax.h"; sourceTree = "<group>"; };
@@ -243,6 +246,8 @@
 		BADD282A1959D4F40057744B /* views */ = {
 			isa = PBXGroup;
 			children = (
+				BA0DC6D7197C6E4600AED271 /* TagsViewController.h */,
+				BA0DC6D8197C6E4600AED271 /* TagsViewController.m */,
 				BAFD9E5B194CDF98009718B2 /* ViewController.h */,
 				BAFD9E5C194CDF98009718B2 /* ViewController.m */,
 				BADD282B1959D72A0057744B /* LoginViewController.h */,
@@ -550,6 +555,7 @@
 				BADD286F1959F12E0057744B /* POPAnimationTracer.mm in Sources */,
 				BADD286D1959F12E0057744B /* POPAnimationExtras.mm in Sources */,
 				BAAD6B97195EF3E800397F4D /* DeviceHardware.m in Sources */,
+				BA0DC6D9197C6E4600AED271 /* TagsViewController.m in Sources */,
 				BADD28711959F12E0057744B /* POPBasicAnimation.mm in Sources */,
 				BADD287A1959F12E0057744B /* POPVector.mm in Sources */,
 				BADD286A1959F12E0057744B /* POPAnimatableProperty.mm in Sources */,
