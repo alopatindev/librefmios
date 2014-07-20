@@ -32,6 +32,8 @@ BOOL _keyboardVisible;
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    _keyboardVisible = NO;
 
     //self.view.backgroundColor = [UIColor yellowColor];
     self.view.layer.cornerRadius = 10.0;
@@ -137,9 +139,6 @@ BOOL _keyboardVisible;
 
 - (void)handleTapBehind:(UITapGestureRecognizer *)sender
 {
-    sender.delegate = nil;
-    sender.enabled = NO;
-
     if (sender.state == UIGestureRecognizerStateEnded)
     {
         CGPoint location = [sender locationInView:nil]; //Passing nil gives us coordinates in the window
@@ -149,6 +148,9 @@ BOOL _keyboardVisible;
                                                    fromView:self.view.window]
                           withEvent:nil] == NO)
         {
+            sender.delegate = nil;
+            sender.enabled = NO;
+
             // Remove the recognizer first so it's view.window is valid.
             [self.view.window removeGestureRecognizer:sender];
             _tapOutsideRecognizer = nil;

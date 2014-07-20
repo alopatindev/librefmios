@@ -322,9 +322,15 @@ NSString* _signupEmail;
         NSString *errorCode = jsonDictionary[@"error"];
         if (errorCode != nil || jsonDictionary == nil) {
             int errorCodeInt = [errorCode intValue];
-            NSString* errorMessage = errorCodeInt == 4
-                                        ? NSLocalizedString(@"Invalid username or password", nil)
-                                        : jsonDictionary[@"message"];
+            NSString* errorMessage;
+            if (errorCodeInt == 4) {
+                errorMessage = NSLocalizedString(@"Invalid username or password", nil);
+                self.username = nil;
+                self.password = nil;
+            } else {
+                errorMessage = jsonDictionary[@"message"];
+            }
+
             self.mobileSessionKey = nil;
             [self.delegate librefmDidLogin:NO
                                      error:[NSError errorWithDomain:errorMessage
