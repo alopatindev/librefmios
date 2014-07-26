@@ -8,8 +8,11 @@
 
 #import "TagsViewController.h"
 #import "HPLTagCloudGenerator.h"
+#import "UIColor+CustomColors.h"
 
 @interface TagsViewController ()
+
+@property NSArray *tagLabels;
 
 @end
 
@@ -27,22 +30,41 @@
         NSDictionary *tagDict = @{@"tag1": @3,
                                   @"tag2": @5,
                                   @"tag3": @7,
-                                  @"tag4": @2};
+                                  @"tag4": @1};
         
         
         HPLTagCloudGenerator *tagGenerator = [[HPLTagCloudGenerator alloc] init];
         tagGenerator.size = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
         tagGenerator.tagDict = tagDict;
         
-        NSArray *views = [tagGenerator generateTagViews];
+        self.tagLabels = [tagGenerator generateTagViews];
         
         dispatch_async( dispatch_get_main_queue(), ^{
-            for(UIView *v in views) {
+            for(UILabel *v in self.tagLabels) {
+                UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tagViewTapped:)];
+                [v addGestureRecognizer:tap];
+                [v setUserInteractionEnabled:YES];
+
+                v.textColor = [UIColor customBlueColor];
                 [v setNeedsDisplay];
                 [self.view addSubview:v];
             }
         });
     });
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    for(UILabel *v in self.tagLabels) {
+        v.textColor = [UIColor customBlueColor];
+    }
+}
+
+- (void)tagViewTapped:(UITapGestureRecognizer *)recognizer
+{
+    UILabel *label = (UILabel *)recognizer.view;
+    label.textColor = [UIColor customYellowColor];
+    NSLog(@"tagViewTapped '%@'", label.text);
 }
 
 - (void)didReceiveMemoryWarning

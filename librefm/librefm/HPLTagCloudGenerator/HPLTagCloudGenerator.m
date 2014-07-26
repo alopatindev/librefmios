@@ -103,14 +103,14 @@
     for (NSString *tag in sortedTags) {
 
         int count = [(NSNumber *) [smoothedTagDict objectForKey:tag] intValue];
-        float fontSize = ceilf(maxFontsize * (count - min) / (max - min)) + 5;
+        float fontSize = ceilf(maxFontsize * (count - min) / (max - min)) + MIN_FONT_SIZE;
 
         UIFont *tagFont = [UIFont systemFontOfSize:fontSize];
         CGSize size = [tag sizeWithFont:tagFont];
 
         while (size.width >= maxWidth) {
             maxFontsize-=2;
-            fontSize = ceilf(maxFontsize * (count - min) / (max - min)) + 5;
+            fontSize = ceilf(maxFontsize * (count - min) / (max - min)) + MIN_FONT_SIZE;
 
             tagFont = [UIFont systemFontOfSize:fontSize];
             size = [tag sizeWithFont:tagFont];
@@ -118,15 +118,14 @@
 
         // check intersections
         CGPoint center = [self getNextPosition];
-        UILabel *tagLabel = [[UILabel alloc] initWithFrame:CGRectMake(center.x - size.width/2, center.y - size.height/2, size.width, size.height)];
-
+        UILabel *tagLabel = [[UILabel alloc] initWithFrame:CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height)];
 
         tagLabel.text = tag;
         tagLabel.font = tagFont;
 
         while([self checkIntersectionWithView:tagLabel viewArray:tagViews]) {
             CGPoint center = [self getNextPosition];
-            tagLabel.frame = CGRectMake(center.x - size.width/2, center.y - size.height/2, size.width, size.height);
+            tagLabel.frame = CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height);
         }
 
         [tagViews addObject:tagLabel];

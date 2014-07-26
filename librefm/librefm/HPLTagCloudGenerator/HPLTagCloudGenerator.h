@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface HPLTagCloudGenerator : NSObject
+static const int MIN_FONT_SIZE = 8;
 
+@interface HPLTagCloudGenerator : NSObject
 
 // Dictionary of tags -> # of occurances
 @property NSDictionary *tagDict;
