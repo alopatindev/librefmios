@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 static const int MIN_FONT_SIZE = 8;
+static const int MAX_POSITION_TRIES = 30;
 
 @interface HPLTagCloudGenerator : NSObject
 
@@ -36,6 +37,6 @@ static const int MIN_FONT_SIZE = 8;
 
 
 // Returns an array of views.
-- (NSArray *)generateTagViews;
+- (NSMutableArray *)generateTagViews;
 
 @end
