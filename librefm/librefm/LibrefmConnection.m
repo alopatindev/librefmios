@@ -15,6 +15,7 @@
 
 NSMutableDictionary *_responseDict;
 NSMutableSet* _requestsQueue;
+NSMutableSet* _requestsNoAuthQueue;
 NSString* _signupUsername;
 NSString* _signupPassword;
 NSString* _signupEmail;
@@ -24,6 +25,7 @@ NSString* _signupEmail;
     if (self = [super init]) {
         _responseDict = [NSMutableDictionary new];
         _requestsQueue = [NSMutableSet new];
+        _requestsNoAuthQueue = [NSMutableSet new];
         self.state = LibrefmConnectionStateNotLoggedIn;
     }
     return self;
@@ -272,7 +274,7 @@ NSString* _signupEmail;
 - (void)getTopTags
 {
     NSArray *req = @[NSStringFromSelector(@selector(getTopTags_))];
-    [_requestsQueue addObject:req];
+    [_requestsNoAuthQueue addObject:req];
     [self processRequestsQueue];
 }
 
@@ -283,36 +285,50 @@ NSString* _signupEmail;
     }
     
     [self updateNetworkActivity];
+    
+    while ([_requestsNoAuthQueue count] > 0) {
+        NSArray* a = [_requestsNoAuthQueue anyObject];
+        [self processRequest:a fromAuthQueue:NO];
+    }
 
     while ([_requestsQueue count] > 0) {
         NSArray* a = [_requestsQueue anyObject];
 
-        if (self.state == LibrefmConnectionStateNotLoggedIn)
-        {
+        if (self.state == LibrefmConnectionStateNotLoggedIn) {
             [self tryLogin];
             break;
         } else if (self.state == LibrefmConnectionStateLoggedIn) {
-            [_requestsQueue removeObject:a];
-            SEL sel = NSSelectorFromString(a[0]);
-            switch([a count]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-                case 1UL:
-                    [self performSelector:sel];
-                    break;
-                case 2UL:
-                    [self performSelector:sel withObject:a[1]];
-                    break;
-                case 3UL:
-                    [self performSelector:sel withObject:a[1] withObject:a[2]];
-                    break;
-                default:
-                    break;
-#pragma clang diagnostic pop
-            }
+            [self processRequest:a fromAuthQueue:YES];
         } else {
             break;
         }
+    }
+}
+
+- (void)processRequest:(NSArray*)a fromAuthQueue:(BOOL)auth
+{
+    if (auth) {
+        [_requestsQueue removeObject:a];
+    } else {
+        [_requestsNoAuthQueue removeObject:a];
+    }
+
+    SEL sel = NSSelectorFromString(a[0]);
+    switch([a count]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        case 1UL:
+            [self performSelector:sel];
+            break;
+        case 2UL:
+            [self performSelector:sel withObject:a[1]];
+            break;
+        case 3UL:
+            [self performSelector:sel withObject:a[1] withObject:a[2]];
+            break;
+        default:
+            break;
+#pragma clang diagnostic pop
     }
 }
 
@@ -371,7 +387,16 @@ NSString* _signupEmail;
         }
         [self radioGetNextPlaylistPage];
     } else if ([url isAPIMethod:METHOD_TAG_GETTOPTAGS]) {
-        
+        NSDictionary* tag = jsonDictionary[@"toptags"][@"tag"];
+        if (tag != nil) {
+            NSMutableDictionary *tags = [NSMutableDictionary new];
+            for (NSDictionary *t in tag) {
+                tags[t[@"name"]] = t[@"count"];
+            }
+            [self.delegate librefmDidLoadTopTags:YES tags:tags];
+        } else {
+            [self.delegate librefmDidLoadTopTags:NO tags:nil];
+        }
     } else {
         NSLog(@"unknown response; url=%@", url);
         NSAssert(jsonDictionary != nil, @"failed to parse json");

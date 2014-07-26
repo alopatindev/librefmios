@@ -29,4 +29,8 @@ typedef enum {
                 password:(NSString*)password
                    email:(NSString*)email;
 
+- (void)librefmDidLoadTopTags:(BOOL)ok
+                         tags:(NSDictionary*)tags;
+
+
 @end
