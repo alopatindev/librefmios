@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
 #import "NetworkManager.h"
+#import "TabBarViewController.h"
+#import "BaseTabViewController.h"
 
 @implementation AppDelegate
 
@@ -24,6 +26,9 @@
     
     //Float32 bufferLength = 0.1;
     //AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration, sizeof(bufferLength), &bufferLength);
+    
+    TabBarViewController *tabBarController = (TabBarViewController*) self.window.rootViewController;
+    tabBarController.delegate = self;
     
     return YES;
 }
@@ -54,6 +59,13 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [NetworkManager releaseResources];
+}
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
+{
+    BaseTabViewController *controller = (BaseTabViewController *)viewController;
+    [controller switchToTab:controller];
+    return YES;
 }
 
 @end

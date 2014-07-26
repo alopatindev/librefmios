@@ -21,7 +21,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 
     NSDictionary *tagDict = @{@"tag1": @3,
                               @"tag2": @5,
@@ -73,10 +72,19 @@
     label.textColor = [UIColor customYellowColor];
     NSLog(@"tagViewTapped '%@'", label.text);
     
-    NSMutableDictionary *tagDict = [NSMutableDictionary new];
+    [UIView transitionWithView:self.view
+                      duration:0.003
+                       options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void){
+                        [super viewWillAppear:YES];
+                    } completion:^(BOOL finished){
+                        [self switchToTabIndex:TabPlayer];
+                    }];
+
+    /*NSMutableDictionary *tagDict = [NSMutableDictionary new];
     for (int i = 0 ; i < rand() % 10 + 50; ++i)
         tagDict[[NSString stringWithFormat:@"%d", i]] = @(i + (rand() % 2));
-    [self updateTags:tagDict];
+    [self updateTags:tagDict];*/
 }
 
 - (void)didReceiveMemoryWarning

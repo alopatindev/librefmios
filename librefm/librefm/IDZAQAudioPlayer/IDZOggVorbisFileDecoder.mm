@@ -236,7 +236,7 @@ BOOL _downloadComplete;
     if (self.headerIsRead == NO /*&& self.downloadedBytes > 0*/) {
         //NSAssert(mpFile, @"fopen succeeded.");
         int iReturn = ov_open_callbacks(mpFile ? mpFile : (FILE*)1, &mOggVorbisFile, NULL, 0, MY_CALLBACKS_STREAMONLY);
-        //NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
+        NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
 
         vorbis_info* pInfo = ov_info(&mOggVorbisFile, -1);
         

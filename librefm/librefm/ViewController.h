@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "LibrefmDelegate.h"
 #import "IDZAudioPlayer.h"
+#import "BaseTabViewController.h"
 
-@interface ViewController : UIViewController <LibrefmDelegate,
-                                              IDZAudioPlayerDelegate,
-                                              UIViewControllerTransitioningDelegate,
-                                              UIAlertViewDelegate>
+@interface ViewController : BaseTabViewController <LibrefmDelegate,
+                                                   IDZAudioPlayerDelegate,
+                                                   UIViewControllerTransitioningDelegate,
+                                                   UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *urlLabel;

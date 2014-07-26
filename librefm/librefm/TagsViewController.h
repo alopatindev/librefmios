@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TabBarViewController.h"
+#import "BaseTabViewController.h"
 
-@interface TagsViewController : UIViewController
+@interface TagsViewController : BaseTabViewController
 
 @end
