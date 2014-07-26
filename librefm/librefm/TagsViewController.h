@@ -12,4 +12,7 @@
 
 @interface TagsViewController : BaseTabViewController
 
+- (void)librefmDidLoadTopTags:(BOOL)ok
+                         tags:(NSDictionary*)tags;
+
 @end

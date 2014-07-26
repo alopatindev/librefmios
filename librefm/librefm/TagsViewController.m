@@ -21,18 +21,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    NSDictionary *tagDict = @{@"tag1": @3,
-                              @"tag2": @5,
-                              @"tag3": @7,
-                              @"tag4": @1};
-    [self updateTags:tagDict];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     for(UILabel *v in self.tagLabels) {
         v.textColor = [UIColor customBlueColor];
+    }
+}
+
+- (void)librefmDidLoadTopTags:(BOOL)ok
+                         tags:(NSDictionary*)tags
+{
+    if (ok) {
+        [self updateTags:tags];
+    } else {
+        NSLog(@"librefmDidLoadTopTags failed");
     }
 }
 

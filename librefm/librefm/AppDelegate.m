@@ -34,6 +34,7 @@ PlayerViewController *_playerViewController;
 
     _librefmConnection = [LibrefmConnection new];
     _librefmConnection.delegate = self;
+    [_librefmConnection getTopTags];
 
     TabBarViewController *tabBarController = (TabBarViewController *)self.window.rootViewController;
     tabBarController.delegate = self;
@@ -129,7 +130,7 @@ PlayerViewController *_playerViewController;
 - (void)librefmDidLoadTopTags:(BOOL)ok
                          tags:(NSDictionary*)tags
 {
-    // TODO
+    [_tagsViewController librefmDidLoadTopTags:ok tags:tags];
 }
 
 @end
