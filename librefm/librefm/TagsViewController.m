@@ -38,12 +38,7 @@
         
         dispatch_async( dispatch_get_main_queue(), ^{
             for(UIView *v in views) {
-                
-                // FIXME: without this hack tags become invisible
-                CGRect rect = v.frame;
-                rect.size.height *= 1.01f;
-                v.frame = rect;
-                
+                [v setNeedsDisplay];
                 [self.view addSubview:v];
             }
         });
