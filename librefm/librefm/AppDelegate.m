@@ -11,8 +11,13 @@
 #import "NetworkManager.h"
 #import "TabBarViewController.h"
 #import "BaseTabViewController.h"
+#import "TagsViewController.h"
+#import "PlayerViewController.h"
 
 @implementation AppDelegate
+
+TagsViewController *_tagsViewController;
+PlayerViewController *_playerViewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -21,14 +26,19 @@
     NSError *error;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
     [[AVAudioSession sharedInstance] setActive:YES error:&error];
-    
-    (void) [NetworkManager instance];
-    
+
     //Float32 bufferLength = 0.1;
     //AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration, sizeof(bufferLength), &bufferLength);
-    
-    TabBarViewController *tabBarController = (TabBarViewController*) self.window.rootViewController;
+
+    (void) [NetworkManager instance];
+
+    _librefmConnection = [LibrefmConnection new];
+    _librefmConnection.delegate = self;
+
+    TabBarViewController *tabBarController = (TabBarViewController *)self.window.rootViewController;
     tabBarController.delegate = self;
+    _tagsViewController = tabBarController.viewControllers[TabTags];
+    _playerViewController = tabBarController.viewControllers[TabPlayer];
     
     return YES;
 }
@@ -66,6 +76,60 @@
     BaseTabViewController *controller = (BaseTabViewController *)viewController;
     [controller switchToTab:controller];
     return YES;
+}
+
+- (void)librefmDidChangeNetworkActivity:(BOOL)loading
+{
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = loading;
+}
+
+- (void)librefmDidLogin:(BOOL)ok error:(NSError*)error
+{
+    [_playerViewController librefmDidLogin:ok error:error];
+}
+
+- (void)librefmDidLoadPlaylist:(NSDictionary*)playlist ok:(BOOL)ok error:(NSError*)error
+{
+    if (ok) {
+        NSString *title = playlist[@"title"];
+        NSString *creator = playlist[@"creator"];
+        //@"link", @"date"
+        NSArray *track = playlist[@"track"];
+        for (NSDictionary *t in track) {
+            NSString *creator = t[@"creator"];
+            NSString *album = t[@"album"];
+            NSString *title = t[@"title"];
+            //NSDictionary* extension = t[@"extension"]; //artist info
+            //@"identifier" : @"0000"
+            NSString *location = t[@"location"];
+            NSString *image = t[@"image"];
+            //NSNumber *duration = t[@"duration"]; // always 180000?
+            NSLog(@"track '%@' '%@' '%@'", creator, title, location);
+        }
+    }
+}
+
+- (void)librefmDidSignUp:(BOOL)ok
+                   error:(NSError*)error
+                username:(NSString*)username
+                password:(NSString*)password
+                   email:(NSString*)email
+{
+    if (ok) {
+        [_librefmConnection loginWithUsername:username password:password];
+    }
+
+    [_playerViewController librefmDidSignUp:ok
+                                      error:error
+                                   username:username
+                                   password:password
+                                      email:email];
+}
+
+- (void)librefmDidLoadTopTags:(BOOL)ok
+                         tags:(NSDictionary*)tags
+{
+    // TODO
 }
 
 @end

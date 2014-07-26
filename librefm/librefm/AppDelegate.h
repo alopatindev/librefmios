@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LibrefmDelegate.h"
+#import "LibrefmConnection.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>
+@interface AppDelegate : UIResponder <LibrefmDelegate,
+                                      UIApplicationDelegate,
+                                      UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) LibrefmConnection *librefmConnection;
 
 @end

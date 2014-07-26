@@ -54,7 +54,7 @@
 		BAFD9E53194CDF98009718B2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E52194CDF98009718B2 /* main.m */; };
 		BAFD9E57194CDF98009718B2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E56194CDF98009718B2 /* AppDelegate.m */; };
 		BAFD9E5A194CDF98009718B2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAFD9E58194CDF98009718B2 /* Main.storyboard */; };
-		BAFD9E5D194CDF98009718B2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E5C194CDF98009718B2 /* ViewController.m */; };
+		BAFD9E5D194CDF98009718B2 /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFD9E5C194CDF98009718B2 /* PlayerViewController.m */; };
 		BAFD9E5F194CDF98009718B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BAFD9E5E194CDF98009718B2 /* Images.xcassets */; };
 		BAFD9E66194CDF98009718B2 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E65194CDF98009718B2 /* XCTest.framework */; };
 		BAFD9E67194CDF98009718B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E46194CDF98009718B2 /* Foundation.framework */; };
@@ -184,8 +184,8 @@
 		BAFD9E55194CDF98009718B2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BAFD9E56194CDF98009718B2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		BAFD9E59194CDF98009718B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		BAFD9E5B194CDF98009718B2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		BAFD9E5C194CDF98009718B2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		BAFD9E5B194CDF98009718B2 /* PlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
+		BAFD9E5C194CDF98009718B2 /* PlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
 		BAFD9E5E194CDF98009718B2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		BAFD9E64194CDF98009718B2 /* librefmTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = librefmTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAFD9E65194CDF98009718B2 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -268,8 +268,8 @@
 				BA628A2E1983F5C800AAA264 /* TabBarViewController.m */,
 				BA0DC6D7197C6E4600AED271 /* TagsViewController.h */,
 				BA0DC6D8197C6E4600AED271 /* TagsViewController.m */,
-				BAFD9E5B194CDF98009718B2 /* ViewController.h */,
-				BAFD9E5C194CDF98009718B2 /* ViewController.m */,
+				BAFD9E5B194CDF98009718B2 /* PlayerViewController.h */,
+				BAFD9E5C194CDF98009718B2 /* PlayerViewController.m */,
 				BADD282B1959D72A0057744B /* LoginViewController.h */,
 				BADD282C1959D72A0057744B /* LoginViewController.m */,
 				BA0DC6CB197AB44300AED271 /* SignupViewController.h */,
@@ -589,7 +589,7 @@
 				BADD286B1959F12E0057744B /* POPAnimation.mm in Sources */,
 				BADD286E1959F12E0057744B /* POPAnimationRuntime.mm in Sources */,
 				BADD28781959F12E0057744B /* POPPropertyAnimation.mm in Sources */,
-				BAFD9E5D194CDF98009718B2 /* ViewController.m in Sources */,
+				BAFD9E5D194CDF98009718B2 /* PlayerViewController.m in Sources */,
 				BADD286C1959F12E0057744B /* POPAnimationEvent.mm in Sources */,
 				BA628A2F1983F5C800AAA264 /* TabBarViewController.m in Sources */,
 				BADD28741959F12E0057744B /* POPDecayAnimation.mm in Sources */,
