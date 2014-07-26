@@ -23,6 +23,8 @@ PlayerViewController *_playerViewController;
 {
     // Override point for customization after application launch.
     
+    srand(time(NULL));
+    
     NSError *error;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
     [[AVAudioSession sharedInstance] setActive:YES error:&error];

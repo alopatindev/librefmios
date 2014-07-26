@@ -391,7 +391,7 @@ NSString* _signupEmail;
         if (tag != nil) {
             NSMutableDictionary *tags = [NSMutableDictionary new];
             for (NSDictionary *t in tag) {
-                tags[t[@"name"]] = @((int)t[@"count"]);
+                tags[t[@"name"]] = @([t[@"count"] integerValue]);
             }
             [self.delegate librefmDidLoadTopTags:YES tags:tags];
         } else {

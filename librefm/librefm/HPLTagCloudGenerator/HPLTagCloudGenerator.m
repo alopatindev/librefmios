@@ -21,8 +21,8 @@
     self = [super init];
     spiralCount = 0;
     self.spiralStep = 0.35;
-    self.a = 5;
-    self.b = 6;
+    self.a = 1; //5;
+    self.b = 2; //6;
     return self;
 }
 
@@ -62,10 +62,10 @@
     static dispatch_once_t onceToken = 0;
     static CGRect screen;
     dispatch_once(&onceToken, ^{
-        screen.origin.x = 0.0f;
-        screen.origin.y = 0.0f;
-        screen.size.width = self.size.width * 0.9f;
-        screen.size.height = self.size.height * 0.9f;
+        screen.origin.x += self.size.width * 0.1f;
+        screen.origin.y += self.size.width * 0.1f;
+        screen.size.width = self.size.width * 0.8f;
+        screen.size.height = self.size.height * 0.5f;
     });
     
     return CGRectIntersectsRect(checkView.frame, screen);
@@ -73,7 +73,15 @@
 
 - (BOOL) checkIntersectionWithView:(UIView *)checkView viewArray:(NSArray*)viewArray {
     for (UIView *view in viewArray) {
-        if(CGRectIntersectsRect(checkView.frame, view.frame)) {
+        CGRect viewFrame = view.frame;
+        CGRect checkFrame = checkView.frame;
+        //checkFrame.size.height *= 0.5f;
+        /*const float k = 0.1f;
+        viewFrame.origin.x += k * viewFrame.size.width;
+        viewFrame.origin.y += k * viewFrame.size.height;
+        viewFrame.size.width *= k;
+        viewFrame.size.height *= k;*/
+        if(CGRectIntersectsRect(checkFrame, viewFrame)) {
             return YES;
         }
     }
@@ -173,6 +181,7 @@
             }
         }
 
+        //tagLabel.backgroundColor = [UIColor yellowColor];
         [tagViews addObject:tagLabel];
     }
 
