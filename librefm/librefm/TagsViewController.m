@@ -7,6 +7,7 @@
 //
 
 #import "TagsViewController.h"
+#import "HPLTagCloudGenerator.h"
 
 @interface TagsViewController ()
 
@@ -14,19 +15,39 @@
 
 @implementation TagsViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+
+    dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // This runs in a background thread
+        
+        // dictionary of tags
+        NSDictionary *tagDict = @{@"tag1": @3,
+                                  @"tag2": @5,
+                                  @"tag3": @7,
+                                  @"tag4": @2};
+        
+        
+        HPLTagCloudGenerator *tagGenerator = [[HPLTagCloudGenerator alloc] init];
+        tagGenerator.size = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
+        tagGenerator.tagDict = tagDict;
+        
+        NSArray *views = [tagGenerator generateTagViews];
+        
+        dispatch_async( dispatch_get_main_queue(), ^{
+            for(UIView *v in views) {
+                
+                // FIXME: without this hack tags become invisible
+                CGRect rect = v.frame;
+                rect.size.height *= 1.01f;
+                v.frame = rect;
+                
+                [self.view addSubview:v];
+            }
+        });
+    });
 }
 
 - (void)didReceiveMemoryWarning
