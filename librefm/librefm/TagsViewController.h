@@ -12,6 +12,8 @@
 
 @interface TagsViewController : BaseTabViewController
 
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
 - (void)librefmDidLoadTopTags:(BOOL)ok
                          tags:(NSDictionary*)tags;
 

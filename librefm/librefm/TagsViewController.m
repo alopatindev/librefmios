@@ -21,6 +21,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.scrollView.showsHorizontalScrollIndicator = NO;
+    self.scrollView.showsVerticalScrollIndicator = NO;
+    CGSize size = self.scrollView.frame.size;
+    size.width *= 2.0f;
+    size.height *= 2.0f;
+    self.scrollView.contentSize = size;
+    [self.scrollView setContentOffset:CGPointMake(40.0f, 140.0f) animated:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -44,14 +52,14 @@
 {
     for(UILabel *v in self.tagLabels) {
         v.hidden = YES;
-        [self.view bringSubviewToFront:v];
+        [self.scrollView bringSubviewToFront:v];
         [v removeFromSuperview];
     }
     [self.tagLabels removeAllObjects];
 
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         HPLTagCloudGenerator *tagGenerator = [[HPLTagCloudGenerator alloc] init];
-        tagGenerator.size = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
+        tagGenerator.size = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height);
         tagGenerator.tagDict = tagDict;
         
         self.tagLabels = [tagGenerator generateTagViews];
@@ -64,7 +72,7 @@
                 
                 v.textColor = [UIColor customBlueColor];
                 [v setNeedsDisplay];
-                [self.view addSubview:v];
+                [self.scrollView addSubview:v];
             }
         });
     });
@@ -80,6 +88,7 @@
     
     if ([tag isEqualToString:@"+"]) {
         NSLog(@"adding a tag");
+        //TODO
     } else {
         [UIView transitionWithView:self.view
                           duration:0.003

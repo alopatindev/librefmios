@@ -201,9 +201,24 @@
                     <view key="view" contentMode="scaleToFill" id="URs-Hu-yh4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8hm-7h-VlC">
+                                <rect key="frame" x="48" y="121" width="205" height="344"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="8hm-7h-VlC" firstAttribute="top" secondItem="lpR-0J-nBv" secondAttribute="bottom" id="67S-S2-siB"/>
+                            <constraint firstAttribute="trailing" secondItem="8hm-7h-VlC" secondAttribute="trailing" id="I5n-cA-ung"/>
+                            <constraint firstItem="zK6-UY-O2j" firstAttribute="top" secondItem="8hm-7h-VlC" secondAttribute="bottom" id="Ka2-2G-G6K"/>
+                            <constraint firstItem="8hm-7h-VlC" firstAttribute="leading" secondItem="URs-Hu-yh4" secondAttribute="leading" id="gZQ-1r-s0M"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Tags" id="Mk5-eu-UPD"/>
+                    <connections>
+                        <outlet property="scrollView" destination="8hm-7h-VlC" id="po0-Hh-Ojj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2aN-HP-wk6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
