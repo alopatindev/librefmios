@@ -74,16 +74,22 @@
 {
     UILabel *label = (UILabel *)recognizer.view;
     label.textColor = [UIColor customYellowColor];
-    NSLog(@"tagViewTapped '%@'", label.text);
     
-    [UIView transitionWithView:self.view
-                      duration:0.003
-                       options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void){
-                        [super viewWillAppear:YES];
-                    } completion:^(BOOL finished){
-                        [self switchToTabIndex:TabPlayer];
-                    }];
+    NSString *tag = label.text;
+    NSLog(@"tagViewTapped '%@'", tag);
+    
+    if ([tag isEqualToString:@"+"]) {
+        NSLog(@"adding a tag");
+    } else {
+        [UIView transitionWithView:self.view
+                          duration:0.003
+                           options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^(void){
+                            [super viewWillAppear:YES];
+                        } completion:^(BOOL finished){
+                            [self switchToTabIndex:TabPlayer];
+                        }];
+    }
 
     /*NSMutableDictionary *tagDict = [NSMutableDictionary new];
     for (int i = 0 ; i < rand() % 10 + 50; ++i)

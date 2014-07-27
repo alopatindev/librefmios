@@ -139,55 +139,79 @@
     min--;
 
     CGFloat maxWidth = [[UIScreen mainScreen] bounds].size.width - 30;
+    
+    NSString *tag = @"+";
+    UIFont *tagFont = [UIFont systemFontOfSize:maxFontsize * 2.0f];
+    CGSize size = [tag sizeWithAttributes:@{ NSFontAttributeName : tagFont }];
+    CGPoint center = [self getNextPosition];
+    UILabel *tagLabel = [[UILabel alloc] initWithFrame:CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height)];
+    tagLabel.text = tag;
+    tagLabel.font = tagFont;
+    [tagViews addObject:tagLabel];
 
     for (NSString *tag in sortedTags) {
-
-        int count = [(NSNumber *) [smoothedTagDict objectForKey:tag] intValue];
-        float fontSize = ceilf(maxFontsize * (count - min) / (max - min)) + MIN_FONT_SIZE;
-
-        UIFont *tagFont = [UIFont systemFontOfSize:fontSize];
-        CGSize size = [tag sizeWithFont:tagFont];
-
-        while (size.width >= maxWidth) {
-            maxFontsize-=2;
-            fontSize = ceilf(maxFontsize * (count - min) / (max - min)) + MIN_FONT_SIZE;
-
-            tagFont = [UIFont systemFontOfSize:fontSize];
-            size = [tag sizeWithFont:tagFont];
-        }
-
-        // check intersections
-        CGPoint center = [self getNextPosition];
-        UILabel *tagLabel = [[UILabel alloc] initWithFrame:CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height)];
-
-        tagLabel.text = tag;
-        tagLabel.font = tagFont;
-
-        int try = 0;
-        while([self checkIntersectionWithView:tagLabel viewArray:tagViews]) {
-            CGPoint center = [self getNextPosition];
-            tagLabel.frame = CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height);
-
-            if (try++ >= MAX_POSITION_TRIES || [self fitsScreen:tagLabel] == NO) {
-                try = 0;
-                while([self checkIntersectionWithView:tagLabel viewArray:tagViews] || [self fitsScreen:tagLabel] == NO) {
-                    CGPoint center = [self getNextRandomPositionForView:tagLabel];
-                    tagLabel.frame = CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height);
-                    if (try++ >= MAX_POSITION_TRIES) {
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-
-        //tagLabel.backgroundColor = [UIColor yellowColor];
+        UILabel *tagLabel = [self generateTag:tag
+                              smoothedTagDict:smoothedTagDict
+                                          max:max
+                                          min:min
+                                  maxFontsize:&maxFontsize
+                                     maxWidth:maxWidth
+                                     tagViews:tagViews];
         [tagViews addObject:tagLabel];
     }
 
     return tagViews;
 }
 
-
+- (UILabel *) generateTag:(NSString *)tag
+          smoothedTagDict:(NSMutableDictionary *)smoothedTagDict
+                      max:(int)max
+                      min:(int)min
+              maxFontsize:(float *)maxFontsize
+                 maxWidth:(CGFloat)maxWidth
+                 tagViews:(NSMutableArray *)tagViews
+{
+    int count = [(NSNumber *) [smoothedTagDict objectForKey:tag] intValue];
+    float fontSize = ceilf(*maxFontsize * (count - min) / (max - min)) + MIN_FONT_SIZE;
+    
+    UIFont *tagFont = [UIFont systemFontOfSize:fontSize];
+    CGSize size = [tag sizeWithAttributes:@{ NSFontAttributeName : tagFont }];
+    
+    while (size.width >= maxWidth) {
+        *maxFontsize -= 2;
+        fontSize = ceilf(*maxFontsize * (count - min) / (max - min)) + MIN_FONT_SIZE;
+        
+        tagFont = [UIFont systemFontOfSize:fontSize];
+        size = [tag sizeWithAttributes:@{ NSFontAttributeName : tagFont }];
+    }
+    
+    // check intersections
+    CGPoint center = [self getNextPosition];
+    UILabel *tagLabel = [[UILabel alloc] initWithFrame:CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height)];
+    
+    tagLabel.text = tag;
+    tagLabel.font = tagFont;
+    
+    int try = 0;
+    while([self checkIntersectionWithView:tagLabel viewArray:tagViews]) {
+        CGPoint center = [self getNextPosition];
+        tagLabel.frame = CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height);
+        
+        if (try++ >= MAX_POSITION_TRIES || [self fitsScreen:tagLabel] == NO) {
+            try = 0;
+            while([self checkIntersectionWithView:tagLabel viewArray:tagViews] || [self fitsScreen:tagLabel] == NO) {
+                CGPoint center = [self getNextRandomPositionForView:tagLabel];
+                tagLabel.frame = CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height);
+                if (try++ >= MAX_POSITION_TRIES) {
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    
+    //tagLabel.backgroundColor = [UIColor yellowColor];
+    return tagLabel;
+}
 
 @end
