@@ -9,6 +9,9 @@
 #import "TagsViewController.h"
 #import "HPLTagCloudGenerator.h"
 #import "UIColor+CustomColors.h"
+#import "AppDelegate.h"
+#import "LibrefmConnection.h"
+#import "PlayerViewController.h"
 
 @interface TagsViewController ()
 
@@ -18,9 +21,16 @@
 
 @implementation TagsViewController
 
+__weak LibrefmConnection *_librefmConnection;
+__weak PlayerViewController *_playerViewController;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    _librefmConnection = appDelegate.librefmConnection;
+    _playerViewController = appDelegate.playerViewController;
 
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.showsVerticalScrollIndicator = NO;
@@ -95,8 +105,10 @@
                            options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionTransitionCrossDissolve
                         animations:^(void){
                             [super viewWillAppear:YES];
-                        } completion:^(BOOL finished){
+                        } completion:^(BOOL finished) {
                             [self switchToTabIndex:TabPlayer];
+                            [_playerViewController clearPlaylist];
+                            [_librefmConnection radioTune:tag];
                         }];
     }
 

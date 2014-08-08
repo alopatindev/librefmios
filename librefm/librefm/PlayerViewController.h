@@ -21,11 +21,18 @@
 - (IBAction)pauseButtonClicked:(id)sender;
 - (IBAction)nextButtonClicked:(id)sender;
 
-- (void)librefmDidLogin:(BOOL)ok error:(NSError*)error;
+- (void)librefmDidLogin:(BOOL)ok error:(NSError *)error;
 - (void)librefmDidSignUp:(BOOL)ok
-                   error:(NSError*)error
-                username:(NSString*)username
-                password:(NSString*)password
-                   email:(NSString*)email;
+                   error:(NSError *)error
+                username:(NSString *)username
+                password:(NSString *)password
+                   email:(NSString *)email;
+
+- (void)clearPlaylist;
+- (void)addToPlaylistURL:(NSString *)url
+                  artist:(NSString *)artist
+                   album:(NSString *)album
+                   title:(NSString *)title
+                imageURL:(NSString *)imageURL;
 
 @end

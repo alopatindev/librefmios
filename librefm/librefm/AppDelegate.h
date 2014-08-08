@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "LibrefmDelegate.h"
 #import "LibrefmConnection.h"
+#import "TagsViewController.h"
+#import "PlayerViewController.h"
 
 @interface AppDelegate : UIResponder <LibrefmDelegate,
                                       UIApplicationDelegate,
@@ -16,5 +18,8 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) LibrefmConnection *librefmConnection;
+
+@property (strong, nonatomic) TagsViewController *tagsViewController;
+@property (strong, nonatomic) PlayerViewController *playerViewController;
 
 @end

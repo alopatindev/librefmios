@@ -41,17 +41,14 @@ CGFloat _presentationViewHeightOffset;
 
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     _librefmConnection = appDelegate.librefmConnection;
-    //[self loginButtonClicked:nil];
-    
-//    [_librefmConnection getTopTags];
 
     _audioPlayer = [IDZAQAudioPlayer new];
     _audioPlayer.delegate = self;
     
-    NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
+    //NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
     //[_audioPlayer queueURL:oggUrl];
 //    [_audioPlayer queueURLString:@"http://zalil.ru/d/tf/00a61d009813661117c43caa5996e1eb/14035400/aceaH/storage5-7-4-455147/little.ogg"];
-    [_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
+    //[_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
     //[_audioPlayer queueURLString:@"http://gigue.rrbone.net/24765.ogg2"];
 
     //[_audioPlayer play];
@@ -167,7 +164,6 @@ CGFloat _presentationViewHeightOffset;
             [_loginViewController dismissViewControllerAnimated:YES completion:nil];
             _loginViewController = nil;
         }
-        [_librefmConnection radioTune:@"rock"];  // TODO DEBUG
     } else {
         [_loginViewController animateError:[error domain]];
     }
@@ -193,6 +189,22 @@ CGFloat _presentationViewHeightOffset;
                 break;
         }
     }
+}
+
+- (void)clearPlaylist
+{
+    [_audioPlayer clearPlaylist];
+    // TODO
+}
+
+- (void)addToPlaylistURL:(NSString *)url
+                  artist:(NSString *)artist
+                   album:(NSString *)album
+                   title:(NSString *)title
+                imageURL:(NSString *)imageURL
+{
+    [_audioPlayer queueURLString:url];
+    // TODO
 }
 
 - (void)audioPlayerDidFinishPlaying:(id<IDZAudioPlayer>)player

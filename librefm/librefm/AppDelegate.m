@@ -11,13 +11,8 @@
 #import "NetworkManager.h"
 #import "TabBarViewController.h"
 #import "BaseTabViewController.h"
-#import "TagsViewController.h"
-#import "PlayerViewController.h"
 
 @implementation AppDelegate
-
-TagsViewController *_tagsViewController;
-PlayerViewController *_playerViewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -33,15 +28,15 @@ PlayerViewController *_playerViewController;
     //AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareIOBufferDuration, sizeof(bufferLength), &bufferLength);
 
     (void) [NetworkManager instance];
-
-    _librefmConnection = [LibrefmConnection new];
-    _librefmConnection.delegate = self;
-    [_librefmConnection getTopTags];
-
+    
     TabBarViewController *tabBarController = (TabBarViewController *)self.window.rootViewController;
     tabBarController.delegate = self;
     _tagsViewController = tabBarController.viewControllers[TabTags];
     _playerViewController = tabBarController.viewControllers[TabPlayer];
+
+    _librefmConnection = [LibrefmConnection new];
+    _librefmConnection.delegate = self;
+    [_librefmConnection getTopTags];
     
     return YES;
 }
@@ -94,20 +89,24 @@ PlayerViewController *_playerViewController;
 - (void)librefmDidLoadPlaylist:(NSDictionary*)playlist ok:(BOOL)ok error:(NSError*)error
 {
     if (ok) {
-        NSString *title = playlist[@"title"];
-        NSString *creator = playlist[@"creator"];
+        //NSString *title = playlist[@"title"];
+        //NSString *creator = playlist[@"creator"];
         //@"link", @"date"
         NSArray *track = playlist[@"track"];
         for (NSDictionary *t in track) {
-            NSString *creator = t[@"creator"];
+            NSString *artist = t[@"creator"];
             NSString *album = t[@"album"];
             NSString *title = t[@"title"];
             //NSDictionary* extension = t[@"extension"]; //artist info
             //@"identifier" : @"0000"
-            NSString *location = t[@"location"];
+            NSString *url = t[@"location"];
             NSString *image = t[@"image"];
             //NSNumber *duration = t[@"duration"]; // always 180000?
-            NSLog(@"track '%@' '%@' '%@'", creator, title, location);
+            [_playerViewController addToPlaylistURL:url
+                                             artist:artist
+                                              album:album
+                                              title:title
+                                           imageURL:image];
         }
     }
 }
