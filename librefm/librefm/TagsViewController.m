@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import "LibrefmConnection.h"
 #import "PlayerViewController.h"
+#import "AddTagViewController.h"
 
 @interface TagsViewController ()
 
@@ -23,6 +24,7 @@
 
 __weak LibrefmConnection *_librefmConnection;
 __weak PlayerViewController *_playerViewController;
+AddTagViewController *_addTagViewController;
 
 - (void)viewDidLoad
 {
@@ -97,8 +99,7 @@ __weak PlayerViewController *_playerViewController;
     NSLog(@"tagViewTapped '%@'", tag);
     
     if ([tag isEqualToString:@"+"]) {
-        NSLog(@"adding a tag");
-        //TODO
+        [self openAddTagScreen];
     } else {
         [UIView transitionWithView:self.view
                           duration:0.003
@@ -116,6 +117,18 @@ __weak PlayerViewController *_playerViewController;
     for (int i = 0 ; i < rand() % 10 + 50; ++i)
         tagDict[[NSString stringWithFormat:@"%d", i]] = @(i + (rand() % 2));
     [self updateTags:tagDict];*/
+}
+
+- (void)openAddTagScreen
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    _addTagViewController = [storyboard instantiateViewControllerWithIdentifier:@"AddTagViewController"];
+    _addTagViewController.transitioningDelegate = self;
+    _addTagViewController.modalPresentationStyle = UIModalPresentationCustom;
+    //_addTagViewController.librefmConnection = _librefmConnection;
+    //self.presentationViewHeightOffset = 550.0;
+    self.presentationViewHeightOffset = 450.0;
+    [self presentViewController:_addTagViewController animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning

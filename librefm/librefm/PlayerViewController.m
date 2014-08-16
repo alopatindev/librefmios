@@ -19,9 +19,6 @@
 #import "LoginViewController.h"
 #import "SignupViewController.h"
 
-#import "DismissingAnimator.h"
-#import "PresentingAnimator.h"
-
 @interface PlayerViewController ()
 
 @end
@@ -32,12 +29,11 @@ id<IDZAudioPlayer> _audioPlayer;
 __weak LibrefmConnection *_librefmConnection;
 LoginViewController *_loginViewController;
 SignupViewController *_signupViewController;
-CGFloat _presentationViewHeightOffset;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _presentationViewHeightOffset = 0.0;
+    self.presentationViewHeightOffset = 0.0;
 
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     _librefmConnection = appDelegate.librefmConnection;
@@ -118,7 +114,7 @@ CGFloat _presentationViewHeightOffset;
     _loginViewController.transitioningDelegate = self;
     _loginViewController.modalPresentationStyle = UIModalPresentationCustom;
     _loginViewController.librefmConnection = _librefmConnection;
-    _presentationViewHeightOffset = 280.0;
+    self.presentationViewHeightOffset = 280.0;
     [self presentViewController:_loginViewController animated:YES completion:nil];
 }
 
@@ -129,7 +125,7 @@ CGFloat _presentationViewHeightOffset;
     _signupViewController.transitioningDelegate = self;
     _signupViewController.modalPresentationStyle = UIModalPresentationCustom;
     _signupViewController.librefmConnection = _librefmConnection;
-    _presentationViewHeightOffset = 220.0;
+    self.presentationViewHeightOffset = 220.0;
     [self presentViewController:_signupViewController animated:YES completion:nil];
 }
 
@@ -247,18 +243,6 @@ CGFloat _presentationViewHeightOffset;
     
     self.statusLabel.text = [NSString stringWithFormat:@"Status: %@", str];
     self.urlLabel.text = [url absoluteString];
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-                                                                  presentingController:(UIViewController *)presenting
-                                                                      sourceController:(UIViewController *)source
-{
-    return [[PresentingAnimator alloc] initWithHeightOffset:_presentationViewHeightOffset];
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
-{
-    return [DismissingAnimator new];
 }
 
 @end

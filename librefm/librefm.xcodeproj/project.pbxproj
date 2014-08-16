@@ -10,6 +10,7 @@
 		BA0DC6CD197AB44300AED271 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0DC6CC197AB44300AED271 /* SignupViewController.m */; };
 		BA0DC6D9197C6E4600AED271 /* TagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0DC6D8197C6E4600AED271 /* TagsViewController.m */; };
 		BA0DC6DE197C6F1100AED271 /* HPLTagCloudGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0DC6DD197C6F1100AED271 /* HPLTagCloudGenerator.m */; };
+		BA4D6A6F199F8F9B00F0E671 /* AddTagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4D6A6E199F8F9B00F0E671 /* AddTagViewController.m */; };
 		BA628A2F1983F5C800AAA264 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA628A2E1983F5C800AAA264 /* TabBarViewController.m */; };
 		BA628A321983FA7600AAA264 /* BaseTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA628A311983FA7600AAA264 /* BaseTabViewController.m */; };
 		BAAD6B8E195A4A6E00397F4D /* BaseModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */; };
@@ -83,6 +84,8 @@
 		BA0DC6D8197C6E4600AED271 /* TagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagsViewController.m; sourceTree = "<group>"; };
 		BA0DC6DC197C6F1100AED271 /* HPLTagCloudGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPLTagCloudGenerator.h; sourceTree = "<group>"; };
 		BA0DC6DD197C6F1100AED271 /* HPLTagCloudGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPLTagCloudGenerator.m; sourceTree = "<group>"; };
+		BA4D6A6D199F8F9B00F0E671 /* AddTagViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddTagViewController.h; sourceTree = "<group>"; };
+		BA4D6A6E199F8F9B00F0E671 /* AddTagViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddTagViewController.m; sourceTree = "<group>"; };
 		BA628A2D1983F5C800AAA264 /* TabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarViewController.h; sourceTree = "<group>"; };
 		BA628A2E1983F5C800AAA264 /* TabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarViewController.m; sourceTree = "<group>"; };
 		BA628A301983FA7600AAA264 /* BaseTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTabViewController.h; sourceTree = "<group>"; };
@@ -278,6 +281,8 @@
 				BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */,
 				BA628A301983FA7600AAA264 /* BaseTabViewController.h */,
 				BA628A311983FA7600AAA264 /* BaseTabViewController.m */,
+				BA4D6A6D199F8F9B00F0E671 /* AddTagViewController.h */,
+				BA4D6A6E199F8F9B00F0E671 /* AddTagViewController.m */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -596,6 +601,7 @@
 				BADD28791959F12E0057744B /* POPSpringAnimation.mm in Sources */,
 				BA0DC6CD197AB44300AED271 /* SignupViewController.m in Sources */,
 				BA628A321983FA7600AAA264 /* BaseTabViewController.m in Sources */,
+				BA4D6A6F199F8F9B00F0E671 /* AddTagViewController.m in Sources */,
 				BAFD9E57194CDF98009718B2 /* AppDelegate.m in Sources */,
 				BADD282D1959D72A0057744B /* LoginViewController.m in Sources */,
 				BADD287B1959F12E0057744B /* TransformationMatrix.cpp in Sources */,

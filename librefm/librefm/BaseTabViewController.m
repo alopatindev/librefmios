@@ -8,6 +8,9 @@
 
 #import "BaseTabViewController.h"
 
+#import "DismissingAnimator.h"
+#import "PresentingAnimator.h"
+
 @interface BaseTabViewController ()
 
 @end
@@ -52,6 +55,18 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                  presentingController:(UIViewController *)presenting
+                                                                      sourceController:(UIViewController *)source
+{
+    return [[PresentingAnimator alloc] initWithHeightOffset:_presentationViewHeightOffset];
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    return [DismissingAnimator new];
 }
 
 /*

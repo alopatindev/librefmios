@@ -224,6 +224,57 @@
             </objects>
             <point key="canvasLocation" x="518" y="-570"/>
         </scene>
+        <!--Add Tag View Controller-->
+        <scene sceneID="2yk-U5-CqJ">
+            <objects>
+                <viewController storyboardIdentifier="AddTagViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ay5-p2-4Dp" customClass="AddTagViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ked-ad-ES5"/>
+                        <viewControllerLayoutGuide type="bottom" id="CqQ-w8-1cl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Qev-Yu-Mt8">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Tag" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SaA-hm-cen">
+                                <rect key="frame" x="75" y="119" width="170" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="didShowKeyboard:" destination="ay5-p2-4Dp" eventType="editingDidBegin" id="tyQ-Nb-WJc"/>
+                                    <action selector="updateButtons" destination="ay5-p2-4Dp" eventType="editingChanged" id="ddk-o1-Kcr"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ay7-Z0-SQ9" customClass="FlatButton">
+                                <rect key="frame" x="128" y="196" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Add">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="CqQ-w8-1cl" firstAttribute="top" secondItem="Ay7-Z0-SQ9" secondAttribute="bottom" constant="10" id="GMG-Wv-R3j"/>
+                            <constraint firstAttribute="trailing" secondItem="Ay7-Z0-SQ9" secondAttribute="trailing" constant="50" id="PGH-PQ-rRr"/>
+                            <constraint firstAttribute="trailing" secondItem="SaA-hm-cen" secondAttribute="trailing" constant="10" id="UFe-LN-gMI"/>
+                            <constraint firstItem="SaA-hm-cen" firstAttribute="top" secondItem="ked-ad-ES5" secondAttribute="bottom" constant="10" id="fon-Df-gBH"/>
+                            <constraint firstItem="Ay7-Z0-SQ9" firstAttribute="top" relation="greaterThanOrEqual" secondItem="SaA-hm-cen" secondAttribute="bottom" constant="10" id="lEl-Qa-nGh"/>
+                            <constraint firstItem="Ay7-Z0-SQ9" firstAttribute="leading" secondItem="Qev-Yu-Mt8" secondAttribute="leading" constant="50" id="vea-db-g3G"/>
+                            <constraint firstItem="SaA-hm-cen" firstAttribute="leading" secondItem="Qev-Yu-Mt8" secondAttribute="leading" constant="10" id="w3K-8a-Yn0"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="addButton" destination="Ay7-Z0-SQ9" id="0pD-Tt-xy0"/>
+                        <outlet property="tagTextField" destination="SaA-hm-cen" id="L4e-hc-eok"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wqH-g4-4r6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="884" y="-839"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="JWC-oO-f0E">
             <objects>

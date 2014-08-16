@@ -11,7 +11,6 @@
 #import "BaseTabViewController.h"
 
 @interface PlayerViewController : BaseTabViewController <IDZAudioPlayerDelegate,
-                                                         UIViewControllerTransitioningDelegate,
                                                          UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;

@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BaseTabViewController : UIViewController <UITabBarControllerDelegate>
+@interface BaseTabViewController : UIViewController <UITabBarControllerDelegate,
+                                                     UIViewControllerTransitioningDelegate>
+
+@property CGFloat presentationViewHeightOffset;
 
 - (void)switchToTab:(UIViewController *)controller;
 - (void)switchToTabIndex:(NSUInteger)controllerIndex;
