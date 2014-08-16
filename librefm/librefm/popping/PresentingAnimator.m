@@ -47,7 +47,8 @@ CGFloat _heightOffset;
     //CGFloat transitionRatio = transitionHeight / transitionWidth;
     //if (transitionRatio < 1.7) {
     if ([Utils aspectRatio] < 1.7) {
-        yOffset *= 0.7;
+        //yOffset *= 0.7;
+        yOffset -= 88;
     }
     toView.frame = CGRectMake(0,
                               0,
