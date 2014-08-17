@@ -17,6 +17,7 @@
 @interface TagsViewController ()
 
 @property NSMutableArray *tagLabels;
+@property (atomic) NSMutableDictionary *tagDict;
 
 @end
 
@@ -25,6 +26,28 @@
 __weak LibrefmConnection *_librefmConnection;
 __weak PlayerViewController *_playerViewController;
 AddTagViewController *_addTagViewController;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        [self setup];
+    }
+    return self;
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        [self setup];
+    }
+    return self;
+}
+
+- (void)setup
+{
+    self.customTags = [NSMutableArray new];
+    // TODO: load custom tags
+}
 
 - (void)viewDidLoad
 {
@@ -54,14 +77,31 @@ AddTagViewController *_addTagViewController;
                          tags:(NSDictionary*)tags
 {
     if (ok) {
-        [self updateTags:tags];
+        [self updateTags:(NSMutableDictionary*)tags];
     } else {
         NSLog(@"librefmDidLoadTopTags failed");
     }
 }
 
-- (void)updateTags:(NSDictionary*)tagDict
+- (void)refresh
 {
+    if (self.tagDict != nil) {
+        [self updateTags:self.tagDict];
+    }
+}
+
+- (void)addTag:(NSString*)tag
+{
+    [self.customTags addObject:tag];
+    // TODO: save
+
+    [self refresh];
+}
+
+- (void)updateTags:(NSMutableDictionary*)tagDict
+{
+    self.tagDict = tagDict;
+
     for(UILabel *v in self.tagLabels) {
         v.hidden = YES;
         [self.scrollView bringSubviewToFront:v];
@@ -70,9 +110,14 @@ AddTagViewController *_addTagViewController;
     [self.tagLabels removeAllObjects];
 
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (NSString *tag in self.customTags) {
+            [self.tagDict removeObjectForKey:tag];
+        }
+
         HPLTagCloudGenerator *tagGenerator = [[HPLTagCloudGenerator alloc] init];
         tagGenerator.size = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height);
-        tagGenerator.tagDict = tagDict;
+        tagGenerator.tagDict = (NSDictionary*) self.tagDict;
+        tagGenerator.customTags = self.customTags;
         
         self.tagLabels = [tagGenerator generateTagViews];
         
@@ -124,9 +169,9 @@ AddTagViewController *_addTagViewController;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     _addTagViewController = [storyboard instantiateViewControllerWithIdentifier:@"AddTagViewController"];
     _addTagViewController.transitioningDelegate = self;
+    _addTagViewController.delegate = self;
     _addTagViewController.modalPresentationStyle = UIModalPresentationCustom;
     //_addTagViewController.librefmConnection = _librefmConnection;
-    //self.presentationViewHeightOffset = 550.0;
     self.presentationViewHeightOffset = 450.0;
     [self presentViewController:_addTagViewController animated:YES completion:nil];
 }

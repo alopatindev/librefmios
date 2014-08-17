@@ -29,6 +29,12 @@
     [self updateButtons];
 }
 
+- (IBAction)onAddClicked
+{
+    [self.delegate addTag:self.tagTextField.text];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

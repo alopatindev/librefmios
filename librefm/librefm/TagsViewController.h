@@ -12,9 +12,12 @@
 
 @interface TagsViewController : BaseTabViewController
 
+@property NSMutableArray *customTags;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 - (void)librefmDidLoadTopTags:(BOOL)ok
                          tags:(NSDictionary*)tags;
+
+- (void)addTag:(NSString*)tag;
 
 @end

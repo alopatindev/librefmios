@@ -148,6 +148,18 @@
     tagLabel.text = tag;
     tagLabel.font = tagFont;
     [tagViews addObject:tagLabel];
+    
+    for (NSString* tag in self.customTags) {
+        smoothedTagDict[tag] = @(max);
+        UILabel *tagLabel = [self generateTag:tag
+                              smoothedTagDict:smoothedTagDict
+                                          max:max
+                                          min:min
+                                  maxFontsize:&maxFontsize
+                                     maxWidth:maxWidth
+                                     tagViews:tagViews];
+        [tagViews addObject:tagLabel];
+    }
 
     for (NSString *tag in sortedTags) {
         UILabel *tagLabel = [self generateTag:tag
@@ -197,7 +209,7 @@
         CGPoint center = [self getNextPosition];
         tagLabel.frame = CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height);
         
-        if (try++ >= MAX_POSITION_TRIES || [self fitsScreen:tagLabel] == NO) {
+        /*if (try++ >= MAX_POSITION_TRIES || [self fitsScreen:tagLabel] == NO) {
             try = 0;
             while([self checkIntersectionWithView:tagLabel viewArray:tagViews] || [self fitsScreen:tagLabel] == NO) {
                 CGPoint center = [self getNextRandomPositionForView:tagLabel];
@@ -207,7 +219,7 @@
                 }
             }
             break;
-        }
+        }*/
     }
     
     //tagLabel.backgroundColor = [UIColor yellowColor];

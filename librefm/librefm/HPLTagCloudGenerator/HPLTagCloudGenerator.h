@@ -16,6 +16,8 @@ static const int MAX_POSITION_TRIES = 30;
 // Dictionary of tags -> # of occurances
 @property NSDictionary *tagDict;
 
+@property NSArray *customTags;
+
 // The size of the view that
 // we are creating a tag cloud for
 @property CGSize size;

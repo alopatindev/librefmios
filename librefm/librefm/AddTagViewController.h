@@ -9,12 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "BaseModalViewController.h"
 #import "FlatButton.h"
+#import "TagsViewController.h"
 
 @interface AddTagViewController : BaseModalViewController
 
 @property (weak, nonatomic) IBOutlet FlatButton *addButton;
 @property (weak, nonatomic) IBOutlet UITextField *tagTextField;
+@property (weak, nonatomic) TagsViewController *delegate;
 
 - (IBAction)updateButtons;
+- (IBAction)onAddClicked;
 
 @end
