@@ -190,6 +190,7 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)prepareToPlay
 {
+    NSLog(@"prepareToPlay");
     for(int i = 0; i < IDZ_BUFFER_COUNT; ++i)
     {
         [self readBuffer:mBuffers[i]];
@@ -200,7 +201,8 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)playIfQueuedPlayback
 {
-    if (_queuedPlayback == YES) {
+    NSLog(@"playIfQueuedPlayback");
+    if (_queuedPlayback == YES && self.playing == YES) {
         return [self play];
     }
     return NO;
@@ -208,6 +210,7 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)play
 {
+    self.playing = YES;
     _queuedPlayback = YES;
     if (mDecoder.bufferingState == BufferingStateReadyToRead) {
         if (_initializedAudio == NO) {
@@ -231,10 +234,15 @@ static void IDZPropertyListener(void* inUserData,
         default:
             [self prepareToPlay];
     }
+    if (self.playing == NO)
+    {
+        [self stop];
+        return NO;
+    }
     OSStatus osStatus = AudioQueueStart(mQueue, NULL);
     NSAssert(osStatus == noErr, @"AudioQueueStart failed");
     self.state = IDZAudioPlayerStatePlaying;
-    self.playing = YES;
+    //self.playing = YES;
     _queuedPlayback = NO;
     return (osStatus == noErr);
     
@@ -257,6 +265,9 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)pause
 {
+    NSLog(@"pause");
+    self.playing = NO;
+    //_shouldPause = YES;
     _queuedPlayback = NO;
     if(self.state != IDZAudioPlayerStatePlaying) return NO;
     OSStatus osStatus = AudioQueuePause(mQueue);
@@ -267,6 +278,7 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)stop
 {
+    NSLog(@"stop");
     _queuedPlayback = NO;
 
     if (_initializedAudio == NO) {
@@ -277,6 +289,8 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)stop_:(BOOL)immediate
 {
+    NSLog(@"stop_");
+    //self.playing = NO;
     self.state = IDZAudioPlayerStateStopping;
     OSStatus osStatus = AudioQueueStop(mQueue, immediate);
     _initializedAudio = NO;
@@ -287,7 +301,11 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)next
 {
+    if (self.playing == NO)
+        return NO;
+
     if ([mDecoder isNextURLAvailable] == YES) {
+        NSLog(@"next");
         [self stop];
         _queuedPlayback = YES;
         if ([mDecoder prepareToPlayNextURL] == YES) {

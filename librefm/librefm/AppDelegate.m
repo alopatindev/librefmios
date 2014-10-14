@@ -34,6 +34,8 @@
     _tagsViewController = tabBarController.viewControllers[TabTags];
     _playerViewController = tabBarController.viewControllers[TabPlayer];
 
+    [application beginReceivingRemoteControlEvents];
+    
     _librefmConnection = [LibrefmConnection new];
     _librefmConnection.delegate = self;
     [_librefmConnection getTopTags];
@@ -67,6 +69,36 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [NetworkManager releaseResources];
+    [application endReceivingRemoteControlEvents];
+}
+
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event
+{
+    if (event.type == UIEventTypeRemoteControl)
+    {
+        switch (event.subtype)
+        {
+            case UIEventSubtypeRemoteControlNextTrack:
+                NSLog(@"next track");
+                [_playerViewController nextButtonClicked:nil];
+                break;
+            case UIEventSubtypeRemoteControlPlay:
+                NSLog(@"play");
+                [_playerViewController playButtonClicked:nil];
+                break;
+            case UIEventSubtypeRemoteControlPause:
+                NSLog(@"pause");
+                [_playerViewController pauseButtonClicked:nil];
+                break;
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                NSLog(@"toggle play pause");
+                [_playerViewController togglePlayPauseButtonClicked:nil];
+                break;
+            default:
+                NSLog(@"remoteControlReceivedWithEvent %d", event.subtype);
+                break;
+        }
+    }
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController

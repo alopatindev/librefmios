@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *urlLabel;
 
 - (IBAction)playButtonClicked:(id)sender;
+- (IBAction)togglePlayPauseButtonClicked:(id)sender;
 - (IBAction)pauseButtonClicked:(id)sender;
 - (IBAction)nextButtonClicked:(id)sender;
 
