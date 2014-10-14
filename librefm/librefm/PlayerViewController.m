@@ -53,6 +53,55 @@ SignupViewController *_signupViewController;
     [self addParallaxEffectWithDepth:12 foreground:NO];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"viewDidAppear");
+
+    [super viewDidAppear:animated];
+    
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    [self becomeFirstResponder];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    NSLog(@"viewWillDisappear");
+
+    [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
+    [self resignFirstResponder];
+    
+    [super viewWillDisappear:animated];
+}
+
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event
+{
+    if (event.type == UIEventTypeRemoteControl)
+    {
+        switch (event.subtype)
+        {
+            case UIEventSubtypeRemoteControlNextTrack:
+                NSLog(@"next track");
+                [_audioPlayer next];
+                break;
+            case UIEventSubtypeRemoteControlPlay:
+                NSLog(@"play");
+                [_audioPlayer play];
+                break;
+            case UIEventSubtypeRemoteControlPause:
+                NSLog(@"pause");
+                [_audioPlayer pause];
+                break;
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                NSLog(@"toggle play pause");
+                [_audioPlayer togglePlayPause];
+                break;
+            default:
+                NSLog(@"remoteControlReceivedWithEvent %d", event.subtype);
+                break;
+        }
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

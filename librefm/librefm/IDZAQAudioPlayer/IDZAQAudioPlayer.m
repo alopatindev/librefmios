@@ -226,6 +226,7 @@ static void IDZPropertyListener(void* inUserData,
             return NO;
         case IDZAudioPlayerStatePaused:
         case IDZAudioPlayerStatePrepared:
+        case IDZAudioPlayerStateStopping:
             break;
         default:
             [self prepareToPlay];
@@ -237,6 +238,21 @@ static void IDZPropertyListener(void* inUserData,
     _queuedPlayback = NO;
     return (osStatus == noErr);
     
+}
+
+- (BOOL)togglePlayPause
+{
+    switch(self.state)
+    {
+        case IDZAudioPlayerStatePlaying:
+        case IDZAudioPlayerStatePrepared:
+            return [self pause];
+        case IDZAudioPlayerStatePaused:
+        case IDZAudioPlayerStateStopped:
+            return [self play];
+        default:
+            return NO;
+    }
 }
 
 - (BOOL)pause
@@ -295,7 +311,7 @@ static void IDZPropertyListener(void* inUserData,
         return;
 
     NSAssert(self.decoder, @"self.decoder is valid.");
-    if(/*self.decoder.bufferingState == BufferingStateReadyToRead &&*/ [self.decoder readBuffer:buffer] == YES)
+    if(/*self.decoder.bufferingState == BufferingStateReadyToRead &&*/buffer != NULL && [self.decoder readBuffer:buffer] == YES)
     {
         OSStatus status = AudioQueueEnqueueBuffer(mQueue, buffer, 0, 0);
         if(status != noErr)

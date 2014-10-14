@@ -81,6 +81,8 @@ typedef enum IDZAudioPlayStateTag
  */
 - (BOOL)stop;
 
+- (BOOL)togglePlayPause;
+
 - (BOOL)next;
 
 - (BOOL)playIfQueuedPlayback;
