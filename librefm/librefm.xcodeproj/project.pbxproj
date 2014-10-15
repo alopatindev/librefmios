@@ -48,6 +48,10 @@
 		BADD287E1959F24D0057744B /* UIColor+CustomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD287D1959F24D0057744B /* UIColor+CustomColors.m */; };
 		BADD2881195A16DC0057744B /* FlatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BADD2880195A16DC0057744B /* FlatButton.m */; };
 		BADD2883195A30CF0057744B /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BADD2882195A30CF0057744B /* logo.png */; };
+		BAE03F9719EF1E140012A900 /* next8.png in Resources */ = {isa = PBXBuildFile; fileRef = BAE03F9319EF1E140012A900 /* next8.png */; };
+		BAE03F9819EF1E140012A900 /* pause11.png in Resources */ = {isa = PBXBuildFile; fileRef = BAE03F9419EF1E140012A900 /* pause11.png */; };
+		BAE03F9919EF1E140012A900 /* play33.png in Resources */ = {isa = PBXBuildFile; fileRef = BAE03F9519EF1E140012A900 /* play33.png */; };
+		BAE03F9A19EF1E140012A900 /* previous5.png in Resources */ = {isa = PBXBuildFile; fileRef = BAE03F9619EF1E140012A900 /* previous5.png */; };
 		BAFD9E47194CDF98009718B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E46194CDF98009718B2 /* Foundation.framework */; };
 		BAFD9E49194CDF98009718B2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */; };
 		BAFD9E4B194CDF98009718B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAFD9E4A194CDF98009718B2 /* UIKit.framework */; };
@@ -176,6 +180,10 @@
 		BADD287F195A16DC0057744B /* FlatButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatButton.h; sourceTree = "<group>"; };
 		BADD2880195A16DC0057744B /* FlatButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlatButton.m; sourceTree = "<group>"; };
 		BADD2882195A30CF0057744B /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		BAE03F9319EF1E140012A900 /* next8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next8.png; sourceTree = "<group>"; };
+		BAE03F9419EF1E140012A900 /* pause11.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause11.png; sourceTree = "<group>"; };
+		BAE03F9519EF1E140012A900 /* play33.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play33.png; sourceTree = "<group>"; };
+		BAE03F9619EF1E140012A900 /* previous5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = previous5.png; sourceTree = "<group>"; };
 		BAFD9E43194CDF98009718B2 /* librefm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = librefm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAFD9E46194CDF98009718B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BAFD9E48194CDF98009718B2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -471,6 +479,10 @@
 		BAFD9E86194DA181009718B2 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				BAE03F9319EF1E140012A900 /* next8.png */,
+				BAE03F9419EF1E140012A900 /* pause11.png */,
+				BAE03F9519EF1E140012A900 /* play33.png */,
+				BAE03F9619EF1E140012A900 /* previous5.png */,
 				BADD2882195A30CF0057744B /* logo.png */,
 				BAFD9E87194DA181009718B2 /* turtle.libre.fm.der */,
 			);
@@ -554,8 +566,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAFD9E5F194CDF98009718B2 /* Images.xcassets in Resources */,
+				BAE03F9A19EF1E140012A900 /* previous5.png in Resources */,
+				BAE03F9919EF1E140012A900 /* play33.png in Resources */,
 				BADD2883195A30CF0057744B /* logo.png in Resources */,
 				BAFD9E88194DA181009718B2 /* turtle.libre.fm.der in Resources */,
+				BAE03F9819EF1E140012A900 /* pause11.png in Resources */,
+				BAE03F9719EF1E140012A900 /* next8.png in Resources */,
 				BAFD9E51194CDF98009718B2 /* InfoPlist.strings in Resources */,
 				BAFD9E5A194CDF98009718B2 /* Main.storyboard in Resources */,
 			);
