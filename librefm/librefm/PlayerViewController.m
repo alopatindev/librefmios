@@ -137,6 +137,7 @@ SignupViewController *_signupViewController;
 - (IBAction)togglePlayPauseButtonClicked:(id)sender
 {
     [_audioPlayer togglePlayPause];
+    [self updateTogglePlayPauseButton];
 }
 
 - (IBAction)pauseButtonClicked:(id)sender
@@ -144,18 +145,31 @@ SignupViewController *_signupViewController;
     //[_librefmConnection updateNowPlayingArtist:@"Metallica" track:@"Master of Puppets" album:@""];
     //[_audioPlayer releaseResources];
     //_audioPlayer = nil;
-//    [_audioPlayer pause];
+    [_audioPlayer pause];
 //    [_audioPlayer clearPlaylist];
 //    [_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
     //[_librefmConnection signUpWithUsername:@"1" password:@"2" email:@"a@b.c"];
 
-    [self maybeStartLogin];
+    //[self maybeStartLogin];
     //[_librefmConnection getTopTags];
 }
 
 - (IBAction)nextButtonClicked:(id)sender
 {
     [_audioPlayer next];
+}
+
+- (IBAction)previousButtonClicked:(id)sender
+{
+    // TODO
+    [self maybeStartLogin];
+}
+
+- (void)updateTogglePlayPauseButton
+{
+    NSString *filename = [_audioPlayer isPlaying] == NO ? @"play33.png" : @"pause11.png";
+    UIImage *image = [UIImage imageNamed:filename];
+    [self.togglePlayPauseButton setImage:image forState:UIControlStateNormal];
 }
 
 - (void)librefmDidLogin:(BOOL)ok error:(NSError*)error
@@ -228,9 +242,11 @@ SignupViewController *_signupViewController;
     {
         case IDZAudioPlayerStatePaused:
             str = @"IDZAudioPlayerStatePaused";
+            [self updateTogglePlayPauseButton];
             break;
         case IDZAudioPlayerStatePlaying:
             str = @"IDZAudioPlayerStatePlaying";
+            [self updateTogglePlayPauseButton];
             break;
         case IDZAudioPlayerStatePrepared:
             str = @"IDZAudioPlayerStatePrepared";

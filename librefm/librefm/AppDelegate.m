@@ -82,6 +82,10 @@
                 NSLog(@"next track");
                 [_playerViewController nextButtonClicked:nil];
                 break;
+            case UIEventSubtypeRemoteControlPreviousTrack:
+                NSLog(@"previous track");
+                [_playerViewController previousButtonClicked:nil];
+                break;
             case UIEventSubtypeRemoteControlPlay:
                 NSLog(@"play");
                 [_playerViewController playButtonClicked:nil];

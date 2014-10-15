@@ -15,11 +15,15 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *urlLabel;
+@property (weak, nonatomic) IBOutlet UIButton *togglePlayPauseButton;
+@property (weak, nonatomic) IBOutlet UIButton *previousButton;
+@property (weak, nonatomic) IBOutlet UIButton *nextButton;
 
 - (IBAction)playButtonClicked:(id)sender;
 - (IBAction)togglePlayPauseButtonClicked:(id)sender;
 - (IBAction)pauseButtonClicked:(id)sender;
 - (IBAction)nextButtonClicked:(id)sender;
+- (IBAction)previousButtonClicked:(id)sender;
 
 - (void)librefmDidLogin:(BOOL)ok error:(NSError *)error;
 - (void)librefmDidSignUp:(BOOL)ok

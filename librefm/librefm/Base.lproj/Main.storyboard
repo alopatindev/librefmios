@@ -23,7 +23,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="pauseButtonClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="iiu-As-y2Y"/>
+                                    <action selector="previousButtonClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Kn4-FX-ftf"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rCl-8x-N9V">
@@ -60,7 +60,10 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Player" id="LgD-Ni-YZ9"/>
                     <connections>
+                        <outlet property="nextButton" destination="vko-Xi-jgF" id="OR7-sf-yP0"/>
+                        <outlet property="previousButton" destination="q0M-me-Vqd" id="Idc-Ep-gwS"/>
                         <outlet property="statusLabel" destination="VgK-QM-pGP" id="LaE-lw-PsR"/>
+                        <outlet property="togglePlayPauseButton" destination="rCl-8x-N9V" id="aUh-kC-bqd"/>
                         <outlet property="urlLabel" destination="qsK-zz-RoQ" id="NMK-1F-SJY"/>
                     </connections>
                 </viewController>
