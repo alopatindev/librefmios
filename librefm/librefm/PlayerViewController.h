@@ -33,6 +33,8 @@
                    email:(NSString *)email;
 
 - (void)clearPlaylist;
+- (void)radioTune:tag;
+
 - (void)addToPlaylistURL:(NSString *)url
                   artist:(NSString *)artist
                    album:(NSString *)album

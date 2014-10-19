@@ -154,7 +154,7 @@ AddTagViewController *_addTagViewController;
                         } completion:^(BOOL finished) {
                             [self switchToTabIndex:TabPlayer];
                             [_playerViewController clearPlaylist];
-                            [_librefmConnection radioTune:tag];
+                            [_playerViewController radioTune:tag];
                         }];
     }
 

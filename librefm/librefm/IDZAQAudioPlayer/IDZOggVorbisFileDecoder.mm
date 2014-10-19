@@ -22,17 +22,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
-#import <Vorbis/vorbisfile.h>
 
+extern "C" {
+
+#import <Vorbis/vorbisfile.h>
 #import "IDZAudioDecoder.h"
 #import "IDZOggVorbisFileDecoder.h"
 #import "IDZTrace.h"
 #import "IDZAQAudioPlayer.h"
 #import "NetworkManager.h"
-
 #include <string.h>
-
-extern "C" {
 
 #define IDZ_BITS_PER_BYTE 8
 #define IDZ_BYTES_TO_BITS(bytes) ((bytes) * IDZ_BITS_PER_BYTE)
@@ -49,8 +48,8 @@ static ov_callbacks MY_CALLBACKS_STREAMONLY = {
     (long (*)(void *))                            NULL
 };
 
-static const size_t MAX_QUEUE_SIZE = (size_t) (1024U * 1024U / 3U);
-static const size_t MIN_QUEUE_SIZE = (size_t) (MAX_QUEUE_SIZE / 2U);
+static const size_t MAX_DATA_QUEUE_SIZE = (size_t) (1024U * 1024U / 3U);
+static const size_t MIN_DATA_QUEUE_SIZE = (size_t) (MAX_DATA_QUEUE_SIZE / 2U);
 static const int DELAY_BETWEEN_REQUESTS_SECONDS = 20; // seconds
     
 /**
@@ -236,7 +235,13 @@ BOOL _downloadComplete;
     if (self.headerIsRead == NO /*&& self.downloadedBytes > 0*/) {
         //NSAssert(mpFile, @"fopen succeeded.");
         int iReturn = ov_open_callbacks(mpFile ? mpFile : (FILE*)1, &mOggVorbisFile, NULL, 0, MY_CALLBACKS_STREAMONLY);
-        NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
+        //NSAssert(iReturn >= 0, @"ov_open_callbacks succeeded.");
+        
+        if (iReturn < 0)
+        {
+            NSLog(@"ov_open_callbacks returned %d", iReturn);
+            return;
+        }
 
         vorbis_info* pInfo = ov_info(&mOggVorbisFile, -1);
         
@@ -338,7 +343,7 @@ BOOL _downloadComplete;
     //    return;
     //}
 
-    if ([self.dataQueueDict[url] length] >= MAX_QUEUE_SIZE) {
+    if ([self.dataQueueDict[url] length] >= MAX_DATA_QUEUE_SIZE) {
         [self sendRequest:url afterDelay:DELAY_BETWEEN_REQUESTS_SECONDS];
         if (isCurrentURL == YES) {
             [self readHeaderInfoIfNeeded];
@@ -456,7 +461,7 @@ BOOL _downloadComplete;
     }
     
     size_t queueLength = (size_t) [self.dataQueueDict[url] length];
-    if (queueLength >= MAX_QUEUE_SIZE) {
+    if (queueLength >= MAX_DATA_QUEUE_SIZE) {
         NSLog(@"cancelling connection");
         [self.connection cancel];
         self.connection = nil;
@@ -468,7 +473,7 @@ BOOL _downloadComplete;
         }
     }
 
-    if (queueLength >= MIN_QUEUE_SIZE && isCurrentURL) {
+    if (queueLength >= MIN_DATA_QUEUE_SIZE && isCurrentURL) {
         [self readHeaderInfoIfNeeded];
     }
 }

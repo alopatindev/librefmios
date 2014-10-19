@@ -128,6 +128,8 @@
         //NSString *title = playlist[@"title"];
         //NSString *creator = playlist[@"creator"];
         //@"link", @"date"
+        //[_playerViewController clearPlaylist];
+
         NSArray *track = playlist[@"track"];
         for (NSDictionary *t in track) {
             NSString *artist = t[@"creator"];

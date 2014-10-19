@@ -23,12 +23,29 @@
 
 @end
 
+@interface PlaylistItem : NSObject
+    @property (nonatomic) NSString *url;
+    @property (nonatomic) NSString *artist;
+    @property (nonatomic) NSString *album;
+    @property (nonatomic) NSString *title;
+    @property (nonatomic) NSString *imageURL;
+@end
+
+@implementation PlaylistItem
+@end
+
 @implementation PlayerViewController
 
 id<IDZAudioPlayer> _audioPlayer;
 __weak LibrefmConnection *_librefmConnection;
 LoginViewController *_loginViewController;
 SignupViewController *_signupViewController;
+
+const static size_t MIN_PLAYLIST_SIZE = 10;
+
+NSMutableArray *_playlist;
+int _playlistIndex;
+NSString *_lastTag;
 
 - (void)viewDidLoad
 {
@@ -38,19 +55,15 @@ SignupViewController *_signupViewController;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     _librefmConnection = appDelegate.librefmConnection;
 
+    _playlist = [NSMutableArray new];
+    _playlistIndex = -1;
+    _lastTag = [NSString new];
+    
     _audioPlayer = [IDZAQAudioPlayer new];
     _audioPlayer.delegate = self;
     
-    //NSURL *oggUrl = [NSURL URLWithString:@"http://gigue.rrbone.net/725290.ogg2"];
-    //[_audioPlayer queueURL:oggUrl];
-//    [_audioPlayer queueURLString:@"http://zalil.ru/d/tf/00a61d009813661117c43caa5996e1eb/14035400/aceaH/storage5-7-4-455147/little.ogg"];
-    //[_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
-    //[_audioPlayer queueURLString:@"http://gigue.rrbone.net/24765.ogg2"];
-
-    //[_audioPlayer play];
-    
-    
     [self addParallaxEffectWithDepth:12 foreground:NO];
+    [self maybeStartLogin];
 }
 
 - (void)didReceiveMemoryWarning
@@ -142,27 +155,36 @@ SignupViewController *_signupViewController;
 
 - (IBAction)pauseButtonClicked:(id)sender
 {
-    //[_librefmConnection updateNowPlayingArtist:@"Metallica" track:@"Master of Puppets" album:@""];
-    //[_audioPlayer releaseResources];
-    //_audioPlayer = nil;
     [_audioPlayer pause];
-//    [_audioPlayer clearPlaylist];
-//    [_audioPlayer queueURLString:@"http://gigue.rrbone.net/743638.ogg2"];
-    //[_librefmConnection signUpWithUsername:@"1" password:@"2" email:@"a@b.c"];
-
-    //[self maybeStartLogin];
-    //[_librefmConnection getTopTags];
+    [self updatePlaylist];
 }
 
 - (IBAction)nextButtonClicked:(id)sender
 {
-    [_audioPlayer next];
+    [self updatePlaylist];
+    if ([_audioPlayer next] == YES)
+    {
+        _playlistIndex++;
+    }
 }
 
 - (IBAction)previousButtonClicked:(id)sender
 {
     // TODO
-    [self maybeStartLogin];
+    if (_playlistIndex-1 >= 0)
+    {
+        _playlistIndex--;
+        assert(_playlistIndex < [_playlist count]);
+        [_audioPlayer clearPlaylist];
+        [_audioPlayer stop];
+        PlaylistItem *item = _playlist[_playlistIndex];
+        [_audioPlayer queueURLString:item.url];
+        [_audioPlayer next];
+        [_audioPlayer play];
+        item = _playlist[_playlistIndex + 1];
+        [_audioPlayer queueURLString:item.url];
+    }
+    //[_audioPlayer previous];
 }
 
 - (void)updateTogglePlayPauseButton
@@ -208,8 +230,31 @@ SignupViewController *_signupViewController;
 
 - (void)clearPlaylist
 {
+    [_audioPlayer stop];
     [_audioPlayer clearPlaylist];
-    // TODO
+    [_playlist removeAllObjects];
+    _playlistIndex = -1;
+}
+
+- (void)updatePlaylist
+{
+    if ([_playlist count] - _playlistIndex < MIN_PLAYLIST_SIZE)
+        [self radioTune:_lastTag];
+    
+    if ([_audioPlayer isNextURLAvailable] == NO)
+    {
+        if (_playlistIndex > 0 && _playlistIndex + 1 < [_playlist count])
+        {
+            PlaylistItem* item = _playlist[_playlistIndex + 1];
+            [_audioPlayer queueURLString:item.url];
+        }
+    }
+}
+
+- (void)radioTune:tag
+{
+    [_librefmConnection radioTune:tag];
+    _lastTag = tag;
 }
 
 - (void)addToPlaylistURL:(NSString *)url
@@ -218,8 +263,20 @@ SignupViewController *_signupViewController;
                    title:(NSString *)title
                 imageURL:(NSString *)imageURL
 {
-    [_audioPlayer queueURLString:url];
+    //[_audioPlayer queueURLString:url];
     // TODO
+    PlaylistItem* item = [PlaylistItem alloc];
+    item.url = url;
+    item.artist = artist;
+    item.album = album;
+    item.title = title;
+    item.imageURL = imageURL;
+    [_playlist addObject:item];
+    if (_playlistIndex == -1)
+        _playlistIndex = 0;
+    
+    if ([_audioPlayer isNextURLAvailable] == NO)
+        [_audioPlayer queueURLString:url];
 }
 
 - (void)audioPlayerDidFinishPlaying:(id<IDZAudioPlayer>)player
