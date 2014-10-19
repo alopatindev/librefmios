@@ -420,10 +420,11 @@ BOOL _downloadComplete;
     
     if (isCurrentURL == YES && wrongResponse == YES) {
         NSLog(@"! wrong response; skipping it");
-        BOOL queuedPlayback = self.audioPlayerDelegate.queuedPlayback;
+        /*BOOL queuedPlayback = self.audioPlayerDelegate.queuedPlayback;
         [self.audioPlayerDelegate stop];
         [self prepareToPlayNextURL];
-        self.audioPlayerDelegate.queuedPlayback = queuedPlayback;
+        self.audioPlayerDelegate.queuedPlayback = queuedPlayback;*/
+        [self.audioPlayerDelegate skipBrokenPlaylistItem];
     }
 }
 

@@ -42,6 +42,7 @@ LoginViewController *_loginViewController;
 SignupViewController *_signupViewController;
 
 const static size_t MIN_PLAYLIST_SIZE = 10;
+const static size_t MAX_PLAYLIST_PREVIOUS_SIZE = 50;
 
 NSMutableArray *_playlist;
 int _playlistIndex;
@@ -168,8 +169,11 @@ NSString *_lastTag;
     if ([_audioPlayer next] == YES)
     {
         _playlistIndex++;
+        [self maybeDecreasePlaylistToLimit];
         [self updateSongInfo];
     }
+    
+    NSLog(@"!!!! playlistIndex=%d, [playlist count]=%d", _playlistIndex, (int)[_playlist count]);
 }
 
 - (IBAction)previousButtonClicked:(id)sender
@@ -189,6 +193,7 @@ NSString *_lastTag;
         [_audioPlayer queueURLString:item.url];
         [self updateSongInfo];
     }
+    NSLog(@"!!!! playlistIndex=%d, [playlist count]=%d", _playlistIndex, (int)[_playlist count]);
     //[_audioPlayer previous];
 }
 
@@ -245,6 +250,21 @@ NSString *_lastTag;
     {
         self.titleLabel.text = [NSString new];
         self.artistLabel.text = [NSString new];
+    }
+}
+
+- (void)maybeDecreasePlaylistToLimit
+{
+    if (_playlistIndex - 1 >= MAX_PLAYLIST_PREVIOUS_SIZE)
+    {
+        PlaylistItem* item = _playlist[_playlistIndex];
+        NSLog(@"!!! decreasePlaylistToLimit(1) %d-1 >= %d; _playlist[_playlistIndex].url='%@'", _playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
+        int offset = _playlistIndex - (int)MAX_PLAYLIST_PREVIOUS_SIZE;
+        NSLog(@"!!! offset=%d", offset);
+        _playlistIndex -= offset;
+        [_playlist removeObjectsInRange:NSMakeRange(0, offset)];
+        item = _playlist[_playlistIndex];
+        NSLog(@"!!! decreasePlaylistToLimit(2) %d-1 >= %d; _playlist[_playlistIndex].url='%@'", _playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
     }
 }
 
@@ -308,6 +328,17 @@ NSString *_lastTag;
 - (void)audioPlayerDecodeErrorDidOccur:(id<IDZAudioPlayer>)player
                                  error:(NSError *)error
 {
+    NSLog(@"!!!!!!! audioPlayerDecodeErrorDidOccur");
+    [self updatePlaylist];
+    if ([_audioPlayer next] == YES)
+    {
+        [_playlist removeObjectAtIndex:_playlistIndex];
+        NSLog(@"!!!!!!! audioPlayerDecodeErrorDidOccur removed previous song");
+    }
+    else
+    {
+        NSLog(@"!!!! audioPlayerDecodeErrorDidOccur: fail of fails");
+    }
 }
 
 - (void)audioPlayerChangedState:(IDZAudioPlayerState)state

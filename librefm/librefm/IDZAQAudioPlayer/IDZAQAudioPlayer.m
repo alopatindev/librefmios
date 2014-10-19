@@ -410,7 +410,7 @@ static void IDZPropertyListener(void* inUserData,
         default:
             break;
     }
-    [self.decoder seekToTime:currentTime error:nil];
+//    [self.decoder seekToTime:currentTime error:nil]; //FIXME: should be used with file?
     mQueueStartTime = currentTime;
     switch(previousState)
     {
@@ -482,6 +482,11 @@ static void IDZPropertyListener(void* inUserData,
 - (BOOL)isNextURLAvailable
 {
     return [mDecoder isNextURLAvailable];
+}
+
+- (void)skipBrokenPlaylistItem
+{
+    [self.delegate audioPlayerDecodeErrorDidOccur:self error:nil];
 }
 
 @end

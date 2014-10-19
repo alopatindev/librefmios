@@ -95,6 +95,8 @@ typedef enum IDZAudioPlayStateTag
 
 - (BOOL)isNextURLAvailable;
 
+- (void)skipBrokenPlaylistItem;
+
 /* properties */
 /**
  * @brief YES when the player is playing, NO otherwise.
