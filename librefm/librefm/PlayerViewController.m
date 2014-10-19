@@ -57,6 +57,7 @@ NSString *_lastTag;
 
     _playlist = [NSMutableArray new];
     _playlistIndex = -1;
+    [self updateSongInfo];
     _lastTag = [NSString new];
     
     _audioPlayer = [IDZAQAudioPlayer new];
@@ -145,12 +146,14 @@ NSString *_lastTag;
 - (IBAction)playButtonClicked:(id)sender
 {
     [_audioPlayer play];
+    [self updateSongInfo];
 }
 
 - (IBAction)togglePlayPauseButtonClicked:(id)sender
 {
     [_audioPlayer togglePlayPause];
     [self updateTogglePlayPauseButton];
+    [self updateSongInfo];
 }
 
 - (IBAction)pauseButtonClicked:(id)sender
@@ -165,6 +168,7 @@ NSString *_lastTag;
     if ([_audioPlayer next] == YES)
     {
         _playlistIndex++;
+        [self updateSongInfo];
     }
 }
 
@@ -183,6 +187,7 @@ NSString *_lastTag;
         [_audioPlayer play];
         item = _playlist[_playlistIndex + 1];
         [_audioPlayer queueURLString:item.url];
+        [self updateSongInfo];
     }
     //[_audioPlayer previous];
 }
@@ -228,12 +233,28 @@ NSString *_lastTag;
     }
 }
 
+- (void)updateSongInfo
+{
+    if (_playlistIndex >= 0 && _playlistIndex < [_playlist count])
+    {
+        PlaylistItem* item = _playlist[_playlistIndex];
+        self.titleLabel.text = item.title;
+        self.artistLabel.text = [NSString stringWithFormat:@"by %@", item.artist];
+    }
+    else
+    {
+        self.titleLabel.text = [NSString new];
+        self.artistLabel.text = [NSString new];
+    }
+}
+
 - (void)clearPlaylist
 {
     [_audioPlayer stop];
     [_audioPlayer clearPlaylist];
     [_playlist removeAllObjects];
     _playlistIndex = -1;
+    [self updateSongInfo];
 }
 
 - (void)updatePlaylist
@@ -319,8 +340,8 @@ NSString *_lastTag;
             break;
     }
     
-    self.statusLabel.text = [NSString stringWithFormat:@"Status: %@", str];
-    self.urlLabel.text = [url absoluteString];
+    //self.statusLabel.text = [NSString stringWithFormat:@"Status: %@", str];
+    //self.urlLabel.text = [url absoluteString];
 }
 
 @end

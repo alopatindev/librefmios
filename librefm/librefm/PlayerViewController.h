@@ -13,11 +13,11 @@
 @interface PlayerViewController : BaseTabViewController <IDZAudioPlayerDelegate,
                                                          UIAlertViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
-@property (weak, nonatomic) IBOutlet UILabel *urlLabel;
 @property (weak, nonatomic) IBOutlet UIButton *togglePlayPauseButton;
 @property (weak, nonatomic) IBOutlet UIButton *previousButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *artistLabel;
 
 - (IBAction)playButtonClicked:(id)sender;
 - (IBAction)togglePlayPauseButtonClicked:(id)sender;
