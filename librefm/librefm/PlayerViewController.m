@@ -278,6 +278,10 @@ dispatch_queue_t _dispatchImageQueue;
     if (self.playlistIndex >= 0 && self.playlistIndex < [self.playlist count])
     {
         PlaylistItem* item = self.playlist[self.playlistIndex];
+        if (self.currentPlaylistItem != nil && (item == self.currentPlaylistItem || [item isEqual:self.currentPlaylistItem] == YES)) {
+            NSLog(@"updateSongInfo the same item");
+            return;
+        }
         self.currentPlaylistItem = item;
         self.titleLabel.text = item.title;
         //self.artistLabel.text = [NSString stringWithFormat:@"by %@", item.artist];
@@ -289,10 +293,21 @@ dispatch_queue_t _dispatchImageQueue;
             if (item == nil)
                 return;
             NSString* imageURL = item.imageURL;
-            if (imageURL != nil) {
-                NSURL* url = [[NSURL alloc] initWithString:imageURL];
-                if (url != nil)
+            if (imageURL != nil && [imageURL length] > 0) {
+                NSString* largeImageURL = [imageURL stringByReplacingOccurrencesOfString:@"imagesize=200" withString:@"imagesize=600"];
+                NSLog(@"image url: '%@'", largeImageURL);
+                NSURL* url = [[NSURL alloc] initWithString:largeImageURL];
+                if (url != nil) {
                     item.imageData = [NSData dataWithContentsOfURL:url];
+                }
+
+                if (item.imageData == nil) {
+                    NSLog(@"no large picture");
+                    url = [[NSURL alloc] initWithString:imageURL];
+                    if (url != nil) {
+                        item.imageData = [NSData dataWithContentsOfURL:url];
+                    }
+                }
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
