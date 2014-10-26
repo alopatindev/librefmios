@@ -20,7 +20,8 @@
 #import "SignupViewController.h"
 
 @interface PlayerViewController ()
-
+    @property (atomic) NSMutableArray *playlist;
+    @property (atomic) int playlistIndex;
 @end
 
 @interface PlaylistItem : NSObject
@@ -28,7 +29,7 @@
     @property (nonatomic) NSString *artist;
     @property (nonatomic) NSString *album;
     @property (nonatomic) NSString *title;
-    @property (nonatomic) NSString *imageURL;
+    @property (atomic) NSString *imageURL;
 @end
 
 @implementation PlaylistItem
@@ -44,9 +45,29 @@ SignupViewController *_signupViewController;
 const static size_t MIN_PLAYLIST_SIZE = 10;
 const static size_t MAX_PLAYLIST_PREVIOUS_SIZE = 50;
 
-NSMutableArray *_playlist;
-int _playlistIndex;
 NSString *_lastTag;
+dispatch_queue_t _dispatchImageQueue;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (void)initialize
+{
+    _dispatchImageQueue = dispatch_queue_create("imageQueue", NULL);
+}
 
 - (void)viewDidLoad
 {
@@ -56,8 +77,8 @@ NSString *_lastTag;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     _librefmConnection = appDelegate.librefmConnection;
 
-    _playlist = [NSMutableArray new];
-    _playlistIndex = -1;
+    self.playlist = [NSMutableArray new];
+    self.playlistIndex = -1;
     [self updateSongInfo];
     _lastTag = [NSString new];
     
@@ -168,32 +189,32 @@ NSString *_lastTag;
     [self updatePlaylist];
     if ([_audioPlayer next] == YES)
     {
-        _playlistIndex++;
+        self.playlistIndex++;
         [self maybeDecreasePlaylistToLimit];
         [self updateSongInfo];
     }
     
-    NSLog(@"!!!! playlistIndex=%d, [playlist count]=%d", _playlistIndex, (int)[_playlist count]);
+    NSLog(@"!!!! playlistIndex=%d, [playlist count]=%d", self.playlistIndex, (int)[self.playlist count]);
 }
 
 - (IBAction)previousButtonClicked:(id)sender
 {
     // TODO
-    if (_playlistIndex-1 >= 0)
+    if (self.playlistIndex-1 >= 0)
     {
-        _playlistIndex--;
-        NSAssert(_playlistIndex < [_playlist count], @"playlistIndex should be < playlist count");
+        self.playlistIndex--;
+        NSAssert(self.playlistIndex < [self.playlist count], @"playlistIndex should be < playlist count");
         [_audioPlayer clearPlaylist];
         [_audioPlayer stop];
-        PlaylistItem *item = _playlist[_playlistIndex];
+        PlaylistItem *item = self.playlist[self.playlistIndex];
         [_audioPlayer queueURLString:item.url];
         [_audioPlayer next];
         [_audioPlayer play];
-        item = _playlist[_playlistIndex + 1];
+        item = self.playlist[self.playlistIndex + 1];
         [_audioPlayer queueURLString:item.url];
         [self updateSongInfo];
     }
-    NSLog(@"!!!! playlistIndex=%d, [playlist count]=%d", _playlistIndex, (int)[_playlist count]);
+    NSLog(@"!!!! playlistIndex=%d, [playlist count]=%d", self.playlistIndex, (int)[self.playlist count]);
     //[_audioPlayer previous];
 }
 
@@ -240,11 +261,26 @@ NSString *_lastTag;
 
 - (void)updateSongInfo
 {
-    if (_playlistIndex >= 0 && _playlistIndex < [_playlist count])
+    if (self.playlistIndex >= 0 && self.playlistIndex < [self.playlist count])
     {
-        PlaylistItem* item = _playlist[_playlistIndex];
+        PlaylistItem* item = self.playlist[self.playlistIndex];
         self.titleLabel.text = item.title;
-        self.artistLabel.text = [NSString stringWithFormat:@"by %@", item.artist];
+        //self.artistLabel.text = [NSString stringWithFormat:@"by %@", item.artist];
+        self.artistLabel.text = item.artist;
+        
+        dispatch_async(_dispatchImageQueue, ^{
+            PlaylistItem* item = self.playlist[self.playlistIndex];
+            if (item == nil)
+                return;
+            NSString* urlString = item.imageURL;
+            if (urlString == nil)
+                return;
+            NSURL* url = [[NSURL alloc] initWithString:urlString];
+            NSData *imageData = [NSData dataWithContentsOfURL:url];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.coverImageView setImage:[UIImage imageWithData:imageData]];
+            });
+        });
     }
     else
     {
@@ -255,16 +291,16 @@ NSString *_lastTag;
 
 - (void)maybeDecreasePlaylistToLimit
 {
-    if (_playlistIndex - 1 >= MAX_PLAYLIST_PREVIOUS_SIZE)
+    if (self.playlistIndex - 1 >= MAX_PLAYLIST_PREVIOUS_SIZE)
     {
-        PlaylistItem* item = _playlist[_playlistIndex];
-        NSLog(@"!!! decreasePlaylistToLimit(1) %d-1 >= %d; _playlist[_playlistIndex].url='%@'", _playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
-        int offset = _playlistIndex - (int)MAX_PLAYLIST_PREVIOUS_SIZE;
+        PlaylistItem* item = self.playlist[self.playlistIndex];
+        NSLog(@"!!! decreasePlaylistToLimit(1) %d-1 >= %d; self.playlist[self.playlistIndex].url='%@'", self.playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
+        int offset = self.playlistIndex - (int)MAX_PLAYLIST_PREVIOUS_SIZE;
         NSLog(@"!!! offset=%d", offset);
-        _playlistIndex -= offset;
-        [_playlist removeObjectsInRange:NSMakeRange(0, offset)];
-        item = _playlist[_playlistIndex];
-        NSLog(@"!!! decreasePlaylistToLimit(2) %d-1 >= %d; _playlist[_playlistIndex].url='%@'", _playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
+        self.playlistIndex -= offset;
+        [self.playlist removeObjectsInRange:NSMakeRange(0, offset)];
+        item = self.playlist[self.playlistIndex];
+        NSLog(@"!!! decreasePlaylistToLimit(2) %d-1 >= %d; self.playlist[self.playlistIndex].url='%@'", self.playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
     }
 }
 
@@ -272,21 +308,21 @@ NSString *_lastTag;
 {
     [_audioPlayer stop];
     [_audioPlayer clearPlaylist];
-    [_playlist removeAllObjects];
-    _playlistIndex = -1;
+    [self.playlist removeAllObjects];
+    self.playlistIndex = -1;
     [self updateSongInfo];
 }
 
 - (void)updatePlaylist
 {
-    if ([_playlist count] - _playlistIndex < MIN_PLAYLIST_SIZE)
+    if ([self.playlist count] - self.playlistIndex < MIN_PLAYLIST_SIZE)
         [self radioTune:_lastTag];
     
     if ([_audioPlayer isNextURLAvailable] == NO)
     {
-        if (_playlistIndex > 0 && _playlistIndex + 1 < [_playlist count])
+        if (self.playlistIndex > 0 && self.playlistIndex + 1 < [self.playlist count])
         {
-            PlaylistItem* item = _playlist[_playlistIndex + 1];
+            PlaylistItem* item = self.playlist[self.playlistIndex + 1];
             [_audioPlayer queueURLString:item.url];
         }
     }
@@ -312,9 +348,9 @@ NSString *_lastTag;
     item.album = album;
     item.title = title;
     item.imageURL = imageURL;
-    [_playlist addObject:item];
-    if (_playlistIndex == -1)
-        _playlistIndex = 0;
+    [self.playlist addObject:item];
+    if (self.playlistIndex == -1)
+        self.playlistIndex = 0;
     
     if ([_audioPlayer isNextURLAvailable] == NO)
         [_audioPlayer queueURLString:url];
@@ -332,7 +368,7 @@ NSString *_lastTag;
     [self updatePlaylist];
     if ([_audioPlayer next] == YES)
     {
-        [_playlist removeObjectAtIndex:_playlistIndex];
+        [self.playlist removeObjectAtIndex:self.playlistIndex];
         NSLog(@"!!!!!!! audioPlayerDecodeErrorDidOccur removed previous song");
     }
     else
