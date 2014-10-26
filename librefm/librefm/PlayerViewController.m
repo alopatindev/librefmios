@@ -182,7 +182,7 @@ NSString *_lastTag;
     if (_playlistIndex-1 >= 0)
     {
         _playlistIndex--;
-        assert(_playlistIndex < [_playlist count]);
+        NSAssert(_playlistIndex < [_playlist count], @"playlistIndex should be < playlist count");
         [_audioPlayer clearPlaylist];
         [_audioPlayer stop];
         PlaylistItem *item = _playlist[_playlistIndex];

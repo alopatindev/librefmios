@@ -2,3 +2,9 @@
 git@github.com:iosdevzone/IDZAQAudioPlayer.git
 git@github.com:schneiderandre/popping.git
 http://www.flaticon.com/packs/ios7-set-lined-1
+
+
+Release checklist
+-DNS_BLOCK_ASSERTIONS=1
+disable NSLog
+google a better checklist

@@ -204,7 +204,7 @@
     tagLabel.text = tag;
     tagLabel.font = tagFont;
     
-    int try = 0;
+    //int try = 0;
     while([self checkIntersectionWithView:tagLabel viewArray:tagViews]) {
         CGPoint center = [self getNextPosition];
         tagLabel.frame = CGRectMake(center.x - size.width * 0.5f, center.y - size.height * 0.5f, size.width, size.height);
