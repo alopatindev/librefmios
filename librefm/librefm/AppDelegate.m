@@ -139,6 +139,8 @@
             //@"identifier" : @"0000"
             NSString *url = t[@"location"];
             NSString *image = t[@"image"];
+            if ([image isKindOfClass:[NSString class]] == NO) // FIXME: wtf
+                image = @"";
             //NSNumber *duration = t[@"duration"]; // always 180000?
             [_playerViewController addToPlaylistURL:url
                                              artist:artist

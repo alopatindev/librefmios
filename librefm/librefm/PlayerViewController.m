@@ -19,20 +19,32 @@
 #import "LoginViewController.h"
 #import "SignupViewController.h"
 
-@interface PlayerViewController ()
-    @property (atomic) NSMutableArray *playlist;
-    @property (atomic) int playlistIndex;
+@interface PlaylistItem : NSObject
+@property (nonatomic) NSString *url;
+@property (nonatomic) NSString *artist;
+@property (nonatomic) NSString *album;
+@property (nonatomic) NSString *title;
+@property (atomic) NSString *imageURL;
+@property (atomic) NSData* imageData;
 @end
 
-@interface PlaylistItem : NSObject
-    @property (nonatomic) NSString *url;
-    @property (nonatomic) NSString *artist;
-    @property (nonatomic) NSString *album;
-    @property (nonatomic) NSString *title;
-    @property (atomic) NSString *imageURL;
+@interface PlayerViewController ()
+@property (atomic) NSMutableArray *playlist;
+@property (atomic) int playlistIndex;
+@property (atomic) PlaylistItem* currentPlaylistItem;
 @end
 
 @implementation PlaylistItem
+
+- (BOOL)isEqual:(id)anObject
+{
+    PlaylistItem* item = (PlaylistItem*)anObject;
+    if (item == nil)
+        return NO;
+    else
+        return self.url == item.url || [self.url isEqualToString:item.url];
+}
+
 @end
 
 @implementation PlayerViewController
@@ -264,21 +276,29 @@ dispatch_queue_t _dispatchImageQueue;
     if (self.playlistIndex >= 0 && self.playlistIndex < [self.playlist count])
     {
         PlaylistItem* item = self.playlist[self.playlistIndex];
+        self.currentPlaylistItem = item;
         self.titleLabel.text = item.title;
         //self.artistLabel.text = [NSString stringWithFormat:@"by %@", item.artist];
         self.artistLabel.text = item.artist;
+        self.coverImageView.hidden = YES;
         
         dispatch_async(_dispatchImageQueue, ^{
-            PlaylistItem* item = self.playlist[self.playlistIndex];
+            PlaylistItem* item = self.currentPlaylistItem;
             if (item == nil)
                 return;
-            NSString* urlString = item.imageURL;
-            if (urlString == nil)
+            NSString* imageURL = item.imageURL;
+            if (imageURL == nil)
                 return;
-            NSURL* url = [[NSURL alloc] initWithString:urlString];
-            NSData *imageData = [NSData dataWithContentsOfURL:url];
+            NSURL* url = [[NSURL alloc] initWithString:imageURL];
+            if (url == nil)
+                return;
+            item.imageData = [NSData dataWithContentsOfURL:url];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.coverImageView setImage:[UIImage imageWithData:imageData]];
+                PlaylistItem* item = self.currentPlaylistItem;
+                if (item == nil || item.imageData == nil)
+                    return;
+                [self.coverImageView setImage:[UIImage imageWithData:self.currentPlaylistItem.imageData]];
+                self.coverImageView.hidden = NO;
             });
         });
     }
@@ -348,12 +368,20 @@ dispatch_queue_t _dispatchImageQueue;
     item.album = album;
     item.title = title;
     item.imageURL = imageURL;
-    [self.playlist addObject:item];
-    if (self.playlistIndex == -1)
-        self.playlistIndex = 0;
     
-    if ([_audioPlayer isNextURLAvailable] == NO)
-        [_audioPlayer queueURLString:url];
+    if ([self.playlist containsObject:item] == NO)
+    {
+        [self.playlist addObject:item];
+        if (self.playlistIndex == -1)
+            self.playlistIndex = 0;
+        
+        if ([_audioPlayer isNextURLAvailable] == NO)
+            [_audioPlayer queueURLString:url];
+    }
+    else
+    {
+        NSLog(@"this item already exists");
+    }
 }
 
 - (void)audioPlayerDidFinishPlaying:(id<IDZAudioPlayer>)player
