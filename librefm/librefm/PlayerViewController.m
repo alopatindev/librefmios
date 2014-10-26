@@ -53,6 +53,7 @@ id<IDZAudioPlayer> _audioPlayer;
 __weak LibrefmConnection *_librefmConnection;
 LoginViewController *_loginViewController;
 SignupViewController *_signupViewController;
+UIImage *_coverImagePlaceholder;
 
 const static size_t MIN_PLAYLIST_SIZE = 10;
 const static size_t MAX_PLAYLIST_PREVIOUS_SIZE = 50;
@@ -79,6 +80,7 @@ dispatch_queue_t _dispatchImageQueue;
 - (void)initialize
 {
     _dispatchImageQueue = dispatch_queue_create("imageQueue", NULL);
+    _coverImagePlaceholder = [UIImage imageNamed:@"music59"];
 }
 
 - (void)viewDidLoad
@@ -287,17 +289,22 @@ dispatch_queue_t _dispatchImageQueue;
             if (item == nil)
                 return;
             NSString* imageURL = item.imageURL;
-            if (imageURL == nil)
-                return;
-            NSURL* url = [[NSURL alloc] initWithString:imageURL];
-            if (url == nil)
-                return;
-            item.imageData = [NSData dataWithContentsOfURL:url];
+            if (imageURL != nil) {
+                NSURL* url = [[NSURL alloc] initWithString:imageURL];
+                if (url != nil)
+                    item.imageData = [NSData dataWithContentsOfURL:url];
+            }
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 PlaylistItem* item = self.currentPlaylistItem;
                 if (item == nil || item.imageData == nil)
-                    return;
-                [self.coverImageView setImage:[UIImage imageWithData:self.currentPlaylistItem.imageData]];
+                {
+                    self.coverImageView.image = _coverImagePlaceholder;
+                }
+                else
+                {
+                    self.coverImageView.image = [UIImage imageWithData:self.currentPlaylistItem.imageData];
+                }
                 self.coverImageView.hidden = NO;
             });
         });

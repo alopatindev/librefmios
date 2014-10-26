@@ -10,6 +10,7 @@
 		BA0DC6CD197AB44300AED271 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0DC6CC197AB44300AED271 /* SignupViewController.m */; };
 		BA0DC6D9197C6E4600AED271 /* TagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0DC6D8197C6E4600AED271 /* TagsViewController.m */; };
 		BA0DC6DE197C6F1100AED271 /* HPLTagCloudGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0DC6DD197C6F1100AED271 /* HPLTagCloudGenerator.m */; };
+		BA33676219FD4482004C5DF7 /* music59.png in Resources */ = {isa = PBXBuildFile; fileRef = BA33676119FD4482004C5DF7 /* music59.png */; };
 		BA4D6A6F199F8F9B00F0E671 /* AddTagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4D6A6E199F8F9B00F0E671 /* AddTagViewController.m */; };
 		BA628A2F1983F5C800AAA264 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA628A2E1983F5C800AAA264 /* TabBarViewController.m */; };
 		BA628A321983FA7600AAA264 /* BaseTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA628A311983FA7600AAA264 /* BaseTabViewController.m */; };
@@ -88,6 +89,7 @@
 		BA0DC6D8197C6E4600AED271 /* TagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagsViewController.m; sourceTree = "<group>"; };
 		BA0DC6DC197C6F1100AED271 /* HPLTagCloudGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPLTagCloudGenerator.h; sourceTree = "<group>"; };
 		BA0DC6DD197C6F1100AED271 /* HPLTagCloudGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPLTagCloudGenerator.m; sourceTree = "<group>"; };
+		BA33676119FD4482004C5DF7 /* music59.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = music59.png; sourceTree = "<group>"; };
 		BA4D6A6D199F8F9B00F0E671 /* AddTagViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddTagViewController.h; sourceTree = "<group>"; };
 		BA4D6A6E199F8F9B00F0E671 /* AddTagViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddTagViewController.m; sourceTree = "<group>"; };
 		BA628A2D1983F5C800AAA264 /* TabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarViewController.h; sourceTree = "<group>"; };
@@ -479,6 +481,7 @@
 		BAFD9E86194DA181009718B2 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				BA33676119FD4482004C5DF7 /* music59.png */,
 				BAE03F9319EF1E140012A900 /* next8.png */,
 				BAE03F9419EF1E140012A900 /* pause11.png */,
 				BAE03F9519EF1E140012A900 /* play33.png */,
@@ -568,6 +571,7 @@
 				BAFD9E5F194CDF98009718B2 /* Images.xcassets in Resources */,
 				BAE03F9A19EF1E140012A900 /* previous5.png in Resources */,
 				BAE03F9919EF1E140012A900 /* play33.png in Resources */,
+				BA33676219FD4482004C5DF7 /* music59.png in Resources */,
 				BADD2883195A30CF0057744B /* logo.png in Resources */,
 				BAFD9E88194DA181009718B2 /* turtle.libre.fm.der in Resources */,
 				BAE03F9819EF1E140012A900 /* pause11.png in Resources */,
