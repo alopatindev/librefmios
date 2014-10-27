@@ -404,6 +404,9 @@ dispatch_queue_t _dispatchImageQueue;
     {
         NSLog(@"this item already exists");
     }
+    
+    if ([self.playlist count] == 1)
+        [self playButtonClicked:nil];
 }
 
 - (void)audioPlayerDidFinishPlaying:(id<IDZAudioPlayer>)player
