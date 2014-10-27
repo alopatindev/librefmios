@@ -163,10 +163,18 @@ static void IDZPropertyListener(void* inUserData,
                                           kCFRunLoopCommonModes,
                                           0,
                                           &mQueue);
-    NSAssert(status == noErr, @"Audio queue creation was successful.");
+    //NSAssert(status == noErr, @"Audio queue creation was successful.");
+    if (status != noErr) {
+        NSLog(@"Audio queue creation was not successful");
+        return;
+    }
     AudioQueueSetParameter(mQueue, kAudioQueueParam_Volume, 1.0);
     status = AudioQueueAddPropertyListener(mQueue, kAudioQueueProperty_IsRunning,
                                            IDZPropertyListener, (__bridge void*)self);
+    if (status != noErr) {
+        NSLog(@"AudioQueueAddPropertyListener failed");
+        return;
+    }
     
     for(int i = 0; i < IDZ_BUFFER_COUNT; ++i)
     {
@@ -240,7 +248,11 @@ static void IDZPropertyListener(void* inUserData,
         return NO;
     }
     OSStatus osStatus = AudioQueueStart(mQueue, NULL);
-    NSAssert(osStatus == noErr, @"AudioQueueStart failed");
+    //NSAssert(osStatus == noErr, @"AudioQueueStart failed");
+    if (osStatus != noErr) {
+        NSLog(@"AudioQueueStart failed");
+        return NO;
+    }
     self.state = IDZAudioPlayerStatePlaying;
     //self.playing = YES;
     _queuedPlayback = NO;
@@ -271,7 +283,11 @@ static void IDZPropertyListener(void* inUserData,
     _queuedPlayback = NO;
     if(self.state != IDZAudioPlayerStatePlaying) return NO;
     OSStatus osStatus = AudioQueuePause(mQueue);
-    NSAssert(osStatus == noErr, @"AudioQueuePause failed");
+    //NSAssert(osStatus == noErr, @"AudioQueuePause failed");
+    if (osStatus != noErr) {
+        NSLog(@"AudioQueuePause failed");
+        return NO;
+    }
     self.state = IDZAudioPlayerStatePaused;
     return (osStatus == noErr);
 }
@@ -293,9 +309,13 @@ static void IDZPropertyListener(void* inUserData,
     //self.playing = NO;
     self.state = IDZAudioPlayerStateStopping;
     OSStatus osStatus = AudioQueueStop(mQueue, immediate);
+    if (osStatus != noErr) {
+        NSLog(@"AudioQueueStop failed");
+        return NO;
+    }
     _initializedAudio = NO;
 
-    NSAssert(osStatus == noErr, @"AudioQueueStop failed");
+    //NSAssert(osStatus == noErr, @"AudioQueueStop failed");
     return (osStatus == noErr);    
 }
 
@@ -366,7 +386,11 @@ static void IDZPropertyListener(void* inUserData,
     UInt32 oRunning = 0;
     UInt32 ioSize = sizeof(oRunning);
     OSStatus result = AudioQueueGetProperty(mQueue, kAudioQueueProperty_IsRunning, &oRunning, &ioSize);
-    return oRunning;
+    if (result != noErr) {
+        NSLog(@"queryIsRunning failed");
+        return 0;
+    }
+    return result == noErr && oRunning;
 }
 - (NSTimeInterval)duration
 {

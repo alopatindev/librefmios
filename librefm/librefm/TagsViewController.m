@@ -68,6 +68,7 @@ AddTagViewController *_addTagViewController;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     for(UILabel *v in self.tagLabels) {
         v.textColor = [UIColor customBlueColor];
     }

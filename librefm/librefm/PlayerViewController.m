@@ -333,16 +333,16 @@ dispatch_queue_t _dispatchImageQueue;
 
 - (void)maybeDecreasePlaylistToLimit
 {
-    if (self.playlistIndex - 1 >= MAX_PLAYLIST_PREVIOUS_SIZE)
+    if (self.playlistIndex >= MAX_PLAYLIST_PREVIOUS_SIZE)
     {
         PlaylistItem* item = self.playlist[self.playlistIndex];
-        NSLog(@"!!! decreasePlaylistToLimit(1) %d-1 >= %d; self.playlist[self.playlistIndex].url='%@'", self.playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
+        NSLog(@"!!! decreasePlaylistToLimit(1) %d >= %d; self.playlist[self.playlistIndex].url='%@'", self.playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
         int offset = self.playlistIndex - (int)MAX_PLAYLIST_PREVIOUS_SIZE;
         NSLog(@"!!! offset=%d", offset);
         self.playlistIndex -= offset;
         [self.playlist removeObjectsInRange:NSMakeRange(0, offset)];
         item = self.playlist[self.playlistIndex];
-        NSLog(@"!!! decreasePlaylistToLimit(2) %d-1 >= %d; self.playlist[self.playlistIndex].url='%@'", self.playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
+        //NSLog(@"!!! decreasePlaylistToLimit(2) %d-1 >= %d; self.playlist[self.playlistIndex].url='%@'", self.playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
     }
 }
 
@@ -433,8 +433,6 @@ dispatch_queue_t _dispatchImageQueue;
 - (void)audioPlayerChangedState:(IDZAudioPlayerState)state
                             url:(NSURL *)url
 {
-    NSLog(@"! changed state=%d url='%@'", state, [url absoluteString]);
-    
     NSString* str;
     switch(state)
     {
@@ -459,6 +457,7 @@ dispatch_queue_t _dispatchImageQueue;
             str = @"uknown";
             break;
     }
+    NSLog(@"! changed state=%d %@ url='%@'", state, str, [url absoluteString]);
     
     //self.statusLabel.text = [NSString stringWithFormat:@"Status: %@", str];
     //self.urlLabel.text = [url absoluteString];
