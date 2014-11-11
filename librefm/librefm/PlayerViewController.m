@@ -441,9 +441,16 @@ dispatch_queue_t _dispatchImageQueue;
             [self updateTogglePlayPauseButton];
             break;
         case IDZAudioPlayerStatePlaying:
+        {
             str = @"IDZAudioPlayerStatePlaying";
             [self updateTogglePlayPauseButton];
+            
+            PlaylistItem* item = self.currentPlaylistItem;
+            [_librefmConnection updateNowPlayingArtist:item.artist
+                                                 track:item.title
+                                                 album:item.album];
             break;
+        }
         case IDZAudioPlayerStatePrepared:
             str = @"IDZAudioPlayerStatePrepared";
             break;

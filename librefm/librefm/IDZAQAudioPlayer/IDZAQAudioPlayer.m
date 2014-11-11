@@ -77,6 +77,7 @@
 @dynamic currentTime;
 @dynamic numberOfChannels;
 @dynamic duration;
+@dynamic durationRatio;
 @synthesize playing = mPlaying;
 @synthesize decoder = mDecoder;
 @synthesize state = mState;
@@ -396,6 +397,11 @@ static void IDZPropertyListener(void* inUserData,
 {
     NSTimeInterval duration = mDecoder.duration;
     return duration;
+}
+
+- (int)durationRatio
+{
+    return mDecoder.durationRatio;
 }
 
 - (NSTimeInterval)currentTime

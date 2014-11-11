@@ -110,6 +110,9 @@ typedef enum IDZAudioPlayStateTag
  * @brief Duration of the source in seconds.
  */
 @property(readonly) NSTimeInterval duration;
+
+@property(readonly) int durationRatio;
+
 /**
  * @brief Delegate for notifications.
  */

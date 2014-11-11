@@ -66,7 +66,8 @@ static const int DELAY_BETWEEN_REQUESTS_SECONDS = 20; // seconds
 @property NSMutableArray* urlList;
 
 @property size_t downloadedBytes;
-//@property size_t expectedContentLength;
+@property size_t readBytes;
+@property size_t expectedContentLength;
 @property NSURLConnection* connection;
 
 @end
@@ -165,8 +166,9 @@ BOOL _downloadComplete;
     mpFile = NULL;
     _downloadComplete = NO;
     self.url = nil;
-    //self.expectedContentLength = 0U;
+    self.expectedContentLength = 0U;
     self.downloadedBytes = 0U;
+    self.readBytes = 0U;
     self.headerIsRead = NO;
     self.bufferingState = BufferingStateNothing;
 }
@@ -312,8 +314,18 @@ BOOL _downloadComplete;
 // MARK: - Dynamic Properties
 - (NSTimeInterval)duration
 {
+    NSLog(@"durationRatio=%d", [self durationRatio]);
     double duration = ov_time_total(&mOggVorbisFile, -1);
     return (NSTimeInterval)duration;
+}
+
+- (int)durationRatio
+{
+    //size_t fileSize = _downloadComplete ? self.downloadedBytes : self.expectedContentLength;
+    size_t fileSize = self.expectedContentLength;
+    if (fileSize == 0LLU)
+        return 0;
+    return (self.readBytes * 100LLU) / fileSize;
 }
 
 // networking
@@ -406,7 +418,7 @@ BOOL _downloadComplete;
     BOOL wrongResponse = NO;
     switch (statusCode) {
         case 200: // OK
-            //self.expectedContentLength = (size_t) [response expectedContentLength];
+            self.expectedContentLength = (size_t) [response expectedContentLength];
             break;
         case 206: // partial content
             break;
@@ -548,6 +560,7 @@ static size_t network_stream_read(void* ptr, size_t size, size_t nitems, FILE* s
                                                 length:(dataQueueSize - sizeWasRead)];
     }
     _self.dataQueueDict[url] = newData;
+    _self.readBytes += sizeWasRead;
     
     return sizeWasRead;
 }
@@ -579,6 +592,7 @@ static int network_stream_close(FILE* stream)
 
 /*static int network_stream_seek(FILE* stream, ogg_int64_t off, int whence)
 {
+    NSLog(@"network_stream_seek %ld %d", (long)off, whence);
     return 0;
 }*/
 
