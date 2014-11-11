@@ -314,12 +314,12 @@ BOOL _downloadComplete;
 // MARK: - Dynamic Properties
 - (NSTimeInterval)duration
 {
-    NSLog(@"durationRatio=%d", [self durationRatio]);
+    NSLog(@"playedRatio=%d", [self playedRatio]);
     double duration = ov_time_total(&mOggVorbisFile, -1);
     return (NSTimeInterval)duration;
 }
 
-- (int)durationRatio
+- (int)playedRatio
 {
     //size_t fileSize = _downloadComplete ? self.downloadedBytes : self.expectedContentLength;
     size_t fileSize = self.expectedContentLength;

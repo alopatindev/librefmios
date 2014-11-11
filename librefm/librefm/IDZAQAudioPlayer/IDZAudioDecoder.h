@@ -57,7 +57,7 @@ typedef enum {
  */
 @property(readonly) NSTimeInterval duration;
 
-@property(readonly) int durationRatio;
+@property(readonly) int playedRatio;
 
 @property BufferingState bufferingState;
 
