@@ -61,6 +61,8 @@ const static size_t MAX_PLAYLIST_PREVIOUS_SIZE = 50;
 NSString *_lastTag;
 dispatch_queue_t _dispatchImageQueue;
 
+NSTimer *_progressUpdateTimer;
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
@@ -101,6 +103,25 @@ dispatch_queue_t _dispatchImageQueue;
     
     [self addParallaxEffectWithDepth:12 foreground:NO];
     [self maybeStartLogin];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    _progressUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                            target:self
+                                                          selector:@selector(updatePlayedProgress)
+                                                          userInfo:nil
+                                                           repeats:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [_progressUpdateTimer invalidate];
+    _progressUpdateTimer = nil;
+
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -329,6 +350,12 @@ dispatch_queue_t _dispatchImageQueue;
         self.titleLabel.text = [NSString new];
         self.artistLabel.text = [NSString new];
     }
+}
+
+- (void)updatePlayedProgress
+{
+    NSLog(@"updatePlayedProgress");
+    self.playedProgressView.progress = (float)[_audioPlayer playedRatio] / 100.0f;
 }
 
 - (void)maybeDecreasePlaylistToLimit

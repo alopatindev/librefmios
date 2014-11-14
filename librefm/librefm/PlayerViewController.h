@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *artistLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *coverImageView;
+@property (weak, nonatomic) IBOutlet UIProgressView *playedProgressView;
 
 - (IBAction)playButtonClicked:(id)sender;
 - (IBAction)togglePlayPauseButtonClicked:(id)sender;

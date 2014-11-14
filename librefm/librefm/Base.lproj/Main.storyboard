@@ -52,12 +52,15 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PRA-W3-Dfl">
                                 <rect key="frame" x="40" y="28" width="240" height="44"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MXy-Ub-omh">
+                                <rect key="frame" x="0.0" y="123" width="320" height="2"/>
+                            </progressView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vkw-z8-qCy">
-                                <rect key="frame" x="60" y="130" width="200" height="200"/>
+                                <rect key="frame" x="60" y="140" width="200" height="200"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -67,6 +70,7 @@
                         <outlet property="artistLabel" destination="V3P-sR-9pU" id="jZp-iB-pRB"/>
                         <outlet property="coverImageView" destination="Vkw-z8-qCy" id="QNh-GS-p3R"/>
                         <outlet property="nextButton" destination="vko-Xi-jgF" id="OR7-sf-yP0"/>
+                        <outlet property="playedProgressView" destination="MXy-Ub-omh" id="xIE-Am-oza"/>
                         <outlet property="previousButton" destination="q0M-me-Vqd" id="Idc-Ep-gwS"/>
                         <outlet property="titleLabel" destination="PRA-W3-Dfl" id="IYY-Kq-6yb"/>
                         <outlet property="togglePlayPauseButton" destination="rCl-8x-N9V" id="aUh-kC-bqd"/>
@@ -74,7 +78,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="531" y="111"/>
+            <point key="canvasLocation" x="531" y="119"/>
         </scene>
         <!--Tab Bar View Controller-->
         <scene sceneID="DgO-mz-bdg">
