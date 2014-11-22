@@ -149,7 +149,7 @@ KeychainItemWrapper *_keychainWrapper;
                   error:(NSError*)error
 {
     [self saveCredentialsUsername:username password:password];
-    [_playerViewController librefmDidLogin:ok error:error];
+    [_playerViewController librefmDidLogin:ok username:username password:password error:error];
 }
 
 - (void)librefmDidLoadPlaylist:(NSDictionary*)playlist ok:(BOOL)ok error:(NSError*)error

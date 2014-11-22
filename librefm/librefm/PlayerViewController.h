@@ -27,7 +27,10 @@
 - (IBAction)nextButtonClicked:(id)sender;
 - (IBAction)previousButtonClicked:(id)sender;
 
-- (void)librefmDidLogin:(BOOL)ok error:(NSError *)error;
+- (void)librefmDidLogin:(BOOL)ok
+               username:(NSString*)username
+               password:(NSString*)password
+                  error:(NSError *)error;
 - (void)librefmDidSignUp:(BOOL)ok
                    error:(NSError *)error
                 username:(NSString *)username
