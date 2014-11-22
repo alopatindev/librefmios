@@ -23,6 +23,8 @@ KeychainItemWrapper *_keychainWrapper;
     
     srand(time(NULL));
     
+    self.needSaveCredentials = NO;
+    
     NSError *error;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
     [[AVAudioSession sharedInstance] setActive:YES error:&error];
@@ -124,11 +126,15 @@ KeychainItemWrapper *_keychainWrapper;
     }
 }
 
-- (void)saveCredentialsUsername:(NSString*)username password:(NSString*)password
+- (void)maybeSaveCredentialsUsername:(NSString*)username password:(NSString*)password
 {
-    NSLog(@"saving credentials");
-    [_keychainWrapper setObject:username forKey:(__bridge id)(kSecAttrAccount)];
-    [_keychainWrapper setObject:password forKey:(__bridge id)(kSecValueData)];
+    if (self.needSaveCredentials) {
+        NSLog(@"saving credentials");
+        [_keychainWrapper setObject:username forKey:(__bridge id)(kSecAttrAccount)];
+        [_keychainWrapper setObject:password forKey:(__bridge id)(kSecValueData)];
+    } else {
+        NSLog(@"not gonna save credentials");
+    }
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
@@ -148,7 +154,9 @@ KeychainItemWrapper *_keychainWrapper;
                password:(NSString*)password
                   error:(NSError*)error
 {
-    [self saveCredentialsUsername:username password:password];
+    if (ok) {
+        [self maybeSaveCredentialsUsername:username password:password];
+    }
     [_playerViewController librefmDidLogin:ok username:username password:password error:error];
 }
 
@@ -188,7 +196,8 @@ KeychainItemWrapper *_keychainWrapper;
                    email:(NSString*)email
 {
     if (ok) {
-        [self saveCredentialsUsername:username password:password];
+        self.needSaveCredentials = YES;
+        [self maybeSaveCredentialsUsername:username password:password];
         [_librefmConnection loginWithUsername:username password:password];
     }
 

@@ -22,4 +22,6 @@
 @property (strong, nonatomic) TagsViewController *tagsViewController;
 @property (strong, nonatomic) PlayerViewController *playerViewController;
 
+@property (nonatomic) BOOL needSaveCredentials;
+
 @end

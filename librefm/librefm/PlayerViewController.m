@@ -94,6 +94,8 @@ NSTimer *_progressUpdateTimer;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     _librefmConnection = appDelegate.librefmConnection;
 
+    [self setEnabled:NO];
+    
     self.playlist = [NSMutableArray new];
     self.playlistIndex = -1;
     [self updateSongInfo];
@@ -104,6 +106,13 @@ NSTimer *_progressUpdateTimer;
     
     [self addParallaxEffectWithDepth:12 foreground:NO];
     [self maybeStartLogin];
+}
+
+- (void)setEnabled:(BOOL)enabled
+{
+    self.togglePlayPauseButton.enabled = enabled;
+    self.previousButton.enabled = enabled;
+    self.nextButton.enabled = enabled;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -313,6 +322,8 @@ NSTimer *_progressUpdateTimer;
         self.artistLabel.text = item.artist;
         self.coverImageView.hidden = YES;
         
+        [self setEnabled:YES];
+        
         dispatch_async(_dispatchImageQueue, ^{
             PlaylistItem* item = self.currentPlaylistItem;
             if (item == nil)
@@ -351,6 +362,7 @@ NSTimer *_progressUpdateTimer;
     }
     else
     {
+        [self setEnabled:NO];
         self.titleLabel.text = [NSString new];
         self.artistLabel.text = [NSString new];
     }

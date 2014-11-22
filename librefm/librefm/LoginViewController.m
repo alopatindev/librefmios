@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "UIColor+CustomColors.h"
+#import "AppDelegate.h"
 
 @interface LoginViewController ()
 
@@ -54,6 +55,9 @@
 
 - (IBAction)loginButtonClicked:(id)sender
 {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    appDelegate.needSaveCredentials = YES;
+    
     self.loginButton.enabled = NO;
     [self.librefmConnection loginWithUsername:self.usernameTextField.text
                                      password:self.passwordTextField.text];
