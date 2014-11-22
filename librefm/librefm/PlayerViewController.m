@@ -54,6 +54,7 @@ __weak LibrefmConnection *_librefmConnection;
 LoginViewController *_loginViewController;
 SignupViewController *_signupViewController;
 UIImage *_coverImagePlaceholder;
+PlaylistItem *_lastScrobbledPlaylistItem;
 
 const static size_t MIN_PLAYLIST_SIZE = 10;
 const static size_t MAX_PLAYLIST_PREVIOUS_SIZE = 50;
@@ -354,8 +355,17 @@ NSTimer *_progressUpdateTimer;
 
 - (void)updatePlayedProgress
 {
-    NSLog(@"updatePlayedProgress");
-    self.playedProgressView.progress = (float)[_audioPlayer playedRatio] / 100.0f;
+    //NSLog(@"updatePlayedProgress");
+    float progress = (float)[_audioPlayer playedRatio] / 100.0f;
+    self.playedProgressView.progress = progress;
+
+    if (progress >= 0.5f && _lastScrobbledPlaylistItem != self.currentPlaylistItem) {
+        PlaylistItem* item = self.currentPlaylistItem;
+        [_librefmConnection scrobbleArtist:item.artist
+                                     track:item.title
+                                     album:item.album];
+        _lastScrobbledPlaylistItem = self.currentPlaylistItem;
+    }
 }
 
 - (void)maybeDecreasePlaylistToLimit
