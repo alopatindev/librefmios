@@ -172,24 +172,42 @@ KeychainItemWrapper *_keychainWrapper;
         //[_playerViewController clearPlaylist];
 
         NSArray *track = playlist[@"track"];
-        for (NSDictionary *t in track) {
-            NSString *artist = t[@"creator"];
-            NSString *album = t[@"album"];
-            NSString *title = t[@"title"];
-            //NSDictionary* extension = t[@"extension"]; //artist info
-            //@"identifier" : @"0000"
-            NSString *url = t[@"location"];
-            NSString *image = t[@"image"];
-            if ([image isKindOfClass:[NSString class]] == NO) // FIXME: wtf
-                image = @"";
-            //NSNumber *duration = t[@"duration"]; // always 180000?
-            [_playerViewController addToPlaylistURL:url
-                                             artist:artist
-                                              album:album
-                                              title:title
-                                           imageURL:image];
+        if ([track count] == 0) {
+            self.loadingUntilPlayingStarted = NO;
+            [self librefmDidChangeNetworkActivity:NO];
+            [_tagsViewController removeSelectedTag];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No songs for this tag"
+                                                            message:@"Please try another one"
+                                                           delegate:self
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"OK", nil];
+            [alert show];
+        } else {
+            for (NSDictionary *t in track) {
+                NSString *artist = t[@"creator"];
+                NSString *album = t[@"album"];
+                NSString *title = t[@"title"];
+                //NSDictionary* extension = t[@"extension"]; //artist info
+                //@"identifier" : @"0000"
+                NSString *url = t[@"location"];
+                NSString *image = t[@"image"];
+                if ([image isKindOfClass:[NSString class]] == NO) // FIXME: wtf
+                    image = @"";
+                //NSNumber *duration = t[@"duration"]; // always 180000?
+                [_playerViewController addToPlaylistURL:url
+                                                 artist:artist
+                                                  album:album
+                                                  title:title
+                                               imageURL:image];
+            }
         }
     }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"clickedButtonAtIndex %d", buttonIndex);
+    [_playerViewController switchToTabIndex:TabTags];
 }
 
 - (void)librefmDidSignUp:(BOOL)ok

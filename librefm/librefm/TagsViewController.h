@@ -14,10 +14,12 @@
 
 @property NSMutableArray *customTags;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (nonatomic) NSString *selectedTag;
 
 - (void)librefmDidLoadTopTags:(BOOL)ok
                          tags:(NSDictionary*)tags;
 
 - (void)addTag:(NSString*)tag;
+- (void)removeSelectedTag;
 
 @end

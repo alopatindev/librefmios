@@ -99,6 +99,14 @@ AddTagViewController *_addTagViewController;
     [self refresh];
 }
 
+- (void)removeSelectedTag
+{
+    [self.customTags removeObject:self.selectedTag];
+    self.selectedTag = nil;
+    // TODO: save?
+    [self refresh];
+}
+
 - (void)updateTags:(NSMutableDictionary*)tagDict
 {
     self.tagDict = tagDict;
@@ -141,10 +149,10 @@ AddTagViewController *_addTagViewController;
     UILabel *label = (UILabel *)recognizer.view;
     label.textColor = [UIColor customYellowColor];
     
-    NSString *tag = label.text;
-    NSLog(@"tagViewTapped '%@'", tag);
+    self.selectedTag = label.text;
+    NSLog(@"tagViewTapped '%@'", self.selectedTag);
     
-    if ([tag isEqualToString:@"+"]) {
+    if ([self.selectedTag isEqualToString:@"+"]) {
         [self openAddTagScreen];
     } else {
         [UIView transitionWithView:self.view
@@ -155,7 +163,7 @@ AddTagViewController *_addTagViewController;
                         } completion:^(BOOL finished) {
                             [self switchToTabIndex:TabPlayer];
                             [_playerViewController clearPlaylist];
-                            [_playerViewController radioTune:tag];
+                            [_playerViewController radioTune:self.selectedTag];
                         }];
     }
 
