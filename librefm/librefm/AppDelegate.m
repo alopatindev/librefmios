@@ -24,6 +24,7 @@ KeychainItemWrapper *_keychainWrapper;
     srand(time(NULL));
     
     self.needSaveCredentials = NO;
+    self.loadingUntilPlayingStarted = NO;
     
     NSError *error;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
@@ -146,6 +147,8 @@ KeychainItemWrapper *_keychainWrapper;
 
 - (void)librefmDidChangeNetworkActivity:(BOOL)loading
 {
+    if (self.loadingUntilPlayingStarted == YES)
+        loading = YES;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = loading;
 }
 

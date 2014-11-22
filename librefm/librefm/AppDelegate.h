@@ -23,5 +23,6 @@
 @property (strong, nonatomic) PlayerViewController *playerViewController;
 
 @property (nonatomic) BOOL needSaveCredentials;
+@property (nonatomic) BOOL loadingUntilPlayingStarted;
 
 @end

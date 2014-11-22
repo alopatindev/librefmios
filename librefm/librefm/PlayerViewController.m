@@ -50,6 +50,7 @@
 @implementation PlayerViewController
 
 id<IDZAudioPlayer> _audioPlayer;
+__weak AppDelegate *_appDelegate;
 __weak LibrefmConnection *_librefmConnection;
 LoginViewController *_loginViewController;
 SignupViewController *_signupViewController;
@@ -84,6 +85,7 @@ NSTimer *_progressUpdateTimer;
 {
     _dispatchImageQueue = dispatch_queue_create("imageQueue", NULL);
     _coverImagePlaceholder = [UIImage imageNamed:@"music59"];
+    _appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 }
 
 - (void)viewDidLoad
@@ -91,8 +93,7 @@ NSTimer *_progressUpdateTimer;
     [super viewDidLoad];
     self.presentationViewHeightOffset = 0.0;
 
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    _librefmConnection = appDelegate.librefmConnection;
+    _librefmConnection = _appDelegate.librefmConnection;
 
     [self setEnabled:NO];
     
@@ -424,6 +425,7 @@ NSTimer *_progressUpdateTimer;
 
 - (void)radioTune:tag
 {
+    _appDelegate.loadingUntilPlayingStarted = YES;
     [_librefmConnection radioTune:tag];
     _lastTag = tag;
 }
@@ -496,6 +498,8 @@ NSTimer *_progressUpdateTimer;
         {
             str = @"IDZAudioPlayerStatePlaying";
             [self updateTogglePlayPauseButton];
+            _appDelegate.loadingUntilPlayingStarted = NO;
+            [_appDelegate librefmDidChangeNetworkActivity:NO];
             
             PlaylistItem* item = self.currentPlaylistItem;
             [_librefmConnection updateNowPlayingArtist:item.artist
