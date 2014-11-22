@@ -11,8 +11,11 @@
 #import "NetworkManager.h"
 #import "TabBarViewController.h"
 #import "BaseTabViewController.h"
+#import "KeychainItemWrapper.h"
 
 @implementation AppDelegate
+
+KeychainItemWrapper *_keychainWrapper;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -29,17 +32,21 @@
 
     (void) [NetworkManager instance];
     
+    _keychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"UserAuth" accessGroup:nil];
+    
     TabBarViewController *tabBarController = (TabBarViewController *)self.window.rootViewController;
     tabBarController.delegate = self;
     _tagsViewController = tabBarController.viewControllers[TabTags];
     _playerViewController = tabBarController.viewControllers[TabPlayer];
-
-    [application beginReceivingRemoteControlEvents];
     
     _librefmConnection = [LibrefmConnection new];
     _librefmConnection.delegate = self;
     [_librefmConnection getTopTags];
     
+    [application beginReceivingRemoteControlEvents];
+    
+    [self loadCredentials];
+
     return YES;
 }
 							
@@ -105,6 +112,25 @@
     }
 }
 
+- (void)loadCredentials
+{
+    NSString* username = [_keychainWrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString* password = [_keychainWrapper objectForKey:(__bridge id)(kSecValueData)];
+    if (username != nil && [username length] != 0) {
+        NSLog(@"username and password loaded");
+        [_librefmConnection loginWithUsername:username password:password];
+    } else {
+        NSLog(@"no username/password");
+    }
+}
+
+- (void)saveCredentialsUsername:(NSString*)username password:(NSString*)password
+{
+    NSLog(@"saving credentials");
+    [_keychainWrapper setObject:username forKey:(__bridge id)(kSecAttrAccount)];
+    [_keychainWrapper setObject:password forKey:(__bridge id)(kSecValueData)];
+}
+
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
     BaseTabViewController *controller = (BaseTabViewController *)viewController;
@@ -117,8 +143,12 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = loading;
 }
 
-- (void)librefmDidLogin:(BOOL)ok error:(NSError*)error
+- (void)librefmDidLogin:(BOOL)ok
+               username:(NSString*)username
+               password:(NSString*)password
+                  error:(NSError*)error
 {
+    [self saveCredentialsUsername:username password:password];
     [_playerViewController librefmDidLogin:ok error:error];
 }
 
@@ -158,6 +188,7 @@
                    email:(NSString*)email
 {
     if (ok) {
+        [self saveCredentialsUsername:username password:password];
         [_librefmConnection loginWithUsername:username password:password];
     }
 

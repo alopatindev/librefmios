@@ -14,6 +14,7 @@
 		BA4D6A6F199F8F9B00F0E671 /* AddTagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4D6A6E199F8F9B00F0E671 /* AddTagViewController.m */; };
 		BA628A2F1983F5C800AAA264 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA628A2E1983F5C800AAA264 /* TabBarViewController.m */; };
 		BA628A321983FA7600AAA264 /* BaseTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA628A311983FA7600AAA264 /* BaseTabViewController.m */; };
+		BAA18F5C1A211E01002356C5 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = BAA18F5B1A211E01002356C5 /* KeychainItemWrapper.m */; };
 		BAAD6B8E195A4A6E00397F4D /* BaseModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */; };
 		BAAD6B91195A8B4600397F4D /* UIViewController+Parallax.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B90195A8B4600397F4D /* UIViewController+Parallax.m */; };
 		BAAD6B97195EF3E800397F4D /* DeviceHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B96195EF3E800397F4D /* DeviceHardware.m */; };
@@ -96,6 +97,8 @@
 		BA628A2E1983F5C800AAA264 /* TabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarViewController.m; sourceTree = "<group>"; };
 		BA628A301983FA7600AAA264 /* BaseTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTabViewController.h; sourceTree = "<group>"; };
 		BA628A311983FA7600AAA264 /* BaseTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTabViewController.m; sourceTree = "<group>"; };
+		BAA18F5A1A211E01002356C5 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		BAA18F5B1A211E01002356C5 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		BAAD6B8C195A4A6E00397F4D /* BaseModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModalViewController.h; sourceTree = "<group>"; };
 		BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseModalViewController.m; sourceTree = "<group>"; };
 		BAAD6B8F195A8B4600397F4D /* UIViewController+Parallax.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Parallax.h"; sourceTree = "<group>"; };
@@ -432,6 +435,8 @@
 				BAAD6B96195EF3E800397F4D /* DeviceHardware.m */,
 				BAAD6B98195EF46800397F4D /* Singleton.h */,
 				BAAD6B99195EF46800397F4D /* Singleton.m */,
+				BAA18F5A1A211E01002356C5 /* KeychainItemWrapper.h */,
+				BAA18F5B1A211E01002356C5 /* KeychainItemWrapper.m */,
 			);
 			path = librefm;
 			sourceTree = "<group>";
@@ -637,6 +642,7 @@
 				BADD28731959F12E0057744B /* POPCustomAnimation.mm in Sources */,
 				BAAD6B9A195EF46800397F4D /* Singleton.m in Sources */,
 				BADD27DD1953931C0057744B /* IDZOggVorbisFileDecoder.mm in Sources */,
+				BAA18F5C1A211E01002356C5 /* KeychainItemWrapper.m in Sources */,
 				BADD28721959F12E0057744B /* POPCGUtils.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

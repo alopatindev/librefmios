@@ -349,6 +349,8 @@ NSString* _signupEmail;
 
             self.mobileSessionKey = nil;
             [self.delegate librefmDidLogin:NO
+                                  username:self.username
+                                  password:self.password
                                      error:[NSError errorWithDomain:errorMessage
                                                                code:errorCodeInt
                                                            userInfo:nil]];
@@ -361,6 +363,8 @@ NSString* _signupEmail;
             BOOL loggedIn = self.state == LibrefmConnectionStateLoggedIn
                             ? YES : NO;
             [self.delegate librefmDidLogin:loggedIn
+                                  username:self.username
+                                  password:self.password
                                      error:nil];
             if (loggedIn == NO) {
                 self.state = LibrefmConnectionStateNotLoggedIn;
@@ -503,6 +507,8 @@ NSString* _signupEmail;
         if ([url isAPIMethod:METHOD_AUTH_GETMOBILESESSION]) {
             self.mobileSessionKey = nil;
             [self.delegate librefmDidLogin:NO
+                                  username:self.username
+                                  password:self.password
                                      error:error];
             self.state = LibrefmConnectionStateNotLoggedIn;
         } else if ([url isAPIMethod:METHOD_RADIO_GETPLAYLIST] ||

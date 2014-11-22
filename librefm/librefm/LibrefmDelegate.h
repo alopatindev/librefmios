@@ -17,7 +17,10 @@ typedef enum {
 
 - (void)librefmDidChangeNetworkActivity:(BOOL)loading;
 
-- (void)librefmDidLogin:(BOOL)ok error:(NSError*)error;
+- (void)librefmDidLogin:(BOOL)ok
+               username:(NSString*)username
+               password:(NSString*)password
+                  error:(NSError*)error;
 
 - (void)librefmDidLoadPlaylist:(NSDictionary*)playlist
                             ok:(BOOL)ok
