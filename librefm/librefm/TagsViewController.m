@@ -27,6 +27,8 @@ __weak LibrefmConnection *_librefmConnection;
 __weak PlayerViewController *_playerViewController;
 AddTagViewController *_addTagViewController;
 
+NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
@@ -45,8 +47,20 @@ AddTagViewController *_addTagViewController;
 
 - (void)setup
 {
-    self.customTags = [NSMutableArray new];
-    // TODO: load custom tags
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:USERDEFAULT_CUSTOMTAGS] != nil)
+    {
+        self.customTags = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:USERDEFAULT_CUSTOMTAGS]];
+    }
+    else
+    {
+        self.customTags = [NSMutableArray new];
+    }
+}
+
+- (void)saveData
+{
+    [[NSUserDefaults standardUserDefaults] setObject:self.customTags forKey:USERDEFAULT_CUSTOMTAGS];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)viewDidLoad
@@ -94,7 +108,7 @@ AddTagViewController *_addTagViewController;
 - (void)addTag:(NSString*)tag
 {
     [self.customTags addObject:tag];
-    // TODO: save
+    [self saveData];
 
     [self refresh];
 }
@@ -103,7 +117,8 @@ AddTagViewController *_addTagViewController;
 {
     [self.customTags removeObject:self.selectedTag];
     self.selectedTag = nil;
-    // TODO: save?
+    [self saveData];
+
     [self refresh];
 }
 
