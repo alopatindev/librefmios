@@ -162,7 +162,7 @@ NSTimer *_progressUpdateTimer;
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSLog(@"%d", buttonIndex);
+    NSLog(@"%d", (int)buttonIndex);
     switch (buttonIndex) {
         case 0:
             [self openLoginScreen];
