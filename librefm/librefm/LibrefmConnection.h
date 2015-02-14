@@ -78,6 +78,7 @@ typedef enum {
 - (void)loginWithUsername:(NSString*)username password:(NSString*)password;  // librefmDidLogin
 - (void)signUpWithUsername:(NSString*)username password:(NSString*)password email:(NSString*)email;  // librefmDidSignUp
 - (void)openSignupBrowser;
+- (void)logout;
 
 - (void)radioTune:(NSString*)tag;  // librefmDidLoadPlaylist
 - (void)radioGetNextPlaylistPage;  // librefmDidLoadPlaylist

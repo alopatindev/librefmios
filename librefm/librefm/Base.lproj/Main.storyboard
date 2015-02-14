@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Player-->
@@ -204,26 +205,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8hm-7h-VlC">
-                                <rect key="frame" x="48" y="121" width="205" height="344"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8hm-7h-VlC">
+                                <rect key="frame" x="0.0" y="80" width="320" height="404"/>
                             </scrollView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Logged in as username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDE-GF-4ry">
+                                <rect key="frame" x="35" y="31" width="160" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="0.66233598066298338" green="0.66233598066298338" blue="0.66233598066298338" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="highlightedColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CQr-2H-Ypw">
+                                <rect key="frame" x="235" y="28" width="85" height="30"/>
+                                <state key="normal" title="Logout">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginButtonClicked:" destination="IJj-Ln-qYL" eventType="touchUpInside" id="GmZ-1m-Yda"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="8hm-7h-VlC" firstAttribute="top" secondItem="lpR-0J-nBv" secondAttribute="bottom" id="67S-S2-siB"/>
-                            <constraint firstAttribute="trailing" secondItem="8hm-7h-VlC" secondAttribute="trailing" id="I5n-cA-ung"/>
-                            <constraint firstItem="zK6-UY-O2j" firstAttribute="top" secondItem="8hm-7h-VlC" secondAttribute="bottom" id="Ka2-2G-G6K"/>
-                            <constraint firstItem="8hm-7h-VlC" firstAttribute="leading" secondItem="URs-Hu-yh4" secondAttribute="leading" id="gZQ-1r-s0M"/>
+                            <constraint firstItem="kDE-GF-4ry" firstAttribute="top" secondItem="lpR-0J-nBv" secondAttribute="bottom" constant="10" id="cpR-bW-SlR"/>
+                            <constraint firstItem="8hm-7h-VlC" firstAttribute="top" secondItem="kDE-GF-4ry" secondAttribute="bottom" constant="5" id="ly3-PP-si9"/>
+                            <constraint firstItem="CQr-2H-Ypw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="kDE-GF-4ry" secondAttribute="trailing" constant="10" id="mCy-AY-ozd"/>
+                            <constraint firstItem="zK6-UY-O2j" firstAttribute="top" secondItem="8hm-7h-VlC" secondAttribute="bottom" id="nNs-oo-buu"/>
+                            <constraint firstItem="8hm-7h-VlC" firstAttribute="top" secondItem="CQr-2H-Ypw" secondAttribute="bottom" constant="5" id="ncc-of-xhk"/>
+                            <constraint firstItem="CQr-2H-Ypw" firstAttribute="top" secondItem="lpR-0J-nBv" secondAttribute="bottom" constant="10" id="sjF-Y9-7rG"/>
+                            <constraint firstItem="kDE-GF-4ry" firstAttribute="leading" secondItem="URs-Hu-yh4" secondAttribute="leadingMargin" constant="10" id="tIe-vF-5M8"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="CQr-2H-Ypw" secondAttribute="trailing" constant="10" id="vd9-24-ohV"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Tags" id="Mk5-eu-UPD"/>
                     <connections>
+                        <outlet property="loggedInAsLabel" destination="kDE-GF-4ry" id="VT3-le-yyy"/>
+                        <outlet property="loginButton" destination="CQr-2H-Ypw" id="okR-mN-MVR"/>
                         <outlet property="scrollView" destination="8hm-7h-VlC" id="po0-Hh-Ojj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2aN-HP-wk6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="518" y="-570"/>
+            <point key="canvasLocation" x="507" y="-562"/>
         </scene>
         <!--Add Tag View Controller-->
         <scene sceneID="2yk-U5-CqJ">
@@ -289,7 +311,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="e1219194" borderStyle="roundedRect" placeholder="Login" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BF5-Dr-cwE">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Login" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BF5-Dr-cwE">
                                 <rect key="frame" x="82" y="187" width="157" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
@@ -298,7 +320,7 @@
                                     <action selector="updateButtons" destination="tLY-Ok-r82" eventType="editingChanged" id="Txa-Hb-h1R"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="violence" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xxO-MF-adR">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xxO-MF-adR">
                                 <rect key="frame" x="82" y="238" width="157" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>

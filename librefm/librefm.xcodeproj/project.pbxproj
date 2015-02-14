@@ -776,7 +776,11 @@
 				GCC_PREFIX_HEADER = "librefm/librefm-Prefix.pch";
 				INFOPLIST_FILE = "librefm/librefm-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				OTHER_CFLAGS = "-I../../librefm/LibreFM/librefm/popping";
+				OTHER_CFLAGS = (
+					"-I../../librefm/LibreFM/librefm/popping",
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"-DNSLog(...)=",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -796,7 +800,11 @@
 				GCC_PREFIX_HEADER = "librefm/librefm-Prefix.pch";
 				INFOPLIST_FILE = "librefm/librefm-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				OTHER_CFLAGS = "-I../../librefm/LibreFM/librefm/popping";
+				OTHER_CFLAGS = (
+					"-I../../librefm/LibreFM/librefm/popping",
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"-DNSLog(...)=",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;

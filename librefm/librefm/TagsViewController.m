@@ -86,6 +86,11 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
     for(UILabel *v in self.tagLabels) {
         v.textColor = [UIColor customBlueColor];
     }
+
+    if ([_librefmConnection isNeedInputLoginData] == YES)
+    {
+        [self librefmDidLogout];
+    }
 }
 
 - (void)librefmDidLoadTopTags:(BOOL)ok
@@ -96,6 +101,59 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
     } else {
         NSLog(@"librefmDidLoadTopTags failed");
     }
+}
+
+- (void)librefmDidLogin:(BOOL)ok
+               username:(NSString*)username
+               password:(NSString*)password
+                  error:(NSError *)error
+{
+    self.loggedInAsLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Logged in as %@", nil), username];
+    [self.loginButton setTitle:NSLocalizedString(@"Logout", nil) forState:UIControlStateNormal];
+    self.loggedInAsLabel.hidden = NO;
+    self.loginButton.hidden = NO;
+}
+
+- (IBAction)loginButtonClicked:(id)sender
+{
+    if ([_librefmConnection isNeedInputLoginData] == YES)
+    {
+        [_playerViewController maybeStartLogin];
+    }
+    else
+    {
+        NSString *titleText = NSLocalizedString(@"", nil);
+        NSString *messageText = NSLocalizedString(@"Do you wish to logout?", nil);
+        NSString *noText = NSLocalizedString(@"No", nil);
+        NSString *yesText = NSLocalizedString(@"Yes", nil);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:titleText
+                                                        message:messageText
+                                                       delegate:self
+                                              cancelButtonTitle:noText
+                                              otherButtonTitles:yesText, nil];
+        [alert show];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"%d", (int)buttonIndex);
+    switch (buttonIndex) {
+        case 0:
+            break;
+        case 1:
+            [_librefmConnection logout];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)librefmDidLogout
+{
+    self.loggedInAsLabel.hidden = YES;
+    [self.loginButton setTitle:NSLocalizedString(@"Login or Sign Up", nil) forState:UIControlStateNormal];
+    self.loginButton.hidden = NO;
 }
 
 - (void)refresh

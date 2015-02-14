@@ -23,10 +23,7 @@ NSString* _signupEmail;
 - (instancetype)init
 {
     if (self = [super init]) {
-        _responseDict = [NSMutableDictionary new];
-        _requestsQueue = [NSMutableSet new];
-        _requestsNoAuthQueue = [NSMutableSet new];
-        self.state = LibrefmConnectionStateNotLoggedIn;
+        [self reset];
     }
     return self;
 }
@@ -38,9 +35,28 @@ NSString* _signupEmail;
     [self tryLogin];
 }
 
+- (void)logout
+{
+    [self reset];
+    [self.delegate librefmDidLogout];
+}
+
+- (void)reset
+{
+    self.username = nil;
+    self.password = nil;
+    self.state = LibrefmConnectionStateNotLoggedIn;
+    self.name = nil;
+    self.mobileSessionKey = nil;
+    _responseDict = [NSMutableDictionary new];
+    _requestsQueue = [NSMutableSet new];
+    _requestsNoAuthQueue = [NSMutableSet new];
+}
+
 - (BOOL)isNeedInputLoginData
 {
-    return (self.username == nil || self.password == nil) ? YES : NO;
+    return (self.username == nil || self.password == nil ||
+            [self.username length] == 0 || [self.password length] == 0) ? YES : NO;
 }
 
 - (void)tryLogin

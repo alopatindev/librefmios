@@ -10,15 +10,25 @@
 #import "TabBarViewController.h"
 #import "BaseTabViewController.h"
 
-@interface TagsViewController : BaseTabViewController
+@interface TagsViewController : BaseTabViewController<UIAlertViewDelegate>
 
 @property NSMutableArray *customTags;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic) NSString *selectedTag;
+@property (weak, nonatomic) IBOutlet UILabel *loggedInAsLabel;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
 
 - (void)librefmDidLoadTopTags:(BOOL)ok
                          tags:(NSDictionary*)tags;
 
+- (void)librefmDidLogin:(BOOL)ok
+               username:(NSString*)username
+               password:(NSString*)password
+                  error:(NSError *)error;
+
+- (void)librefmDidLogout;
+
+- (IBAction)loginButtonClicked:(id)sender;
 - (void)addTag:(NSString*)tag;
 - (void)removeSelectedTag;
 

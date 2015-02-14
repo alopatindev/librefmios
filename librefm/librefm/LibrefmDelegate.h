@@ -22,6 +22,8 @@ typedef enum {
                password:(NSString*)password
                   error:(NSError*)error;
 
+- (void)librefmDidLogout;
+
 - (void)librefmDidLoadPlaylist:(NSDictionary*)playlist
                             ok:(BOOL)ok
                          error:(NSError*)error;

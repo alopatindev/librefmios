@@ -27,6 +27,8 @@
 - (IBAction)nextButtonClicked:(id)sender;
 - (IBAction)previousButtonClicked:(id)sender;
 
+- (void)maybeStartLogin;
+
 - (void)librefmDidLogin:(BOOL)ok
                username:(NSString*)username
                password:(NSString*)password

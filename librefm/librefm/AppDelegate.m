@@ -160,7 +160,16 @@ KeychainItemWrapper *_keychainWrapper;
     if (ok) {
         [self maybeSaveCredentialsUsername:username password:password];
     }
+    [_tagsViewController librefmDidLogin:ok username:username password:password error:error];
     [_playerViewController librefmDidLogin:ok username:username password:password error:error];
+}
+
+- (void)librefmDidLogout
+{
+    self.needSaveCredentials = YES;
+    [self maybeSaveCredentialsUsername:@"" password:@""];
+    [_playerViewController clearPlaylist];
+    [_tagsViewController librefmDidLogout];
 }
 
 - (void)librefmDidLoadPlaylist:(NSDictionary*)playlist ok:(BOOL)ok error:(NSError*)error

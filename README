@@ -5,7 +5,6 @@ http://www.flaticon.com/packs/ios7-set-lined-1
 
 
 Release checklist
--DNS_BLOCK_ASSERTIONS=1
-disable NSLog
+-I../../librefm/LibreFM/librefm/popping -DNS_BLOCK_ASSERTIONS=1 -DNSLog(...)=
 disable transparent UI stuff
 google a better checklist

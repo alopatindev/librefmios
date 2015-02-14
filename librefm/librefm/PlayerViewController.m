@@ -106,7 +106,6 @@ NSTimer *_progressUpdateTimer;
     _audioPlayer.delegate = self;
     
     [self addParallaxEffectWithDepth:12 foreground:NO];
-    [self maybeStartLogin];
 }
 
 - (void)setEnabled:(BOOL)enabled
@@ -148,12 +147,12 @@ NSTimer *_progressUpdateTimer;
         NSString *messageText = NSLocalizedString(@"To continue please login with your Libre.fm account", nil);
         NSString *loginText = NSLocalizedString(@"Login", nil);
         NSString *signupText = NSLocalizedString(@"Sign Up", nil);
-        //NSString *notNowText = NSLocalizedString(@"Not Now", nil);
+        NSString *notNowText = NSLocalizedString(@"Not Now", nil);
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:titleText
                                                         message:messageText
                                                        delegate:self
                                               cancelButtonTitle:loginText
-                                              otherButtonTitles:/*notNowText, */signupText, nil];
+                                              otherButtonTitles:notNowText, signupText, nil];
         [alert show];
         return YES;
     }
@@ -168,9 +167,10 @@ NSTimer *_progressUpdateTimer;
             [self openLoginScreen];
             break;
         case 1:
+            break;
+        case 2:
             [self openSignupScreen];
             break;
-        //case 2:
         default:
             break;
     }
@@ -366,6 +366,8 @@ NSTimer *_progressUpdateTimer;
         [self setEnabled:NO];
         self.titleLabel.text = [NSString new];
         self.artistLabel.text = [NSString new];
+        self.coverImageView.hidden = YES;
+        self.playedProgressView.progress = 0.0f;
     }
 }
 
@@ -425,6 +427,7 @@ NSTimer *_progressUpdateTimer;
 
 - (void)radioTune:tag
 {
+    [self maybeStartLogin];
     _appDelegate.loadingUntilPlayingStarted = YES;
     [_librefmConnection radioTune:tag];
     _lastTag = tag;
