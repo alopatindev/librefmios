@@ -29,6 +29,7 @@
 - (void)librefmDidLogout;
 
 - (IBAction)loginButtonClicked:(id)sender;
+- (IBAction)iconsWebsiteButton:(id)sender;
 - (void)addTag:(NSString*)tag;
 - (void)removeSelectedTag;
 

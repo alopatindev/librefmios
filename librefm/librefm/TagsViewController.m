@@ -13,6 +13,7 @@
 #import "LibrefmConnection.h"
 #import "PlayerViewController.h"
 #import "AddTagViewController.h"
+#import "Utils.h"
 
 @interface TagsViewController ()
 
@@ -133,6 +134,11 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
                                               otherButtonTitles:yesText, nil];
         [alert show];
     }
+}
+
+- (IBAction)iconsWebsiteButton:(id)sender
+{
+    [Utils openBrowser:@"http://flaticon.com"];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
