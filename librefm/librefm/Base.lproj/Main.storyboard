@@ -66,7 +66,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Player" id="LgD-Ni-YZ9"/>
+                    <tabBarItem key="tabBarItem" title="Player" image="musiciconinactive.png" id="LgD-Ni-YZ9"/>
                     <connections>
                         <outlet property="artistLabel" destination="V3P-sR-9pU" id="jZp-iB-pRB"/>
                         <outlet property="coverImageView" destination="Vkw-z8-qCy" id="QNh-GS-p3R"/>
@@ -266,7 +266,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="CQr-2H-Ypw" secondAttribute="trailing" constant="10" id="vd9-24-ohV"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Tags" id="Mk5-eu-UPD"/>
+                    <tabBarItem key="tabBarItem" title="Tags" image="price1inactive.png" id="Mk5-eu-UPD"/>
                     <connections>
                         <outlet property="loadingLabel" destination="YJH-Eo-aY4" id="OMh-pw-Edx"/>
                         <outlet property="loggedInAsLabel" destination="kDE-GF-4ry" id="VT3-le-yyy"/>
@@ -413,9 +413,11 @@
     </scenes>
     <resources>
         <image name="logo.png" width="121" height="69"/>
+        <image name="musiciconinactive.png" width="19" height="24"/>
         <image name="next8.png" width="512" height="512"/>
         <image name="play33.png" width="512" height="512"/>
         <image name="previous5.png" width="512" height="512"/>
+        <image name="price1inactive.png" width="30" height="24"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

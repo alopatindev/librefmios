@@ -95,7 +95,7 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
         [self librefmDidLogout];
     }
 
-    [self networkAvailabilityChanged:[[NetworkManager instance] isConnectionAvailable]];
+    [self networkAvailabilityChanged:YES];
 }
 
 - (void)librefmDidLoadTopTags:(BOOL)ok
@@ -119,6 +119,17 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
         self.loggedInAsLabel.hidden = YES;
         [self.loginButton setTitle:NSLocalizedString(@"Login or Sign Up", nil) forState:UIControlStateNormal];
         self.loginButton.hidden = NO;
+    }
+}
+
+- (void)updateLoadingLabel
+{
+    if ([[NetworkManager instance] isConnectionAvailable] == YES) {
+        self.loadingLabel.text = NSLocalizedString(@"Loading", nil);
+    }
+    else
+    {
+        self.loadingLabel.text = NSLocalizedString(@"Network is not available", nil);
     }
 }
 
@@ -286,15 +297,16 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
 
 - (void)networkAvailabilityChanged:(BOOL)available
 {
-    if (available == YES) {
-        [_librefmConnection getTopTags];
-        self.loadingLabel.text = NSLocalizedString(@"Loading", nil);
-    }
-    else
-    {
-        self.loadingLabel.text = NSLocalizedString(@"Network is not available", nil);
-    }
+    [self updateLoadingLabel];
     [self updateLoginButton];
+    [self maybeGetTopTags];
+}
+
+- (void)maybeGetTopTags
+{
+    if (self.tagDict == nil && [[NetworkManager instance] isConnectionAvailable] == YES) {
+        [_librefmConnection getTopTags];
+    }
 }
 
 /*

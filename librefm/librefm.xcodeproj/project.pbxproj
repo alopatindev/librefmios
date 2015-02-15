@@ -14,6 +14,10 @@
 		BA4D6A6F199F8F9B00F0E671 /* AddTagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4D6A6E199F8F9B00F0E671 /* AddTagViewController.m */; };
 		BA628A2F1983F5C800AAA264 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA628A2E1983F5C800AAA264 /* TabBarViewController.m */; };
 		BA628A321983FA7600AAA264 /* BaseTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA628A311983FA7600AAA264 /* BaseTabViewController.m */; };
+		BA9C933E1A906CB900DAB714 /* price1active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA9C933C1A906CB900DAB714 /* price1active@2x.png */; };
+		BA9C933F1A906CB900DAB714 /* price1inactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA9C933D1A906CB900DAB714 /* price1inactive@2x.png */; };
+		BA9C93421A906CD000DAB714 /* musiciconactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA9C93401A906CD000DAB714 /* musiciconactive@2x.png */; };
+		BA9C93431A906CD000DAB714 /* musiciconinactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BA9C93411A906CD000DAB714 /* musiciconinactive@2x.png */; };
 		BAA18F5C1A211E01002356C5 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = BAA18F5B1A211E01002356C5 /* KeychainItemWrapper.m */; };
 		BAAD6B8E195A4A6E00397F4D /* BaseModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B8D195A4A6E00397F4D /* BaseModalViewController.m */; };
 		BAAD6B91195A8B4600397F4D /* UIViewController+Parallax.m in Sources */ = {isa = PBXBuildFile; fileRef = BAAD6B90195A8B4600397F4D /* UIViewController+Parallax.m */; };
@@ -97,6 +101,10 @@
 		BA628A2E1983F5C800AAA264 /* TabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarViewController.m; sourceTree = "<group>"; };
 		BA628A301983FA7600AAA264 /* BaseTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTabViewController.h; sourceTree = "<group>"; };
 		BA628A311983FA7600AAA264 /* BaseTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTabViewController.m; sourceTree = "<group>"; };
+		BA9C933C1A906CB900DAB714 /* price1active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "price1active@2x.png"; path = "../../librefm/resources/price1active@2x.png"; sourceTree = "<group>"; };
+		BA9C933D1A906CB900DAB714 /* price1inactive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "price1inactive@2x.png"; path = "../../librefm/resources/price1inactive@2x.png"; sourceTree = "<group>"; };
+		BA9C93401A906CD000DAB714 /* musiciconactive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "musiciconactive@2x.png"; path = "../../librefm/resources/musiciconactive@2x.png"; sourceTree = "<group>"; };
+		BA9C93411A906CD000DAB714 /* musiciconinactive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "musiciconinactive@2x.png"; path = "../../librefm/resources/musiciconinactive@2x.png"; sourceTree = "<group>"; };
 		BAA18F5A1A211E01002356C5 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		BAA18F5B1A211E01002356C5 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		BAAD6B8C195A4A6E00397F4D /* BaseModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseModalViewController.h; sourceTree = "<group>"; };
@@ -486,6 +494,10 @@
 		BAFD9E86194DA181009718B2 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				BA9C93401A906CD000DAB714 /* musiciconactive@2x.png */,
+				BA9C93411A906CD000DAB714 /* musiciconinactive@2x.png */,
+				BA9C933C1A906CB900DAB714 /* price1active@2x.png */,
+				BA9C933D1A906CB900DAB714 /* price1inactive@2x.png */,
 				BA33676119FD4482004C5DF7 /* music59.png */,
 				BAE03F9319EF1E140012A900 /* next8.png */,
 				BAE03F9419EF1E140012A900 /* pause11.png */,
@@ -576,12 +588,16 @@
 				BAFD9E5F194CDF98009718B2 /* Images.xcassets in Resources */,
 				BAE03F9A19EF1E140012A900 /* previous5.png in Resources */,
 				BAE03F9919EF1E140012A900 /* play33.png in Resources */,
+				BA9C93421A906CD000DAB714 /* musiciconactive@2x.png in Resources */,
+				BA9C93431A906CD000DAB714 /* musiciconinactive@2x.png in Resources */,
 				BA33676219FD4482004C5DF7 /* music59.png in Resources */,
 				BADD2883195A30CF0057744B /* logo.png in Resources */,
 				BAFD9E88194DA181009718B2 /* turtle.libre.fm.der in Resources */,
 				BAE03F9819EF1E140012A900 /* pause11.png in Resources */,
 				BAE03F9719EF1E140012A900 /* next8.png in Resources */,
 				BAFD9E51194CDF98009718B2 /* InfoPlist.strings in Resources */,
+				BA9C933F1A906CB900DAB714 /* price1inactive@2x.png in Resources */,
+				BA9C933E1A906CB900DAB714 /* price1active@2x.png in Resources */,
 				BAFD9E5A194CDF98009718B2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
