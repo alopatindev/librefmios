@@ -56,6 +56,8 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
     {
         self.customTags = [NSMutableArray new];
     }
+
+    [[NetworkManager instance] addObserver:self];
 }
 
 - (void)saveData
@@ -78,7 +80,7 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
     size.width *= 2.0f;
     size.height *= 2.0f;
     self.scrollView.contentSize = size;
-    [self.scrollView setContentOffset:CGPointMake(40.0f, 140.0f) animated:NO];
+    [self.scrollView setContentOffset:CGPointMake(160.0f, 140.0f) animated:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -92,6 +94,8 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
     {
         [self librefmDidLogout];
     }
+
+    [self networkAvailabilityChanged:[[NetworkManager instance] isConnectionAvailable]];
 }
 
 - (void)librefmDidLoadTopTags:(BOOL)ok
@@ -104,15 +108,26 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
     }
 }
 
+- (void)updateLoginButton
+{
+    if ([_librefmConnection isNeedInputLoginData] == NO) {
+        self.loggedInAsLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Logged in as %@", nil), _librefmConnection.username];
+        [self.loginButton setTitle:NSLocalizedString(@"Logout", nil) forState:UIControlStateNormal];
+        self.loggedInAsLabel.hidden = NO;
+        self.loginButton.hidden = NO;
+    } else {
+        self.loggedInAsLabel.hidden = YES;
+        [self.loginButton setTitle:NSLocalizedString(@"Login or Sign Up", nil) forState:UIControlStateNormal];
+        self.loginButton.hidden = NO;
+    }
+}
+
 - (void)librefmDidLogin:(BOOL)ok
                username:(NSString*)username
                password:(NSString*)password
                   error:(NSError *)error
 {
-    self.loggedInAsLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Logged in as %@", nil), username];
-    [self.loginButton setTitle:NSLocalizedString(@"Logout", nil) forState:UIControlStateNormal];
-    self.loggedInAsLabel.hidden = NO;
-    self.loginButton.hidden = NO;
+    [self updateLoginButton];
 }
 
 - (IBAction)loginButtonClicked:(id)sender
@@ -157,9 +172,7 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
 
 - (void)librefmDidLogout
 {
-    self.loggedInAsLabel.hidden = YES;
-    [self.loginButton setTitle:NSLocalizedString(@"Login or Sign Up", nil) forState:UIControlStateNormal];
-    self.loginButton.hidden = NO;
+    [self updateLoginButton];
 }
 
 - (void)refresh
@@ -210,6 +223,7 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
         self.tagLabels = [tagGenerator generateTagViews];
         
         dispatch_async( dispatch_get_main_queue(), ^{
+            self.loadingLabel.hidden = YES;
             for(UILabel *v in self.tagLabels) {
                 UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tagViewTapped:)];
                 [v addGestureRecognizer:tap];
@@ -268,6 +282,19 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)networkAvailabilityChanged:(BOOL)available
+{
+    if (available == YES) {
+        [_librefmConnection getTopTags];
+        self.loadingLabel.text = NSLocalizedString(@"Loading", nil);
+    }
+    else
+    {
+        self.loadingLabel.text = NSLocalizedString(@"Network is not available", nil);
+    }
+    [self updateLoginButton];
 }
 
 /*

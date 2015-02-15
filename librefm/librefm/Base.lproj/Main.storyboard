@@ -205,6 +205,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YJH-Eo-aY4">
+                                <rect key="frame" x="129" y="274" width="62" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.66233598069999999" green="0.66233598069999999" blue="0.66233598069999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8hm-7h-VlC">
                                 <rect key="frame" x="0.0" y="80" width="320" height="357"/>
                             </scrollView>
@@ -242,6 +248,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="YJH-Eo-aY4" secondAttribute="trailing" constant="50" id="0xB-Nd-ctx"/>
                             <constraint firstItem="zK6-UY-O2j" firstAttribute="top" relation="lessThanOrEqual" secondItem="EGP-JW-gIc" secondAttribute="bottom" constant="3" id="8n0-XA-4O4"/>
                             <constraint firstItem="Odu-CZ-wS5" firstAttribute="leading" secondItem="EGP-JW-gIc" secondAttribute="trailing" constant="3" id="AcV-QC-Kol"/>
                             <constraint firstItem="zK6-UY-O2j" firstAttribute="top" relation="lessThanOrEqual" secondItem="Odu-CZ-wS5" secondAttribute="bottom" constant="3" id="HTC-xE-8pT"/>
@@ -250,6 +257,7 @@
                             <constraint firstItem="EGP-JW-gIc" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="URs-Hu-yh4" secondAttribute="leadingMargin" constant="20" id="WAJ-hY-AlU"/>
                             <constraint firstItem="EGP-JW-gIc" firstAttribute="top" secondItem="8hm-7h-VlC" secondAttribute="bottom" constant="5" id="Wjw-zZ-cyJ"/>
                             <constraint firstItem="kDE-GF-4ry" firstAttribute="top" secondItem="lpR-0J-nBv" secondAttribute="bottom" constant="10" id="cpR-bW-SlR"/>
+                            <constraint firstItem="YJH-Eo-aY4" firstAttribute="leading" secondItem="URs-Hu-yh4" secondAttribute="leadingMargin" constant="50" id="fI9-zd-4Ca"/>
                             <constraint firstItem="8hm-7h-VlC" firstAttribute="top" secondItem="kDE-GF-4ry" secondAttribute="bottom" constant="5" id="ly3-PP-si9"/>
                             <constraint firstItem="CQr-2H-Ypw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="kDE-GF-4ry" secondAttribute="trailing" constant="10" id="mCy-AY-ozd"/>
                             <constraint firstItem="8hm-7h-VlC" firstAttribute="top" secondItem="CQr-2H-Ypw" secondAttribute="bottom" constant="5" id="ncc-of-xhk"/>
@@ -260,6 +268,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Tags" id="Mk5-eu-UPD"/>
                     <connections>
+                        <outlet property="loadingLabel" destination="YJH-Eo-aY4" id="OMh-pw-Edx"/>
                         <outlet property="loggedInAsLabel" destination="kDE-GF-4ry" id="VT3-le-yyy"/>
                         <outlet property="loginButton" destination="CQr-2H-Ypw" id="okR-mN-MVR"/>
                         <outlet property="scrollView" destination="8hm-7h-VlC" id="po0-Hh-Ojj"/>

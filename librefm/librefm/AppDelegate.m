@@ -44,7 +44,6 @@ KeychainItemWrapper *_keychainWrapper;
     
     _librefmConnection = [LibrefmConnection new];
     _librefmConnection.delegate = self;
-    [_librefmConnection getTopTags];
     
     [application beginReceivingRemoteControlEvents];
     
