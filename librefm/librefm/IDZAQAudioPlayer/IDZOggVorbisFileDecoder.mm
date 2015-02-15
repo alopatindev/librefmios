@@ -332,7 +332,7 @@ BOOL _downloadComplete;
 
 - (void)networkAvailabilityChanged:(BOOL)available
 {
-    if (_downloadComplete == NO && self.url != nil) {
+    if (available == YES && _downloadComplete == NO && self.url != nil) {
         [self sendRequest:self.url];
     }
 }

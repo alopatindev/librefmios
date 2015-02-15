@@ -39,10 +39,11 @@
 - (BOOL)isEqual:(id)anObject
 {
     PlaylistItem* item = (PlaylistItem*)anObject;
-    if (item == nil)
+    if (item == nil) {
         return NO;
-    else
+    } else {
         return self.url == item.url || [self.url isEqualToString:item.url];
+    }
 }
 
 @end
@@ -233,8 +234,7 @@ NSTimer *_progressUpdateTimer;
 - (IBAction)nextButtonClicked:(id)sender
 {
     [self updatePlaylist];
-    if ([_audioPlayer next] == YES)
-    {
+    if ([_audioPlayer next] == YES) {
         self.playlistIndex++;
         [self maybeDecreasePlaylistToLimit];
         [self updateSongInfo];
@@ -246,8 +246,7 @@ NSTimer *_progressUpdateTimer;
 - (IBAction)previousButtonClicked:(id)sender
 {
     // TODO
-    if (self.playlistIndex-1 >= 0)
-    {
+    if (self.playlistIndex-1 >= 0) {
         self.playlistIndex--;
         NSAssert(self.playlistIndex < [self.playlist count], @"playlistIndex should be < playlist count");
         [_audioPlayer clearPlaylist];
@@ -310,8 +309,7 @@ NSTimer *_progressUpdateTimer;
 
 - (void)updateSongInfo
 {
-    if (self.playlistIndex >= 0 && self.playlistIndex < [self.playlist count])
-    {
+    if (self.playlistIndex >= 0 && self.playlistIndex < [self.playlist count]) {
         PlaylistItem* item = self.playlist[self.playlistIndex];
         if (self.currentPlaylistItem != nil && (item == self.currentPlaylistItem || [item isEqual:self.currentPlaylistItem] == YES)) {
             NSLog(@"updateSongInfo the same item");
@@ -327,8 +325,9 @@ NSTimer *_progressUpdateTimer;
         
         dispatch_async(_dispatchImageQueue, ^{
             PlaylistItem* item = self.currentPlaylistItem;
-            if (item == nil)
+            if (item == nil) {
                 return;
+            }
             NSString* imageURL = item.imageURL;
             if (imageURL != nil && [imageURL length] > 0) {
                 NSString* largeImageURL = [imageURL stringByReplacingOccurrencesOfString:@"imagesize=200" withString:@"imagesize=600"];
@@ -388,8 +387,7 @@ NSTimer *_progressUpdateTimer;
 
 - (void)maybeDecreasePlaylistToLimit
 {
-    if (self.playlistIndex >= MAX_PLAYLIST_PREVIOUS_SIZE)
-    {
+    if (self.playlistIndex >= MAX_PLAYLIST_PREVIOUS_SIZE) {
         PlaylistItem* item = self.playlist[self.playlistIndex];
         NSLog(@"!!! decreasePlaylistToLimit(1) %d >= %d; self.playlist[self.playlistIndex].url='%@'", self.playlistIndex, (int)MAX_PLAYLIST_PREVIOUS_SIZE, item.url);
         int offset = self.playlistIndex - (int)MAX_PLAYLIST_PREVIOUS_SIZE;
@@ -412,11 +410,11 @@ NSTimer *_progressUpdateTimer;
 
 - (void)updatePlaylist
 {
-    if ([self.playlist count] - self.playlistIndex < MIN_PLAYLIST_SIZE)
+    if ([self.playlist count] - self.playlistIndex < MIN_PLAYLIST_SIZE) {
         [self radioTune:_lastTag];
+    }
     
-    if ([_audioPlayer isNextURLAvailable] == NO)
-    {
+    if ([_audioPlayer isNextURLAvailable] == NO) {
         if (self.playlistIndex > 0 && self.playlistIndex + 1 < [self.playlist count])
         {
             PlaylistItem* item = self.playlist[self.playlistIndex + 1];
@@ -451,19 +449,22 @@ NSTimer *_progressUpdateTimer;
     if ([self.playlist containsObject:item] == NO)
     {
         [self.playlist addObject:item];
-        if (self.playlistIndex == -1)
+        if (self.playlistIndex == -1) {
             self.playlistIndex = 0;
+        }
         
-        if ([_audioPlayer isNextURLAvailable] == NO)
+        if ([_audioPlayer isNextURLAvailable] == NO) {
             [_audioPlayer queueURLString:url];
+        }
     }
     else
     {
         NSLog(@"this item already exists");
     }
     
-    if ([self.playlist count] == 1)
+    if ([self.playlist count] == 1) {
         [self playButtonClicked:nil];
+    }
 }
 
 - (void)audioPlayerDidFinishPlaying:(id<IDZAudioPlayer>)player
@@ -515,6 +516,7 @@ NSTimer *_progressUpdateTimer;
             break;
         case IDZAudioPlayerStateStopped:
             str = @"IDZAudioPlayerStateStopped";
+            [self updateTogglePlayPauseButton];
             break;
         case IDZAudioPlayerStateStopping:
             str = @"IDZAudioPlayerStateStopping";
