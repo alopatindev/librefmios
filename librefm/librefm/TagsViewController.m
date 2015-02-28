@@ -300,6 +300,7 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
     [self updateLoadingLabel];
     [self updateLoginButton];
     [self maybeGetTopTags];
+    [_librefmConnection maybeGetAnonymousSession];
 }
 
 - (void)maybeGetTopTags

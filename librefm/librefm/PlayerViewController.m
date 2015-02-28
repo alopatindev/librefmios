@@ -425,7 +425,8 @@ NSTimer *_progressUpdateTimer;
 
 - (void)radioTune:tag
 {
-    [self maybeStartLogin];
+    //[self maybeStartLogin];
+    [_librefmConnection maybeGetAnonymousSession];
     _appDelegate.loadingUntilPlayingStarted = YES;
     [_librefmConnection radioTune:tag];
     _lastTag = tag;
