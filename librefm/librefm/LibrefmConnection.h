@@ -11,9 +11,11 @@
 
 #include <time.h>
 
-static NSString *const API2_URL = @"https://libre.fm/2.0/?format=json&method=";
-static NSString *const SIGNUP_URL = @"https://libre.fm/register.php?lang=en_US";
-static NSString *const ANONYMOUS_SESSION_URL = @"https://libre.fm/listen.php?tag=rock&lang=en_US";
+#define LIBREFM_HOSTNAME "libre.fm"
+#define LIBREFM_URL_PREFIX "https://" LIBREFM_HOSTNAME "/"
+static NSString *const API2_URL = @LIBREFM_URL_PREFIX "2.0/?format=json&method=";
+static NSString *const SIGNUP_URL = @LIBREFM_URL_PREFIX "register.php?lang=en_US";
+static NSString *const ANONYMOUS_SESSION_URL = @LIBREFM_URL_PREFIX "listen.php?tag=rock&lang=en_US";
 
 // http://bugs.foocorp.net/projects/librefm/wiki/Librefm_API_methods
 static NSString *const METHOD_ALBUM_ADDTAGS          = @"album.addTags";

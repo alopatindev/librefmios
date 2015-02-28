@@ -97,8 +97,8 @@ BOOL _anonymousSessionParsingFailed;
     wsToken = [self.username stringByAppendingString:passMD5];
     wsToken = [wsToken md5];
     
-    //NSString *streamingLoginUrl = [NSString stringWithFormat:@"https://libre.fm/radio/handshake.php?username=%@&passwordmd5=%@", self.username, passMD5];
-    //NSString *scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle.libre.fm/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", self.username, timeStamp, token];
+    //NSString *streamingLoginUrl = [NSString stringWithFormat:@LIBREFM_URL_PREFIX "radio/handshake.php?username=%@&passwordmd5=%@", self.username, passMD5];
+    //NSString *scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle." LIBREFM_HOSTNAME "/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", self.username, timeStamp, token];
     NSString *webServicesLoginUrl = [NSString stringWithFormat:@"%@%@&username=%@&authToken=%@", API2_URL, METHOD_AUTH_GETMOBILESESSION, self.username, wsToken];
     
     //NSLog(@"%@\n%@\n%@\n", streamingLoginUrl, scrobblingLoginUrl, webServicesLoginUrl);
