@@ -28,6 +28,7 @@ BOOL _anonymousSessionParsingFailed;
 {
     if (self = [super init]) {
         [self reset];
+        _anonymousSessionKey = nil;
     }
     return self;
 }
@@ -55,7 +56,6 @@ BOOL _anonymousSessionParsingFailed;
     _responseDict = [NSMutableDictionary new];
     _requestsQueue = [NSMutableSet new];
     _requestsNoAuthQueue = [NSMutableSet new];
-    _anonymousSessionKey = nil;
     _anonymousSessionTimestamp = 0;
     _anonymousSessionParsingFailed = NO;
 }
@@ -161,10 +161,6 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)updateNowPlayingArtist_:(NSArray*)args
 {
-    if (self.state != LibrefmConnectionStateLoggedIn) {
-        return;
-    }
-
     NSString* artist = args[0];
     NSString* track = args[1];
     NSString* album = args[2];
@@ -186,6 +182,10 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)updateNowPlayingArtist:(NSString*)artist track:(NSString*)track album:(NSString*)album
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(updateNowPlayingArtist_:)), @[artist, track, album]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -193,10 +193,6 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)scrobbleArtist_:(NSArray*)args
 {
-    if (self.state != LibrefmConnectionStateLoggedIn) {
-        return;
-    }
-
     NSString* artist = args[0];
     NSString* track = args[1];
     NSString* album = args[2];
@@ -220,6 +216,10 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)scrobbleArtist:(NSString*)artist track:(NSString*)track album:(NSString*)album
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(scrobbleArtist_:)), @[artist, track, album]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -227,10 +227,6 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)love_:(NSArray*)args
 {
-    if (self.state != LibrefmConnectionStateLoggedIn) {
-        return;
-    }
-
     NSString* artist = args[0];
     NSString* track = args[1];
     
@@ -244,6 +240,10 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)loveArtist:(NSString*)artist track:(NSString*)track
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(love_:)), @[artist, track]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -251,10 +251,6 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)unlove_:(NSArray*)args
 {
-    if (self.state != LibrefmConnectionStateLoggedIn) {
-        return;
-    }
-
     NSString* artist = args[0];
     NSString* track = args[1];
     
@@ -268,6 +264,10 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)unloveArtist:(NSString*)artist track:(NSString*)track
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(unlove_:)), @[artist, track]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -275,10 +275,6 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)ban_:(NSArray*)args
 {
-    if (self.state != LibrefmConnectionStateLoggedIn) {
-        return;
-    }
-
     NSString* artist = args[0];
     NSString* track = args[1];
     
@@ -292,6 +288,10 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)banArtist:(NSString*)artist track:(NSString*)track
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(ban_:)), @[artist, track]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -299,10 +299,6 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)unban_:(NSArray*)args
 {
-    if (self.state != LibrefmConnectionStateLoggedIn) {
-        return;
-    }
-
     NSString* artist = args[0];
     NSString* track = args[1];
     
@@ -316,6 +312,10 @@ BOOL _anonymousSessionParsingFailed;
 
 - (void)unbanArtist:(NSString*)artist track:(NSString*)track
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(unban_:)), @[artist, track]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -379,7 +379,7 @@ BOOL _anonymousSessionParsingFailed;
 
         if (self.state == LibrefmConnectionStateNotLoggedIn) {
             [self tryLogin];
-            if (self.state == LibrefmConnectionStateNotLoggedIn && _anonymousSessionKey != nil) {
+            if (_anonymousSessionKey != nil) {
                 [self processRequest:a fromAuthQueue:YES];
             }
             break;

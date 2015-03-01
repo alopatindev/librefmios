@@ -212,8 +212,10 @@ static void IDZPropertyListener(void* inUserData,
 {
     NSLog(@"playIfQueuedPlayback");
     if (_queuedPlayback == YES && self.playing == YES) {
+        NSLog(@"playIfQueuedPlayback yes");
         return [self play];
     }
+    NSLog(@"playIfQueuedPlayback no");
     return NO;
 }
 
@@ -322,8 +324,9 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)next
 {
-    if (self.playing == NO)
+    if (self.playing == NO) {
         return NO;
+    }
 
     if ([mDecoder isNextURLAvailable] == YES) {
         NSLog(@"next");
@@ -346,8 +349,9 @@ static void IDZPropertyListener(void* inUserData,
 
 - (void)readBuffer:(AudioQueueBufferRef)buffer
 {
-    if(self.state == IDZAudioPlayerStateStopping)
+    if(self.state == IDZAudioPlayerStateStopping) {
         return;
+    }
 
     NSAssert(self.decoder, @"self.decoder is valid.");
     if(/*self.decoder.bufferingState == BufferingStateReadyToRead &&*/buffer != NULL && [self.decoder readBuffer:buffer] == YES)
