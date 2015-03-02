@@ -235,8 +235,8 @@
                                 <color key="textColor" red="0.66233598069999999" green="0.66233598069999999" blue="0.66233598069999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button contentMode="bottom" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Odu-CZ-wS5">
-                                <rect key="frame" x="182" y="488" width="83" height="21"/>
+                            <button contentMode="bottom" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Odu-CZ-wS5">
+                                <rect key="frame" x="182" y="490" width="83" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Flaticon.com">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -249,9 +249,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="YJH-Eo-aY4" secondAttribute="trailing" constant="50" id="0xB-Nd-ctx"/>
-                            <constraint firstItem="zK6-UY-O2j" firstAttribute="top" relation="lessThanOrEqual" secondItem="EGP-JW-gIc" secondAttribute="bottom" constant="3" id="8n0-XA-4O4"/>
+                            <constraint firstItem="zK6-UY-O2j" firstAttribute="top" secondItem="EGP-JW-gIc" secondAttribute="bottom" constant="5" id="8n0-XA-4O4"/>
                             <constraint firstItem="Odu-CZ-wS5" firstAttribute="leading" secondItem="EGP-JW-gIc" secondAttribute="trailing" constant="3" id="AcV-QC-Kol"/>
-                            <constraint firstItem="zK6-UY-O2j" firstAttribute="top" relation="lessThanOrEqual" secondItem="Odu-CZ-wS5" secondAttribute="bottom" constant="3" id="HTC-xE-8pT"/>
+                            <constraint firstItem="zK6-UY-O2j" firstAttribute="top" secondItem="Odu-CZ-wS5" secondAttribute="bottom" constant="5" id="HTC-xE-8pT"/>
                             <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="Odu-CZ-wS5" secondAttribute="trailing" constant="20" id="LcA-Pe-BQg"/>
                             <constraint firstItem="Odu-CZ-wS5" firstAttribute="top" secondItem="8hm-7h-VlC" secondAttribute="bottom" constant="5" id="SNX-Xg-ZGF"/>
                             <constraint firstItem="EGP-JW-gIc" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="URs-Hu-yh4" secondAttribute="leadingMargin" constant="20" id="WAJ-hY-AlU"/>

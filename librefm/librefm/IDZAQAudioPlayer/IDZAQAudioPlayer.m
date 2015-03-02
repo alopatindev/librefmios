@@ -212,8 +212,10 @@ static void IDZPropertyListener(void* inUserData,
 {
     NSLog(@"playIfQueuedPlayback");
     if (_queuedPlayback == YES && self.playing == YES) {
+        NSLog(@"playIfQueuedPlayback yes");
         return [self play];
     }
+    NSLog(@"playIfQueuedPlayback no");
     return NO;
 }
 
@@ -322,12 +324,20 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)next
 {
-    if (self.playing == NO)
+    return [self next_:NO];
+}
+
+- (BOOL)next_:(BOOL)force
+{
+    if (force == NO && self.playing == NO) {
         return NO;
+    }
 
     if ([mDecoder isNextURLAvailable] == YES) {
         NSLog(@"next");
-        [self stop];
+        if (force == NO) {
+            [self stop];
+        }
         _queuedPlayback = YES;
         if ([mDecoder prepareToPlayNextURL] == YES) {
             [self play];
@@ -346,8 +356,9 @@ static void IDZPropertyListener(void* inUserData,
 
 - (void)readBuffer:(AudioQueueBufferRef)buffer
 {
-    if(self.state == IDZAudioPlayerStateStopping)
+    if(self.state == IDZAudioPlayerStateStopping) {
         return;
+    }
 
     NSAssert(self.decoder, @"self.decoder is valid.");
     if(/*self.decoder.bufferingState == BufferingStateReadyToRead &&*/buffer != NULL && [self.decoder readBuffer:buffer] == YES)
@@ -463,10 +474,6 @@ static void IDZPropertyListener(void* inUserData,
 
 - (void)setState:(IDZAudioPlayerState)state
 {
-    if (mDecoder != nil) {
-        [self.delegate audioPlayerChangedState:state url:mDecoder.url];
-    }
-
     switch(state)
     {
         case IDZAudioPlayerStatePaused:
@@ -482,13 +489,18 @@ static void IDZPropertyListener(void* inUserData,
             NSLog(@"IDZAudioPlayerStateStopped");
             if (_continueWithNextSong == YES) {
                 _continueWithNextSong = NO;
-                [self next];
+                [self next_:YES];
             }
             break;
         case IDZAudioPlayerStateStopping:
             NSLog(@"IDZAudioPlayerStateStopping");
             break;
     }
+
+    if (mDecoder != nil) {
+        [self.delegate audioPlayerChangedState:state url:mDecoder.url];
+    }
+
     mState = state;
 }
 

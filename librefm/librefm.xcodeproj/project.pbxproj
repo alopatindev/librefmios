@@ -556,6 +556,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Alexander Lopatin";
 				TargetAttributes = {
+					BAFD9E42194CDF98009718B2 = {
+						DevelopmentTeam = EQ49PE8AY5;
+					};
 					BAFD9E63194CDF98009718B2 = {
 						TestTargetID = BAFD9E42194CDF98009718B2;
 					};
@@ -784,6 +787,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/sbar/git/librefm/IDZAQAudioPlayer/Frameworks,
@@ -808,6 +812,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/sbar/git/librefm/IDZAQAudioPlayer/Frameworks,

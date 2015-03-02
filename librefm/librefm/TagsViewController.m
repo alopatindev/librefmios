@@ -145,7 +145,7 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
 {
     if ([_librefmConnection isNeedInputLoginData] == YES)
     {
-        [_playerViewController maybeStartLogin];
+        (void)[_playerViewController maybeStartLogin];
     }
     else
     {
@@ -300,6 +300,7 @@ NSString* const USERDEFAULT_CUSTOMTAGS = @"CustomTags";
     [self updateLoadingLabel];
     [self updateLoginButton];
     [self maybeGetTopTags];
+    [_librefmConnection maybeGetAnonymousSession];
 }
 
 - (void)maybeGetTopTags

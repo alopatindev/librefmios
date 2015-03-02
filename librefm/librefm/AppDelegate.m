@@ -167,7 +167,7 @@ KeychainItemWrapper *_keychainWrapper;
 {
     self.needSaveCredentials = YES;
     [self maybeSaveCredentialsUsername:@"" password:@""];
-    [_playerViewController clearPlaylist];
+    //[_playerViewController clearPlaylist];
     [_tagsViewController librefmDidLogout];
 }
 
@@ -180,6 +180,7 @@ KeychainItemWrapper *_keychainWrapper;
         //[_playerViewController clearPlaylist];
 
         NSArray *track = playlist[@"track"];
+        NSLog(@"librefmDidLoadPlaylist %d tracks", (int)[track count]);
         if ([track count] == 0) {
             self.loadingUntilPlayingStarted = NO;
             [self librefmDidChangeNetworkActivity:NO];

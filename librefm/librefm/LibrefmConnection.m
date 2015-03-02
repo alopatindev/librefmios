@@ -20,10 +20,15 @@ NSString* _signupUsername;
 NSString* _signupPassword;
 NSString* _signupEmail;
 
+NSString* _anonymousSessionKey;
+time_t _anonymousSessionTimestamp;
+BOOL _anonymousSessionParsingFailed;
+
 - (instancetype)init
 {
     if (self = [super init]) {
         [self reset];
+        _anonymousSessionKey = nil;
     }
     return self;
 }
@@ -51,6 +56,17 @@ NSString* _signupEmail;
     _responseDict = [NSMutableDictionary new];
     _requestsQueue = [NSMutableSet new];
     _requestsNoAuthQueue = [NSMutableSet new];
+    _anonymousSessionTimestamp = 0;
+    _anonymousSessionParsingFailed = NO;
+}
+
+- (NSString*)getAppropriateSessionKey
+{
+    if (self.state == LibrefmConnectionStateNotLoggedIn) {
+        return _anonymousSessionKey;
+    } else {
+        return self.mobileSessionKey;
+    }
 }
 
 - (BOOL)isNeedInputLoginData
@@ -81,8 +97,8 @@ NSString* _signupEmail;
     wsToken = [self.username stringByAppendingString:passMD5];
     wsToken = [wsToken md5];
     
-    //NSString *streamingLoginUrl = [NSString stringWithFormat:@"https://libre.fm/radio/handshake.php?username=%@&passwordmd5=%@", self.username, passMD5];
-    //NSString *scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle.libre.fm/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", self.username, timeStamp, token];
+    //NSString *streamingLoginUrl = [NSString stringWithFormat:@LIBREFM_URL_PREFIX "radio/handshake.php?username=%@&passwordmd5=%@", self.username, passMD5];
+    //NSString *scrobblingLoginUrl = [NSString stringWithFormat:@"https://turtle." LIBREFM_HOSTNAME "/?hs=true&p=1.2&u=%@&t=%@&a=%@&c=ldr", self.username, timeStamp, token];
     NSString *webServicesLoginUrl = [NSString stringWithFormat:@"%@%@&username=%@&authToken=%@", API2_URL, METHOD_AUTH_GETMOBILESESSION, self.username, wsToken];
     
     //NSLog(@"%@\n%@\n%@\n", streamingLoginUrl, scrobblingLoginUrl, webServicesLoginUrl);
@@ -120,12 +136,12 @@ NSString* _signupEmail;
     NSString *url = [NSString stringWithFormat:@"%@%@", API2_URL, METHOD_RADIO_TUNE];
     tag = [tag stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self sendRequest:url
-             postData:[NSString stringWithFormat:@"sk=%@&station=librefm://globaltags/%@", self.mobileSessionKey, tag]];
+             postData:[NSString stringWithFormat:@"sk=%@&station=librefm://globaltags/%@", [self getAppropriateSessionKey], tag]];
 }
 
 - (void)radioGetPlaylist_
 {
-    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_RADIO_GETPLAYLIST, self.mobileSessionKey];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_RADIO_GETPLAYLIST, [self getAppropriateSessionKey]];
     [self sendRequest:url];
 }
 
@@ -152,7 +168,7 @@ NSString* _signupEmail;
     track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     album = [album stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UPDATENOWPLAYING, self.mobileSessionKey];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UPDATENOWPLAYING, [self getAppropriateSessionKey]];
     
     NSString *postData;
     if ([album length] > 0) {
@@ -166,6 +182,10 @@ NSString* _signupEmail;
 
 - (void)updateNowPlayingArtist:(NSString*)artist track:(NSString*)track album:(NSString*)album
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(updateNowPlayingArtist_:)), @[artist, track, album]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -182,7 +202,7 @@ NSString* _signupEmail;
     track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     album = [album stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_SCROBBLE, self.mobileSessionKey];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_SCROBBLE, [self getAppropriateSessionKey]];
     
     NSString *postData;
     if ([album length] > 0) {
@@ -196,6 +216,10 @@ NSString* _signupEmail;
 
 - (void)scrobbleArtist:(NSString*)artist track:(NSString*)track album:(NSString*)album
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(scrobbleArtist_:)), @[artist, track, album]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -209,13 +233,17 @@ NSString* _signupEmail;
     artist = [artist stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_LOVE, self.mobileSessionKey];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_LOVE, [self getAppropriateSessionKey]];
     NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
     [self sendRequest:url postData:postData];
 }
 
 - (void)loveArtist:(NSString*)artist track:(NSString*)track
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(love_:)), @[artist, track]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -229,13 +257,17 @@ NSString* _signupEmail;
     artist = [artist stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UNLOVE, self.mobileSessionKey];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UNLOVE, [self getAppropriateSessionKey]];
     NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
     [self sendRequest:url postData:postData];
 }
 
 - (void)unloveArtist:(NSString*)artist track:(NSString*)track
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(unlove_:)), @[artist, track]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -249,13 +281,17 @@ NSString* _signupEmail;
     artist = [artist stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_BAN, self.mobileSessionKey];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_BAN, [self getAppropriateSessionKey]];
     NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
     [self sendRequest:url postData:postData];
 }
 
 - (void)banArtist:(NSString*)artist track:(NSString*)track
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(ban_:)), @[artist, track]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -269,13 +305,17 @@ NSString* _signupEmail;
     artist = [artist stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     track = [track stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UNBAN, self.mobileSessionKey];
+    NSString *url = [NSString stringWithFormat:@"%@%@&sk=%@", API2_URL, METHOD_TRACK_UNBAN, [self getAppropriateSessionKey]];
     NSString *postData = [NSString stringWithFormat:@"artist=%@&track=%@", artist, track];
     [self sendRequest:url postData:postData];
 }
 
 - (void)unbanArtist:(NSString*)artist track:(NSString*)track
 {
+    if (self.state != LibrefmConnectionStateLoggedIn) {
+        return;
+    }
+
     NSArray *req = @[NSStringFromSelector(@selector(unban_:)), @[artist, track]];
     [_requestsQueue addObject:req];
     [self processRequestsQueue];
@@ -292,6 +332,33 @@ NSString* _signupEmail;
     NSArray *req = @[NSStringFromSelector(@selector(getTopTags_))];
     [_requestsNoAuthQueue addObject:req];
     [self processRequestsQueue];
+}
+
+- (void)getAnonymousSession_
+{
+    NSString *url = ANONYMOUS_SESSION_URL;
+    [self sendRequest:url];
+}
+
+- (void)getAnonymousSession
+{
+    NSArray *req = @[NSStringFromSelector(@selector(getAnonymousSession_))];
+    [_requestsNoAuthQueue addObject:req];
+    [self processRequestsQueue];
+}
+
+- (BOOL)isAnonymousSessionOld
+{
+    time_t dt = time(NULL) - _anonymousSessionTimestamp;
+    return dt > MAX_ANONYMOUS_SESSION_TIME;
+}
+
+- (void)maybeGetAnonymousSession
+{
+    if (_anonymousSessionParsingFailed == NO && [self isAnonymousSessionOld] == YES) {
+        [self getAnonymousSession];
+        _anonymousSessionTimestamp = time(NULL);
+    }
 }
 
 - (void)processRequestsQueue
@@ -312,6 +379,9 @@ NSString* _signupEmail;
 
         if (self.state == LibrefmConnectionStateNotLoggedIn) {
             [self tryLogin];
+            if (_anonymousSessionKey != nil) {
+                [self processRequest:a fromAuthQueue:YES];
+            }
             break;
         } else if (self.state == LibrefmConnectionStateLoggedIn) {
             [self processRequest:a fromAuthQueue:YES];
@@ -444,6 +514,7 @@ NSString* _signupEmail;
                     NSLog(@"BADSESSION");
                     self.state = LibrefmConnectionStateNotLoggedIn;
                     self.mobileSessionKey = nil;
+                    [self maybeGetAnonymousSession];
                     [self tryLogin];
                 } else if ([out containsString:@"FAILED"]) {
                     // TODO
@@ -482,6 +553,17 @@ NSString* _signupEmail;
                                        password:_signupPassword
                                           email:_signupEmail];
             }
+        }
+    } else if ([url hasPrefix:ANONYMOUS_SESSION_URL]) {
+        @try {
+            NSString *out = [[NSString alloc] initWithData:data
+                                                  encoding:NSUTF8StringEncoding];
+            _anonymousSessionKey =
+                [[[[out componentsSeparatedByString:@"var radio_session = \""] objectAtIndex:1]
+                        componentsSeparatedByString:@"\";"] objectAtIndex:0];
+        } @catch (NSException* e) {
+            NSLog(@"anonymous session parsing fail: %@", e);
+            _anonymousSessionParsingFailed = YES;
         }
     } else {
         NSString *out = [[NSString alloc] initWithData:data

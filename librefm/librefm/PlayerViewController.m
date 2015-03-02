@@ -215,14 +215,14 @@ NSTimer *_progressUpdateTimer;
 - (IBAction)playButtonClicked:(id)sender
 {
     [_audioPlayer play];
-    [self updateSongInfo];
+    //[self updateSongInfo];
 }
 
 - (IBAction)togglePlayPauseButtonClicked:(id)sender
 {
     [_audioPlayer togglePlayPause];
     [self updateTogglePlayPauseButton];
-    [self updateSongInfo];
+    //[self updateSongInfo];
 }
 
 - (IBAction)pauseButtonClicked:(id)sender
@@ -234,11 +234,10 @@ NSTimer *_progressUpdateTimer;
 - (IBAction)nextButtonClicked:(id)sender
 {
     [self updatePlaylist];
-    if ([_audioPlayer next] == YES) {
-        self.playlistIndex++;
-        [self maybeDecreasePlaylistToLimit];
-        [self updateSongInfo];
-    }
+    (void) [_audioPlayer next];
+    self.playlistIndex++;
+    [self maybeDecreasePlaylistToLimit];
+    //[self updateSongInfo];
     
     NSLog(@"!!!! playlistIndex=%d, [playlist count]=%d", self.playlistIndex, (int)[self.playlist count]);
 }
@@ -257,7 +256,7 @@ NSTimer *_progressUpdateTimer;
         [_audioPlayer play];
         item = self.playlist[self.playlistIndex + 1];
         [_audioPlayer queueURLString:item.url];
-        [self updateSongInfo];
+        //[self updateSongInfo];
     }
     NSLog(@"!!!! playlistIndex=%d, [playlist count]=%d", self.playlistIndex, (int)[self.playlist count]);
     //[_audioPlayer previous];
@@ -309,12 +308,14 @@ NSTimer *_progressUpdateTimer;
 
 - (void)updateSongInfo
 {
+    NSLog(@"updateSongInfo");
     if (self.playlistIndex >= 0 && self.playlistIndex < [self.playlist count]) {
         PlaylistItem* item = self.playlist[self.playlistIndex];
         if (self.currentPlaylistItem != nil && (item == self.currentPlaylistItem || [item isEqual:self.currentPlaylistItem] == YES)) {
-            NSLog(@"updateSongInfo the same item");
+            NSLog(@"!! updateSongInfo the same item");
             return;
         }
+        NSLog(@"updateSongInfo => updating");
         self.currentPlaylistItem = item;
         self.titleLabel.text = item.title;
         //self.artistLabel.text = [NSString stringWithFormat:@"by %@", item.artist];
@@ -362,11 +363,13 @@ NSTimer *_progressUpdateTimer;
     }
     else
     {
+        NSLog(@"updateSongInfo => setting to empty");
         [self setEnabled:NO];
         self.titleLabel.text = [NSString new];
         self.artistLabel.text = [NSString new];
         self.coverImageView.hidden = YES;
         self.playedProgressView.progress = 0.0f;
+        self.currentPlaylistItem = nil;
     }
 }
 
@@ -425,7 +428,8 @@ NSTimer *_progressUpdateTimer;
 
 - (void)radioTune:tag
 {
-    [self maybeStartLogin];
+    //[self maybeStartLogin];
+    [_librefmConnection maybeGetAnonymousSession];
     _appDelegate.loadingUntilPlayingStarted = YES;
     [_librefmConnection radioTune:tag];
     _lastTag = tag;
@@ -446,7 +450,7 @@ NSTimer *_progressUpdateTimer;
     item.title = title;
     item.imageURL = imageURL;
     
-    if ([self.playlist containsObject:item] == NO)
+    if ([self.playlist containsObject:item] == NO || [self.playlist count] - self.playlistIndex < MIN_PLAYLIST_SIZE)
     {
         [self.playlist addObject:item];
         if (self.playlistIndex == -1) {
@@ -488,6 +492,27 @@ NSTimer *_progressUpdateTimer;
     }
 }
 
+- (BOOL)tryFixPlaylistItemIndex:(NSURL*)correctURL
+{
+    int newPlaylistIndex = self.playlistIndex;
+
+    while (newPlaylistIndex >= 0 && newPlaylistIndex < [self.playlist count])
+    {
+        PlaylistItem* item = self.playlist[newPlaylistIndex];
+        if (item == nil || [item.url isEqualToString:[correctURL absoluteString]] == NO) {
+            NSLog(@"fixing playlist index");
+            newPlaylistIndex++;
+        } else {
+            self.playlistIndex = newPlaylistIndex;
+            return YES;
+        }
+    }
+
+    NSLog(@"tryFixPlaylistItemIndex failed");
+
+    return NO;
+}
+
 - (void)audioPlayerChangedState:(IDZAudioPlayerState)state
                             url:(NSURL *)url
 {
@@ -496,19 +521,23 @@ NSTimer *_progressUpdateTimer;
     {
         case IDZAudioPlayerStatePaused:
             str = @"IDZAudioPlayerStatePaused";
-            [self updateTogglePlayPauseButton];
             break;
         case IDZAudioPlayerStatePlaying:
         {
             str = @"IDZAudioPlayerStatePlaying";
-            [self updateTogglePlayPauseButton];
             _appDelegate.loadingUntilPlayingStarted = NO;
             [_appDelegate librefmDidChangeNetworkActivity:NO];
             
-            PlaylistItem* item = self.currentPlaylistItem;
-            [_librefmConnection updateNowPlayingArtist:item.artist
-                                                 track:item.title
-                                                 album:item.album];
+            if ([self tryFixPlaylistItemIndex:url] == YES) {
+                [self updateSongInfo];
+                PlaylistItem* item = self.currentPlaylistItem;
+                [_librefmConnection updateNowPlayingArtist:item.artist
+                                                     track:item.title
+                                                     album:item.album];
+            } else {
+                NSLog(@"! playlistIndex not in playlist");
+                [self updateSongInfo];
+            }
             break;
         }
         case IDZAudioPlayerStatePrepared:
@@ -516,7 +545,6 @@ NSTimer *_progressUpdateTimer;
             break;
         case IDZAudioPlayerStateStopped:
             str = @"IDZAudioPlayerStateStopped";
-            [self updateTogglePlayPauseButton];
             break;
         case IDZAudioPlayerStateStopping:
             str = @"IDZAudioPlayerStateStopping";
@@ -525,10 +553,11 @@ NSTimer *_progressUpdateTimer;
             str = @"uknown";
             break;
     }
-    NSLog(@"! changed state=%d %@ url='%@'", state, str, [url absoluteString]);
+    NSLog(@"! changed state=%d %@ url='%@' audioPlayer.isPlaying=%d", state, str, [url absoluteString], [_audioPlayer isPlaying]);
     
     //self.statusLabel.text = [NSString stringWithFormat:@"Status: %@", str];
     //self.urlLabel.text = [url absoluteString];
+    [self updateTogglePlayPauseButton];
 }
 
 @end
