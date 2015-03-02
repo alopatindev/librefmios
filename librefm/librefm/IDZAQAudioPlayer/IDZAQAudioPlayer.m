@@ -324,13 +324,20 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)next
 {
-    if (self.playing == NO) {
+    return [self next_:NO];
+}
+
+- (BOOL)next_:(BOOL)force
+{
+    if (force == NO && self.playing == NO) {
         return NO;
     }
 
     if ([mDecoder isNextURLAvailable] == YES) {
         NSLog(@"next");
-        [self stop];
+        if (force == NO) {
+            [self stop];
+        }
         _queuedPlayback = YES;
         if ([mDecoder prepareToPlayNextURL] == YES) {
             [self play];
@@ -486,7 +493,7 @@ static void IDZPropertyListener(void* inUserData,
             NSLog(@"IDZAudioPlayerStateStopped");
             if (_continueWithNextSong == YES) {
                 _continueWithNextSong = NO;
-                [self next];
+                [self next_:YES];
             }
             break;
         case IDZAudioPlayerStateStopping:

@@ -215,14 +215,14 @@ NSTimer *_progressUpdateTimer;
 - (IBAction)playButtonClicked:(id)sender
 {
     [_audioPlayer play];
-    [self updateSongInfo];
+    //[self updateSongInfo];
 }
 
 - (IBAction)togglePlayPauseButtonClicked:(id)sender
 {
     [_audioPlayer togglePlayPause];
     [self updateTogglePlayPauseButton];
-    [self updateSongInfo];
+    //[self updateSongInfo];
 }
 
 - (IBAction)pauseButtonClicked:(id)sender
@@ -234,11 +234,10 @@ NSTimer *_progressUpdateTimer;
 - (IBAction)nextButtonClicked:(id)sender
 {
     [self updatePlaylist];
-    if ([_audioPlayer next] == YES) {
-        self.playlistIndex++;
-        [self maybeDecreasePlaylistToLimit];
-        [self updateSongInfo];
-    }
+    (void) [_audioPlayer next];
+    self.playlistIndex++;
+    [self maybeDecreasePlaylistToLimit];
+    //[self updateSongInfo];
     
     NSLog(@"!!!! playlistIndex=%d, [playlist count]=%d", self.playlistIndex, (int)[self.playlist count]);
 }
@@ -257,7 +256,7 @@ NSTimer *_progressUpdateTimer;
         [_audioPlayer play];
         item = self.playlist[self.playlistIndex + 1];
         [_audioPlayer queueURLString:item.url];
-        [self updateSongInfo];
+        //[self updateSongInfo];
     }
     NSLog(@"!!!! playlistIndex=%d, [playlist count]=%d", self.playlistIndex, (int)[self.playlist count]);
     //[_audioPlayer previous];
@@ -309,12 +308,14 @@ NSTimer *_progressUpdateTimer;
 
 - (void)updateSongInfo
 {
+    NSLog(@"updateSongInfo");
     if (self.playlistIndex >= 0 && self.playlistIndex < [self.playlist count]) {
         PlaylistItem* item = self.playlist[self.playlistIndex];
         if (self.currentPlaylistItem != nil && (item == self.currentPlaylistItem || [item isEqual:self.currentPlaylistItem] == YES)) {
-            NSLog(@"updateSongInfo the same item");
+            NSLog(@"!! updateSongInfo the same item");
             return;
         }
+        NSLog(@"updateSongInfo => updating");
         self.currentPlaylistItem = item;
         self.titleLabel.text = item.title;
         //self.artistLabel.text = [NSString stringWithFormat:@"by %@", item.artist];
@@ -362,11 +363,13 @@ NSTimer *_progressUpdateTimer;
     }
     else
     {
+        NSLog(@"updateSongInfo => setting to empty");
         [self setEnabled:NO];
         self.titleLabel.text = [NSString new];
         self.artistLabel.text = [NSString new];
         self.coverImageView.hidden = YES;
         self.playedProgressView.progress = 0.0f;
+        self.currentPlaylistItem = nil;
     }
 }
 
@@ -506,10 +509,12 @@ NSTimer *_progressUpdateTimer;
             _appDelegate.loadingUntilPlayingStarted = NO;
             [_appDelegate librefmDidChangeNetworkActivity:NO];
             
-            PlaylistItem* item = self.currentPlaylistItem;
+            //PlaylistItem* item = self.currentPlaylistItem;
+            PlaylistItem *item = self.playlist[self.playlistIndex];
             [_librefmConnection updateNowPlayingArtist:item.artist
                                                  track:item.title
                                                  album:item.album];
+            [self updateSongInfo];
             break;
         }
         case IDZAudioPlayerStatePrepared:
