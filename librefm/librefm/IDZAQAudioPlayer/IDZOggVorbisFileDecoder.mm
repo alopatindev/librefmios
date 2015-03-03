@@ -365,9 +365,11 @@ BOOL _downloadComplete;
     }
     
     size_t downloadedBytes = self.downloadedBytes;
-    /*if (downloadedBytes > self.expectedContentLength) {
+    if (downloadedBytes != 0 && self.expectedContentLength != 0 && downloadedBytes >= self.expectedContentLength) {
+        NSLog(@"! downloadedBytes >= self.expectedContentLength");
+        [self finishConnection:isCurrentURL];
         return;
-    }*/
+    }
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -422,6 +424,12 @@ BOOL _downloadComplete;
             break;
         case 206: // partial content
             break;
+        case 416: // requested range not satisfiable
+        {
+            NSLog(@"requested range not satisfiable");
+            [self finishConnection:isCurrentURL];
+            break;
+        }
         default:
             // 404 and so on
             wrongResponse = YES;
@@ -500,23 +508,31 @@ BOOL _downloadComplete;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     NSLog(@"song downloading complete!");
-    self.connection = nil;
-    _downloadComplete = YES;
-    
+
     // for very small songs
     NSURL* url = [[connection currentRequest] URL];
     BOOL isCurrentURL = [url isEqual:self.url];
-    if (isCurrentURL) {
-        [self readHeaderInfoIfNeeded];
-        [self.audioPlayerDelegate playIfQueuedPlayback];
-    }
+
+    [self finishConnection:isCurrentURL];
 
     if ([self isNextURLAvailable] == YES) {
         //NSLog(@"downloading the NEXT song");
         //NSURL* nextURL = self.urlList[1];
         //[self sendRequest:nextURL];
     } else {
-        NSLog(@"all songs has been downloaded?");
+        NSLog(@"all songs have been downloaded?");
+        [self.audioPlayerDelegate playIfQueuedPlayback]; // FIXME
+    }
+}
+
+- (void)finishConnection:(BOOL)isCurrentURL
+{
+    NSLog(@"breaking connection isCurrentURL=%d", isCurrentURL);
+    self.connection = nil;
+    _downloadComplete = YES;
+    if (isCurrentURL) {
+        [self readHeaderInfoIfNeeded];
+        [self.audioPlayerDelegate playIfQueuedPlayback];
     }
 }
 

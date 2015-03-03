@@ -210,7 +210,7 @@ static void IDZPropertyListener(void* inUserData,
 
 - (BOOL)playIfQueuedPlayback
 {
-    NSLog(@"playIfQueuedPlayback");
+    NSLog(@"playIfQueuedPlayback _queuedPlayback=%d self.playing=%d", _queuedPlayback, self.playing);
     if (_queuedPlayback == YES && self.playing == YES) {
         NSLog(@"playIfQueuedPlayback yes");
         return [self play];
