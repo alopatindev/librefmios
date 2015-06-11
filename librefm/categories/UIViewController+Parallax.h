@@ -2,7 +2,7 @@
 //  UIViewController+Parallax.h
 //  librefm
 //
-//  Created by sbar on 25/06/14.
+//  Created by alopatindev on 25/06/14.
 //  Copyright (c) 2014 Alexander Lopatin. All rights reserved.
 //
 

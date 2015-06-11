@@ -13,7 +13,7 @@
 		<key>4A410B8B-EC3C-4CE6-85DC-1AA72D322660</key>
 		<string>ssh://github.com/tumtumtum/StreamingKit.git</string>
 		<key>4EBBEF300820DF39E5F5256A5901D14C3DDD5995</key>
-		<string>ssh://bitbucket.org/sbargeek/librefm.git</string>
+		<string>ssh://bitbucket.org/alopatindev/librefm.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>LibreFM_iOS.xcworkspace</string>
@@ -25,7 +25,7 @@
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://bitbucket.org/sbargeek/librefm.git</string>
+	<string>ssh://bitbucket.org/alopatindev/librefm.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
